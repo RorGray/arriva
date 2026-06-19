@@ -5,10 +5,11 @@
 	"title": "Wave Divider",
 	"category": "design",
 	"icon": "marker",
-	"description": "A wave-shaped section divider with two configurable colors: top background (matches the section above) and bottom fill (matches the section below).",
+	"description": "A wave-shaped section divider with a choice of shapes and two configurable colors: top background (matches the section above) and bottom fill (matches the section below).",
 	"keywords": [ "wave", "divider", "separator", "section" ],
 	"textdomain": "arriva",
 	"attributes": {
+		"shape": { "type": "string", "default": "" },
 		"topColor": { "type": "string", "default": "#18222a" },
 		"bottomColor": { "type": "string", "default": "#ffffff" }
 	},
