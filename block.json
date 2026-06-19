@@ -10,8 +10,8 @@
 	"textdomain": "arriva",
 	"attributes": {
 		"shape": { "type": "string", "default": "" },
-		"topColor": { "type": "string", "default": "#18222a" },
-		"bottomColor": { "type": "string", "default": "#ffffff" }
+		"topColor": { "type": "string", "default": "" },
+		"bottomColor": { "type": "string", "default": "" }
 	},
 	"supports": { "html": false, "align": [ "full", "wide" ] },
 	"editorScript": "file:./index.js",

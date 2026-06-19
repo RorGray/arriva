@@ -5,12 +5,16 @@
 	var useEffect = wp.element.useEffect;
 	var useBlockProps = wp.blockEditor.useBlockProps;
 	var InspectorControls = wp.blockEditor.InspectorControls;
+	var useMultipleOriginColorsAndGradients = wp.blockEditor.__experimentalUseMultipleOriginColorsAndGradients;
 	var PanelBody = wp.components.PanelBody;
 	var BaseControl = wp.components.BaseControl;
 	var Button = wp.components.Button;
 	var ColorPalette = wp.components.ColorPalette;
 	var useSelect = wp.data.useSelect;
 	var __ = wp.i18n.__;
+
+	var TOP_FALLBACK = '#18222a';
+	var BOTTOM_FALLBACK = '#ffffff';
 
 	var WAVES = {
 		wave: {
@@ -56,25 +60,83 @@
 		return el(
 			'svg',
 			{ viewBox: '0 0 1440 ' + wave.height, preserveAspectRatio: 'none', height: wave.height },
-			el( 'path', { d: wave.path, fill: bottomColor } )
+			el( 'path', { d: wave.path, fill: bottomColor || BOTTOM_FALLBACK } )
 		);
+	}
+
+	/**
+	 * Reads a color from a sibling block, but only if that block uses
+	 * WordPress's native color block-support (custom color or a palette slug).
+	 * Arbitrary CSS backgrounds (theme classes, gradients, images) aren't
+	 * visible to the block editor's data store, so those can't be detected.
+	 */
+	function detectBlockBackground( block, flatColors ) {
+		if ( ! block ) {
+			return null;
+		}
+		var attrs = block.attributes || {};
+		if ( attrs.style && attrs.style.color && attrs.style.color.background ) {
+			return attrs.style.color.background;
+		}
+		var slug = attrs.backgroundColor || attrs.overlayColor;
+		if ( slug ) {
+			var match = flatColors.filter( function ( c ) {
+				return c.slug === slug;
+			} )[ 0 ];
+			if ( match ) {
+				return match.color;
+			}
+		}
+		return null;
 	}
 
 	registerBlockType( 'arriva/wave-divider', {
 		edit: function ( props ) {
 			var attributes = props.attributes;
 			var setAttributes = props.setAttributes;
+			var clientId = props.clientId;
 			var shape = attributes.shape;
 			var topColor = attributes.topColor;
 			var bottomColor = attributes.bottomColor;
-			var blockProps = useBlockProps( { style: { background: topColor } } );
-			var themeColors = useSelect( function ( select ) {
+			var blockProps = useBlockProps( { style: { background: topColor || TOP_FALLBACK } } );
+
+			var colorGroups = useSelect( function ( select ) {
+				if ( useMultipleOriginColorsAndGradients ) {
+					return null;
+				}
 				return select( 'core/block-editor' ).getSettings().colors || [];
 			}, [] );
+			var multiOrigin = useMultipleOriginColorsAndGradients ? useMultipleOriginColorsAndGradients() : null;
+			var paletteGroups = multiOrigin ? multiOrigin.colors : colorGroups;
+			var flatColors = [];
+			( paletteGroups || [] ).forEach( function ( entry ) {
+				if ( entry.colors ) {
+					flatColors = flatColors.concat( entry.colors );
+				} else {
+					flatColors.push( entry );
+				}
+			} );
+
+			var siblings = useSelect( function ( select ) {
+				var editor = select( 'core/block-editor' );
+				var rootClientId = editor.getBlockRootClientId( clientId );
+				var order = editor.getBlockOrder( rootClientId );
+				var index = order.indexOf( clientId );
+				return {
+					prev: index > 0 ? editor.getBlock( order[ index - 1 ] ) : null,
+					next: index < order.length - 1 ? editor.getBlock( order[ index + 1 ] ) : null,
+				};
+			}, [ clientId ] );
 
 			useEffect( function () {
 				if ( ! shape ) {
 					setAttributes( { shape: randomShape() } );
+				}
+				if ( ! topColor ) {
+					setAttributes( { topColor: detectBlockBackground( siblings.prev, flatColors ) || TOP_FALLBACK } );
+				}
+				if ( ! bottomColor ) {
+					setAttributes( { bottomColor: detectBlockBackground( siblings.next, flatColors ) || BOTTOM_FALLBACK } );
 				}
 			}, [] );
 
@@ -105,10 +167,10 @@
 							BaseControl,
 							{ label: __( 'Top background (matches section above)', 'arriva' ) },
 							el( ColorPalette, {
-								colors: themeColors,
+								colors: paletteGroups,
 								value: topColor,
 								onChange: function ( color ) {
-									setAttributes( { topColor: color || '#18222a' } );
+									setAttributes( { topColor: color || TOP_FALLBACK } );
 								},
 							} )
 						),
@@ -116,10 +178,10 @@
 							BaseControl,
 							{ label: __( 'Bottom fill (matches section below)', 'arriva' ) },
 							el( ColorPalette, {
-								colors: themeColors,
+								colors: paletteGroups,
 								value: bottomColor,
 								onChange: function ( color ) {
-									setAttributes( { bottomColor: color || '#ffffff' } );
+									setAttributes( { bottomColor: color || BOTTOM_FALLBACK } );
 								},
 							} )
 						)
@@ -133,7 +195,7 @@
 			var shape = attributes.shape;
 			var topColor = attributes.topColor;
 			var bottomColor = attributes.bottomColor;
-			var blockProps = useBlockProps.save( { style: { background: topColor } } );
+			var blockProps = useBlockProps.save( { style: { background: topColor || TOP_FALLBACK } } );
 
 			return el( 'div', blockProps, waveSvg( shape, bottomColor ) );
 		},
