@@ -1,0 +1,18 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "arriva/wave-divider",
+	"title": "Wave Divider",
+	"category": "design",
+	"icon": "marker",
+	"description": "A wave-shaped section divider with two configurable colors: top background (matches the section above) and bottom fill (matches the section below).",
+	"keywords": [ "wave", "divider", "separator", "section" ],
+	"textdomain": "arriva",
+	"attributes": {
+		"topColor": { "type": "string", "default": "#18222a" },
+		"bottomColor": { "type": "string", "default": "#ffffff" }
+	},
+	"supports": { "html": false, "align": [ "full", "wide" ] },
+	"editorScript": "file:./index.js",
+	"style": "file:./style.css"
+}

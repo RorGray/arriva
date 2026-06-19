@@ -1,0 +1,11 @@
+.wp-block-arriva-wave-divider {
+	display: block;
+	width: 100%;
+	overflow: hidden;
+	line-height: 0;
+}
+
+.wp-block-arriva-wave-divider svg {
+	display: block;
+	width: 100%;
+}
