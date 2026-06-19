@@ -5,7 +5,8 @@
 	var useBlockProps = wp.blockEditor.useBlockProps;
 	var InspectorControls = wp.blockEditor.InspectorControls;
 	var PanelBody = wp.components.PanelBody;
-	var PanelColorSettings = wp.components.PanelColorSettings;
+	var BaseControl = wp.components.BaseControl;
+	var ColorPalette = wp.components.ColorPalette;
 	var __ = wp.i18n.__;
 
 	var WAVE_PATH = 'M0 28C180 56 360 0 540 28C720 56 900 0 1080 28C1260 56 1440 0 1440 28L1440 56L0 56Z';
@@ -35,25 +36,26 @@
 					el(
 						PanelBody,
 						{ title: __( 'Wave Colors', 'arriva' ), initialOpen: true },
-						el( PanelColorSettings, {
-							title: __( 'Colors', 'arriva' ),
-							colorSettings: [
-								{
-									value: topColor,
-									onChange: function ( color ) {
-										setAttributes( { topColor: color || '#18222a' } );
-									},
-									label: __( 'Top background (matches section above)', 'arriva' ),
+						el(
+							BaseControl,
+							{ label: __( 'Top background (matches section above)', 'arriva' ) },
+							el( ColorPalette, {
+								value: topColor,
+								onChange: function ( color ) {
+									setAttributes( { topColor: color || '#18222a' } );
 								},
-								{
-									value: bottomColor,
-									onChange: function ( color ) {
-										setAttributes( { bottomColor: color || '#ffffff' } );
-									},
-									label: __( 'Bottom fill (matches section below)', 'arriva' ),
+							} )
+						),
+						el(
+							BaseControl,
+							{ label: __( 'Bottom fill (matches section below)', 'arriva' ) },
+							el( ColorPalette, {
+								value: bottomColor,
+								onChange: function ( color ) {
+									setAttributes( { bottomColor: color || '#ffffff' } );
 								},
-							],
-						} )
+							} )
+						)
 					)
 				),
 				el( 'div', blockProps, waveSvg( bottomColor ) )
