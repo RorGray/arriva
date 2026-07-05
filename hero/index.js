@@ -67,13 +67,13 @@
 				' ',
 				el( RichText, {
 					tagName: 'span',
-					className: 'arriva-hero__wkw',
+					className: 'arriva-wkw',
 					value: attrs.titleHighlight,
 					onChange: function ( value ) {
 						setAttributes( { titleHighlight: value } );
 					},
 					placeholder: __( 'Highlight…', 'arriva' ),
-					allowedFormats: [],
+					allowedFormats: [ 'arriva/wavy-underline' ],
 				} ),
 				el( RichText, {
 					tagName: 'span',
@@ -98,7 +98,7 @@
 				attrs.titleBeforeHighlight ? el( 'span', {}, attrs.titleBeforeHighlight ) : null,
 				' ',
 				attrs.titleHighlight
-					? el( 'span', { className: 'arriva-hero__wkw' }, attrs.titleHighlight )
+					? el( 'span', { className: 'arriva-wkw' }, attrs.titleHighlight )
 					: null,
 				attrs.titleAfterHighlight ? el( 'span', {}, attrs.titleAfterHighlight ) : null,
 				el( 'br', {} ),

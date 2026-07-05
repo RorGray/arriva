@@ -26,6 +26,10 @@
 	z-index: 0;
 }
 
+body:not(.block-editor-page) .wp-block-arriva-hero.is-fixed-scroll.is-layer-hidden .arriva-hero__layer {
+	display: none;
+}
+
 .wp-block-arriva-hero.is-fixed-scroll .arriva-hero__spacer {
 	width: 100%;
 	height: var(--arriva-fixed-height, var(--arriva-hero-min-height));
@@ -116,28 +120,6 @@
 	color: rgba(255, 255, 255, 0.5);
 }
 
-.wp-block-arriva-hero .arriva-hero__wkw {
-	position: relative;
-	display: inline;
-}
-
-.wp-block-arriva-hero .arriva-hero__wkw::after {
-	content: '';
-	position: absolute;
-	left: 0;
-	right: 0;
-	bottom: -0.12em;
-	height: 0.35em;
-	background-color: var(--arriva-hero-accent);
-	opacity: 0.85;
-	mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 8'%3E%3Cpath d='M0 6C5 2 10 2 15 6S25 10 30 6 40 2 40 6' fill='%23000'/%3E%3C/svg%3E");
-	mask-repeat: repeat-x;
-	mask-size: 20px 7px;
-	-webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 8'%3E%3Cpath d='M0 6C5 2 10 2 15 6S25 10 30 6 40 2 40 6' fill='%23000'/%3E%3C/svg%3E");
-	-webkit-mask-repeat: repeat-x;
-	-webkit-mask-size: 20px 7px;
-}
-
 .wp-block-arriva-hero .arriva-hero__sub {
 	font-size: clamp(1.15rem, 1.06rem + 0.44vw, 1.35rem);
 	color: rgba(255, 255, 255, 0.6);
@@ -220,11 +202,28 @@
 	}
 
 	.wp-block-arriva-hero .arriva-hero__inner {
-		padding-block: clamp(3rem, 12vw, 4.5rem) clamp(2.5rem, 8vw, 3.5rem);
+		padding-block: clamp(3rem, 12vw, 4.5rem) clamp(5rem, 16vw, 6.5rem);
 	}
 
 	.wp-block-arriva-hero .arriva-hero__icon {
-		display: none;
+		top: auto;
+		right: auto;
+		left: 50%;
+		bottom: clamp(0.75rem, 4vw, 1.75rem);
+		transform: translateX(-50%);
+		opacity: 0.14;
+	}
+
+	.wp-block-arriva-hero .arriva-hero__icon svg {
+		width: clamp(100px, 36vw, 160px);
+	}
+
+	.wp-block-arriva-hero .arriva-hero__icon-img {
+		width: clamp(100px, 36vw, 160px);
+	}
+
+	.wp-block-arriva-hero .arriva-hero__icon.fl {
+		animation: arriva-hero-float-mobile 4.5s ease-in-out infinite;
 	}
 
 	.wp-block-arriva-hero .arriva-hero__wrap {
@@ -253,7 +252,31 @@
 	}
 }
 
-/* Editor: show fixed layout inline for easier editing */
+@keyframes arriva-hero-float-mobile {
+	0%,
+	100% {
+		transform: translateX(-50%) translateY(0);
+	}
+	50% {
+		transform: translateX(-50%) translateY(-6px);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wp-block-arriva-hero .arriva-hero__icon.fl {
+		animation: none;
+	}
+}
+
+/* Editor: full width + inline fixed layout for easier editing */
+.block-editor-block-list__layout .wp-block-arriva-hero.alignfull,
+.block-editor-block-list__layout .wp-block-arriva-hero.is-fixed-scroll {
+	width: 100dvw;
+	max-width: 100dvw;
+	margin-left: calc(50% - 50dvw);
+	margin-right: calc(50% - 50dvw);
+}
+
 .block-editor-block-list__layout .wp-block-arriva-hero.is-fixed-scroll .arriva-hero__layer {
 	position: relative;
 }

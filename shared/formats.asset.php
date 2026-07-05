@@ -1,12 +1,10 @@
 <?php
 return array(
 	'dependencies' => array(
-		'arriva-formats',
-		'wp-blocks',
+		'wp-rich-text',
 		'wp-element',
-		'wp-block-editor',
-		'wp-components',
 		'wp-i18n',
+		'wp-block-editor',
 	),
 	'version'      => ARRIVA_VERSION,
 );

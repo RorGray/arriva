@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Arriva
  * Description: Custom Gutenberg blocks for Arriva Speyer e.V.
- * Version: 1.3.2
+ * Version: 1.3.3
  * Author: Arriva Speyer e.V.
  * License: GPL-2.0-or-later
  * Text Domain: arriva
@@ -16,6 +16,16 @@ if ( ! defined( 'ARRIVA_VERSION' ) ) {
 }
 
 add_action( 'init', function () {
+	$formats_asset = require __DIR__ . '/shared/formats.asset.php';
+
+	wp_register_script(
+		'arriva-formats',
+		plugins_url( 'shared/formats.js', __FILE__ ),
+		$formats_asset['dependencies'],
+		$formats_asset['version'],
+		true
+	);
+
 	register_block_type( __DIR__ . '/wave-divider' );
 	register_block_type( __DIR__ . '/hero' );
 
@@ -33,4 +43,17 @@ add_action( 'init', function () {
 			'content'     => "<!-- wp:arriva/hero {\"align\":\"full\"} /-->\n<!-- wp:arriva/wave-divider {\"align\":\"full\",\"overlapPrevious\":true,\"topColor\":\"transparent\",\"bottomColor\":\"#ffffff\"} /-->",
 		)
 	);
+} );
+
+add_action( 'enqueue_block_assets', function () {
+	wp_enqueue_style(
+		'arriva-formats',
+		plugins_url( 'shared/formats.css', __FILE__ ),
+		array(),
+		ARRIVA_VERSION
+	);
+} );
+
+add_action( 'enqueue_block_editor_assets', function () {
+	wp_enqueue_script( 'arriva-formats' );
 } );

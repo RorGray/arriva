@@ -25,16 +25,3 @@
 .wp-block-arriva-wave-divider.is-overlap-previous {
 	margin-block-start: calc(-1 * var(--arriva-wave-height, 56px));
 }
-
-/* Override WP constrained layout gap that exposes the fixed hero between sections */
-:root :where(.is-layout-constrained) > .wp-block-arriva-wave-divider.is-overlap-previous {
-	margin-block-start: calc(-1 * var(--arriva-wave-height, 56px));
-}
-
-:root :where(.is-layout-constrained) > .wp-block-arriva-wave-divider.is-overlap-previous + * {
-	margin-block-start: 0;
-}
-
-:root :where(.is-layout-constrained) > .wp-block-arriva-hero.is-fixed-scroll:first-child {
-	margin-block-start: 0;
-}
