@@ -25,37 +25,43 @@
 		wave: {
 			label: __( 'Wave', 'arriva' ),
 			height: 56,
-			tileWidth: 1080,
+			pathWidth: 1080,
+			tileWidth: 1440,
 			tilePath: 'M0 28C180 56 360 0 540 28C720 56 900 0 1080 28L1080 56L0 56Z',
 		},
 		'wave-flip': {
 			label: __( 'Wave (flipped)', 'arriva' ),
 			height: 56,
-			tileWidth: 1080,
+			pathWidth: 1080,
+			tileWidth: 1440,
 			tilePath: 'M0 28C180 0 360 56 540 28C720 0 900 56 1080 28L1080 56L0 56Z',
 		},
 		curve: {
 			label: __( 'Curve', 'arriva' ),
 			height: 48,
-			tileWidth: 1440,
+			pathWidth: 1440,
+			tileWidth: 1920,
 			tilePath: 'M0 24C240 48 480 0 720 24C960 48 1200 0 1440 24L1440 48L0 48Z',
 		},
 		'curve-flip': {
 			label: __( 'Curve (flipped)', 'arriva' ),
 			height: 48,
-			tileWidth: 1440,
+			pathWidth: 1440,
+			tileWidth: 1920,
 			tilePath: 'M0 24C240 0 480 48 720 24C960 0 1200 48 1440 24L1440 48L0 48Z',
 		},
 		ripple: {
 			label: __( 'Ripple', 'arriva' ),
 			height: 48,
-			tileWidth: 1080,
+			pathWidth: 1080,
+			tileWidth: 1440,
 			tilePath: 'M0 24C180 0 360 48 540 24C720 0 900 48 1080 24L1080 48L0 48Z',
 		},
 		'ripple-flip': {
 			label: __( 'Ripple (flipped)', 'arriva' ),
 			height: 48,
-			tileWidth: 1080,
+			pathWidth: 1080,
+			tileWidth: 1440,
 			tilePath: 'M0 24C180 48 360 0 540 24C720 48 900 0 1080 24L1080 48L0 48Z',
 		},
 	};
@@ -93,6 +99,7 @@
 		var wave = WAVES[ shape ] || WAVES.wave;
 		var fill = bottomColor || TRANSPARENT;
 		var phase = ( offset || 0 ) % wave.tileWidth;
+		var scaleX = wave.tileWidth / wave.pathWidth;
 		return el(
 			'svg',
 			{
@@ -112,7 +119,11 @@
 						patternUnits: 'userSpaceOnUse',
 						patternTransform: 'translate(' + -phase + ', 0)',
 					},
-					el( 'path', { d: wave.tilePath, fill: fill } )
+					el( 'path', {
+						d: wave.tilePath,
+						fill: fill,
+						transform: 'scale(' + scaleX + ', 1)',
+					} )
 				)
 			),
 			el( 'rect', {
