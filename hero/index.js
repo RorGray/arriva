@@ -269,8 +269,12 @@
 			attrs.showIcon
 				? el(
 					'div',
-					{ className: 'arriva-hero__icon fl', 'aria-hidden': 'true' },
-					renderIcon( attrs.iconUrl, attrs.iconAlt )
+					{ className: 'arriva-hero__icon', 'aria-hidden': 'true' },
+					el(
+						'div',
+						{ className: 'arriva-hero__icon-motion' },
+						renderIcon( attrs.iconUrl, attrs.iconAlt )
+					)
 				)
 				: null,
 			el(
