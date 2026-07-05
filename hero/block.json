@@ -1,0 +1,104 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "arriva/hero",
+	"title": "Hero Section",
+	"category": "design",
+	"icon": "cover-image",
+	"description": "Full-width hero with editable text, colours, and imagery. Supports fixed scroll-over behaviour — pair with a Wave Divider in overlay mode for the transition.",
+	"keywords": [ "hero", "banner", "header", "cover" ],
+	"textdomain": "arriva",
+	"attributes": {
+		"eyebrow": {
+			"type": "string",
+			"default": "Category · Location"
+		},
+		"titleBeforeHighlight": {
+			"type": "string",
+			"default": "Your"
+		},
+		"titleHighlight": {
+			"type": "string",
+			"default": "Headline"
+		},
+		"titleAfterHighlight": {
+			"type": "string",
+			"default": "."
+		},
+		"titleEmphasis": {
+			"type": "string",
+			"default": "Goes here."
+		},
+		"subtitle": {
+			"type": "string",
+			"default": "Add a short introduction that explains what this page is about. Keep it concise and inviting."
+		},
+		"primaryBtnText": {
+			"type": "string",
+			"default": "Get started →"
+		},
+		"primaryBtnUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"secondaryBtnText": {
+			"type": "string",
+			"default": "Learn more"
+		},
+		"secondaryBtnUrl": {
+			"type": "string",
+			"default": "#"
+		},
+		"backgroundColor": {
+			"type": "string",
+			"default": "#18222a"
+		},
+		"accentColor": {
+			"type": "string",
+			"default": "#1a93a4"
+		},
+		"accentDarkColor": {
+			"type": "string",
+			"default": "#117585"
+		},
+		"glowColor": {
+			"type": "string",
+			"default": "rgba(26,147,164,0.28)"
+		},
+		"iconUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"iconAlt": {
+			"type": "string",
+			"default": ""
+		},
+		"backgroundImageUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"minHeight": {
+			"type": "number",
+			"default": 600
+		},
+		"fixedScroll": {
+			"type": "boolean",
+			"default": true
+		},
+		"showIcon": {
+			"type": "boolean",
+			"default": true
+		},
+		"showGlow": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"supports": {
+		"html": false,
+		"align": [ "full", "wide" ]
+	},
+	"editorScript": "file:./index.js",
+	"style": "file:./style.css",
+	"viewScript": "file:./view.js"
+}

@@ -5,14 +5,15 @@
 	"title": "Wave Divider",
 	"category": "design",
 	"icon": "marker",
-	"description": "A wave-shaped section divider with a choice of shapes and two configurable colors: top background (matches the section above) and bottom fill (matches the section below).",
+	"description": "A wave-shaped section divider. Use overlay mode after a fixed hero so the wave sits on the section above with a transparent top.",
 	"keywords": [ "wave", "divider", "separator", "section" ],
 	"textdomain": "arriva",
 	"attributes": {
 		"shape": { "type": "string", "default": "" },
 		"offset": { "type": "number", "default": 0 },
 		"topColor": { "type": "string", "default": "" },
-		"bottomColor": { "type": "string", "default": "" }
+		"bottomColor": { "type": "string", "default": "" },
+		"overlayMode": { "type": "string", "default": "none" }
 	},
 	"supports": { "html": false, "align": [ "full", "wide" ] },
 	"editorScript": "file:./index.js",

@@ -1,0 +1,50 @@
+.wp-block-arriva-wave-divider {
+	display: block;
+	width: 100%;
+	overflow: hidden;
+	line-height: 0;
+}
+
+.wp-block-arriva-wave-divider svg {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+/* Fixed overlay mode: wave pinned to bottom of a fixed section above (transparent top) */
+.wp-block-arriva-wave-divider.is-fixed-overlay {
+	position: relative;
+	background: transparent !important;
+}
+
+.wp-block-arriva-wave-divider.is-fixed-overlay .arriva-wave-divider__fixed {
+	position: fixed;
+	top: calc(var(--arriva-fixed-height, 100vh) - var(--arriva-wave-height, 56px));
+	left: 0;
+	right: 0;
+	z-index: 1;
+	pointer-events: none;
+	background: transparent;
+	line-height: 0;
+}
+
+.admin-bar .wp-block-arriva-wave-divider.is-fixed-overlay .arriva-wave-divider__fixed {
+	top: calc(
+		var(--wp-admin--admin-bar--height, 32px) + var(--arriva-fixed-height, 100vh) -
+			var(--arriva-wave-height, 56px)
+	);
+}
+
+.wp-block-arriva-wave-divider.is-fixed-overlay .arriva-wave-divider__spacer {
+	height: var(--arriva-wave-height, 56px);
+	pointer-events: none;
+}
+
+.block-editor-block-list__layout .wp-block-arriva-wave-divider.is-fixed-overlay .arriva-wave-divider__fixed {
+	position: relative;
+	top: auto;
+}
+
+.block-editor-block-list__layout .wp-block-arriva-wave-divider.is-fixed-overlay .arriva-wave-divider__spacer {
+	display: none;
+}

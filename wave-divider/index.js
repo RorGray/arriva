@@ -10,55 +10,45 @@
 	var BaseControl = wp.components.BaseControl;
 	var Button = wp.components.Button;
 	var ColorPalette = wp.components.ColorPalette;
+	var SelectControl = wp.components.SelectControl;
+	var ToggleControl = wp.components.ToggleControl;
 	var useSelect = wp.data.useSelect;
 	var __ = wp.i18n.__;
 
 	var TRANSPARENT = 'transparent';
-	var TRANSPARENT_GROUP = [
-		{
-			name: __( 'Special', 'arriva' ),
-			colors: [ { name: __( 'Transparent', 'arriva' ), color: TRANSPARENT, slug: 'transparent' } ],
-		},
-	];
 
 	var WAVES = {
 		wave: {
-			label: __( 'Wave', 'arriva' ),
 			height: 56,
 			pathWidth: 1080,
 			tileWidth: 1440,
 			tilePath: 'M0 28C180 56 360 0 540 28C720 56 900 0 1080 28L1080 56L0 56Z',
 		},
 		'wave-flip': {
-			label: __( 'Wave (flipped)', 'arriva' ),
 			height: 56,
 			pathWidth: 1080,
 			tileWidth: 1440,
 			tilePath: 'M0 28C180 0 360 56 540 28C720 0 900 56 1080 28L1080 56L0 56Z',
 		},
 		curve: {
-			label: __( 'Curve', 'arriva' ),
 			height: 48,
 			pathWidth: 1440,
 			tileWidth: 1920,
 			tilePath: 'M0 24C240 48 480 0 720 24C960 48 1200 0 1440 24L1440 48L0 48Z',
 		},
 		'curve-flip': {
-			label: __( 'Curve (flipped)', 'arriva' ),
 			height: 48,
 			pathWidth: 1440,
 			tileWidth: 1920,
 			tilePath: 'M0 24C240 0 480 48 720 24C960 0 1200 48 1440 24L1440 48L0 48Z',
 		},
 		ripple: {
-			label: __( 'Ripple', 'arriva' ),
 			height: 48,
 			pathWidth: 1080,
 			tileWidth: 1440,
 			tilePath: 'M0 24C180 0 360 48 540 24C720 0 900 48 1080 24L1080 48L0 48Z',
 		},
 		'ripple-flip': {
-			label: __( 'Ripple (flipped)', 'arriva' ),
 			height: 48,
 			pathWidth: 1080,
 			tileWidth: 1440,
@@ -77,10 +67,6 @@
 		return Math.floor( Math.random() * wave.tileWidth );
 	}
 
-	/**
-	 * Picks a new shape ~60% of the time; otherwise keeps the current shape and
-	 * only shifts phase so the same pattern reads differently.
-	 */
 	function randomizeWave( currentShape ) {
 		var keepShape = currentShape && Math.random() < 0.4;
 		var shape = keepShape ? currentShape : randomShape();
@@ -95,11 +81,16 @@
 		return 'arriva-' + shape + '-' + colorPart + '-' + offset + ( unique ? '-' + unique : '' );
 	}
 
+	function waveHeight( shape ) {
+		return ( WAVES[ shape ] || WAVES.wave ).height;
+	}
+
 	function waveSvg( shape, bottomColor, offset, id ) {
 		var wave = WAVES[ shape ] || WAVES.wave;
 		var fill = bottomColor || TRANSPARENT;
 		var phase = ( offset || 0 ) % wave.tileWidth;
 		var scaleX = wave.tileWidth / wave.pathWidth;
+
 		return el(
 			'svg',
 			{
@@ -134,12 +125,13 @@
 		);
 	}
 
-	/**
-	 * Reads a color from a sibling block, but only if that block uses
-	 * WordPress's native color block-support (custom color or a palette slug).
-	 * Arbitrary CSS backgrounds (theme classes, gradients, images) aren't
-	 * visible to the block editor's data store, so those can't be detected.
-	 */
+	var TRANSPARENT_GROUP = [
+		{
+			name: __( 'Special', 'arriva' ),
+			colors: [ { name: __( 'Transparent', 'arriva' ), color: TRANSPARENT, slug: 'transparent' } ],
+		},
+	];
+
 	function detectBlockBackground( block, flatColors ) {
 		if ( ! block ) {
 			return null;
@@ -157,7 +149,48 @@
 				return match.color;
 			}
 		}
+		if ( attrs.backgroundColor && attrs.backgroundColor.indexOf( '#' ) === 0 ) {
+			return attrs.backgroundColor;
+		}
 		return null;
+	}
+
+	function isFixedOverlayCandidate( block ) {
+		if ( ! block ) {
+			return false;
+		}
+		if ( block.name === 'arriva/hero' ) {
+			return block.attributes.fixedScroll !== false;
+		}
+		return false;
+	}
+
+	function isOverlayMode( overlayMode ) {
+		return overlayMode === 'overlay';
+	}
+
+	function renderWaveMarkup( shape, bottomColor, offset, unique, overlayMode ) {
+		var svg = waveSvg(
+			shape,
+			bottomColor,
+			offset,
+			patternId( shape, bottomColor, offset, unique )
+		);
+
+		if ( isOverlayMode( overlayMode ) ) {
+			return el(
+				Fragment,
+				{},
+				el( 'div', { className: 'arriva-wave-divider__fixed' }, svg ),
+				el( 'div', {
+					className: 'arriva-wave-divider__spacer',
+					'aria-hidden': 'true',
+					style: { height: waveHeight( shape ) + 'px' },
+				} )
+			);
+		}
+
+		return svg;
 	}
 
 	registerBlockType( 'arriva/wave-divider', {
@@ -169,7 +202,15 @@
 			var offset = attributes.offset;
 			var topColor = attributes.topColor;
 			var bottomColor = attributes.bottomColor;
-			var blockProps = useBlockProps( { style: { background: topColor || TRANSPARENT } } );
+			var overlayMode = attributes.overlayMode || 'none';
+			var isOverlay = isOverlayMode( overlayMode );
+			var blockProps = useBlockProps( {
+				className: isOverlay ? 'is-fixed-overlay' : '',
+				style: {
+					background: isOverlay ? TRANSPARENT : topColor || TRANSPARENT,
+					'--arriva-wave-height': waveHeight( shape ) + 'px',
+				},
+			} );
 
 			var colorGroups = useSelect( function ( select ) {
 				if ( useMultipleOriginColorsAndGradients ) {
@@ -213,6 +254,9 @@
 				if ( ! bottomColor ) {
 					setAttributes( { bottomColor: detectBlockBackground( siblings.next, flatColors ) || TRANSPARENT } );
 				}
+				if ( isFixedOverlayCandidate( siblings.prev ) && ! isOverlayMode( overlayMode ) ) {
+					setAttributes( { overlayMode: 'overlay', topColor: TRANSPARENT } );
+				}
 			}, [] );
 
 			return el(
@@ -224,6 +268,28 @@
 					el(
 						PanelBody,
 						{ title: __( 'Wave Settings', 'arriva' ), initialOpen: true },
+						el( SelectControl, {
+							label: __( 'Position mode', 'arriva' ),
+							value: overlayMode,
+							options: [
+								{ label: __( 'Default (between sections)', 'arriva' ), value: 'none' },
+								{
+									label: __( 'Overlay fixed section (transparent top)', 'arriva' ),
+									value: 'overlay',
+								},
+							],
+							onChange: function ( value ) {
+								var next = { overlayMode: value };
+								if ( value === 'overlay' ) {
+									next.topColor = TRANSPARENT;
+								}
+								setAttributes( next );
+							},
+							help: __(
+								'Place after a fixed Hero block (or other fixed section). The wave overlays the bottom edge with a transparent top so no gap appears before scrolling.',
+								'arriva'
+							),
+						} ),
 						el(
 							BaseControl,
 							{ label: __( 'Shape', 'arriva' ) },
@@ -241,13 +307,25 @@
 						el(
 							BaseControl,
 							{ label: __( 'Top background (matches section above)', 'arriva' ) },
-							el( ColorPalette, {
-								colors: paletteGroups,
-								value: topColor,
-								onChange: function ( color ) {
-									setAttributes( { topColor: color || TRANSPARENT } );
+							el( ToggleControl, {
+								label: __( 'Transparent top', 'arriva' ),
+								checked: topColor === TRANSPARENT,
+								disabled: isOverlay,
+								onChange: function ( isTransparent ) {
+									setAttributes( {
+										topColor: isTransparent ? TRANSPARENT : detectBlockBackground( siblings.prev, flatColors ) || '#ffffff',
+									} );
 								},
-							} )
+							} ),
+							topColor !== TRANSPARENT
+								? el( ColorPalette, {
+									colors: paletteGroups,
+									value: topColor,
+									onChange: function ( color ) {
+										setAttributes( { topColor: color || TRANSPARENT } );
+									},
+								} )
+								: null
 						),
 						el(
 							BaseControl,
@@ -265,7 +343,7 @@
 				el(
 					'div',
 					blockProps,
-					waveSvg( shape, bottomColor, offset, patternId( shape, bottomColor, offset, clientId ) )
+					renderWaveMarkup( shape, bottomColor, offset, clientId, overlayMode )
 				)
 			);
 		},
@@ -275,12 +353,20 @@
 			var offset = attributes.offset;
 			var topColor = attributes.topColor;
 			var bottomColor = attributes.bottomColor;
-			var blockProps = useBlockProps.save( { style: { background: topColor || TRANSPARENT } } );
+			var overlayMode = attributes.overlayMode || 'none';
+			var isOverlay = isOverlayMode( overlayMode );
+			var blockProps = useBlockProps.save( {
+				className: isOverlay ? 'is-fixed-overlay' : '',
+				style: {
+					background: isOverlay ? TRANSPARENT : topColor || TRANSPARENT,
+					'--arriva-wave-height': waveHeight( shape ) + 'px',
+				},
+			} );
 
 			return el(
 				'div',
 				blockProps,
-				waveSvg( shape, bottomColor, offset, patternId( shape, bottomColor, offset ) )
+				renderWaveMarkup( shape, bottomColor, offset, '', overlayMode )
 			);
 		},
 	} );
