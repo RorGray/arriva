@@ -44,18 +44,56 @@
 			.trim().length > 0;
 	}
 
-	function intersperse( items, separator ) {
-		var result = [];
-		items.forEach( function ( item, index ) {
-			if ( ! item ) {
-				return;
+	function getTitleValue( attrs ) {
+		if ( attrs.title ) {
+			return attrs.title;
+		}
+
+		var parts = [];
+
+		if ( hasRichTextContent( attrs.titleBeforeHighlight ) ) {
+			parts.push( attrs.titleBeforeHighlight );
+		}
+		if ( hasRichTextContent( attrs.titleHighlight ) ) {
+			parts.push( attrs.titleHighlight );
+		}
+		if ( hasRichTextContent( attrs.titleAfterHighlight ) ) {
+			parts.push( attrs.titleAfterHighlight );
+		}
+
+		var lineOne = parts.join( ' ' );
+
+		if ( hasRichTextContent( attrs.titleEmphasis ) ) {
+			var emphasis = attrs.titleEmphasis;
+			if ( emphasis.indexOf( '<em' ) !== 0 ) {
+				emphasis = '<em>' + emphasis + '</em>';
 			}
-			if ( result.length && separator ) {
-				result.push( separator );
-			}
-			result.push( item );
+			return lineOne ? lineOne + '<br>' + emphasis : emphasis;
+		}
+
+		return lineOne;
+	}
+
+	function renderTitle( attrs, isEditor, setAttributes ) {
+		var titleValue = getTitleValue( attrs );
+
+		if ( isEditor ) {
+			return editRichText( {
+				tagName: 'h1',
+				className: 'arriva-hero__title',
+				value: titleValue,
+				onChange: function ( value ) {
+					setAttributes( { title: value } );
+				},
+				placeholder: __( 'Title…', 'arriva' ),
+			} );
+		}
+
+		return saveRichText( {
+			tagName: 'h1',
+			className: 'arriva-hero__title',
+			value: titleValue,
 		} );
-		return result;
 	}
 
 	function glowVarValue( color ) {
@@ -127,74 +165,6 @@
 			className: config.className,
 			value: config.value,
 		} );
-	}
-
-	function renderTitle( attrs, isEditor, setAttributes ) {
-		if ( isEditor ) {
-			return el(
-				'h1',
-				{ className: 'arriva-hero__title' },
-				editRichText( {
-					tagName: 'span',
-					value: attrs.titleBeforeHighlight,
-					onChange: function ( value ) {
-						setAttributes( { titleBeforeHighlight: value } );
-					},
-					placeholder: __( 'Title…', 'arriva' ),
-				} ),
-				' ',
-				editRichText( {
-					tagName: 'span',
-					value: attrs.titleHighlight,
-					onChange: function ( value ) {
-						setAttributes( { titleHighlight: value } );
-					},
-					placeholder: __( 'Highlight…', 'arriva' ),
-				} ),
-				editRichText( {
-					tagName: 'span',
-					value: attrs.titleAfterHighlight,
-					onChange: function ( value ) {
-						setAttributes( { titleAfterHighlight: value } );
-					},
-				} ),
-				el( 'br', {} ),
-				editRichText( {
-					tagName: 'em',
-					value: attrs.titleEmphasis,
-					onChange: function ( value ) {
-						setAttributes( { titleEmphasis: value } );
-					},
-					placeholder: __( 'Emphasis…', 'arriva' ),
-				} )
-			);
-		}
-
-		var lineOne = intersperse(
-			[
-				saveRichText( { tagName: 'span', value: attrs.titleBeforeHighlight } ),
-				saveRichText( { tagName: 'span', value: attrs.titleHighlight } ),
-				saveRichText( { tagName: 'span', value: attrs.titleAfterHighlight } ),
-			],
-			' '
-		);
-
-		var titleChildren = lineOne.slice();
-
-		if ( hasRichTextContent( attrs.titleEmphasis ) ) {
-			if ( titleChildren.length ) {
-				titleChildren.push( el( 'br', {} ) );
-			}
-			titleChildren.push(
-				saveRichText( { tagName: 'em', value: attrs.titleEmphasis } )
-			);
-		}
-
-		if ( ! titleChildren.length ) {
-			return null;
-		}
-
-		return el( 'h1', { className: 'arriva-hero__title' }, titleChildren );
 	}
 
 	function renderButton( attrs, isEditor, setAttributes, variant, textKey, urlKey, placeholder ) {

@@ -27,7 +27,9 @@
 }
 
 body:not(.block-editor-page) .wp-block-arriva-hero.is-fixed-scroll.is-layer-hidden .arriva-hero__layer {
-	display: none;
+	visibility: hidden;
+	opacity: 0;
+	pointer-events: none;
 }
 
 .wp-block-arriva-hero.is-fixed-scroll .arriva-hero__spacer {

@@ -13,19 +13,7 @@
 			"type": "string",
 			"default": ""
 		},
-		"titleBeforeHighlight": {
-			"type": "string",
-			"default": ""
-		},
-		"titleHighlight": {
-			"type": "string",
-			"default": ""
-		},
-		"titleAfterHighlight": {
-			"type": "string",
-			"default": ""
-		},
-		"titleEmphasis": {
+		"title": {
 			"type": "string",
 			"default": ""
 		},
