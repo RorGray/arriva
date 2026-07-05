@@ -5,7 +5,7 @@
 	--arriva-hero-glow: rgba(26, 147, 164, 0.28);
 	--arriva-hero-min-height: 600px;
 	position: relative;
-	width: 100%;
+	overflow-x: clip;
 }
 
 /* Break out of constrained content width */
@@ -38,13 +38,24 @@ body:not(.block-editor-page) .wp-block-arriva-hero.is-fixed-scroll.is-layer-hidd
 
 .wp-block-arriva-hero .arriva-hero__inner {
 	position: relative;
-	overflow: hidden;
+	overflow: visible;
 	min-height: var(--arriva-hero-min-height);
 	padding-block: clamp(5rem, 12vw, 9rem) clamp(4rem, 9vw, 7rem);
 	background: var(--arriva-hero-bg);
 	background-size: cover;
 	background-position: center;
 	color: #fff;
+}
+
+.wp-block-arriva-hero .arriva-hero__inner::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	background: inherit;
+	background-image: inherit;
+	background-size: inherit;
+	background-position: inherit;
 }
 
 .wp-block-arriva-hero .arriva-hero__glow {
@@ -113,6 +124,8 @@ body:not(.block-editor-page) .wp-block-arriva-hero.is-fixed-scroll.is-layer-hidd
 	line-height: 1.04;
 	color: #fff;
 	margin: 0 0 1.5rem;
+	overflow: visible;
+	padding-bottom: 0.25em;
 }
 
 .wp-block-arriva-hero .arriva-hero__title em {

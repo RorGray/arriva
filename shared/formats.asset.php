@@ -5,6 +5,7 @@ return array(
 		'wp-element',
 		'wp-i18n',
 		'wp-block-editor',
+		'wp-hooks',
 	),
 	'version'      => ARRIVA_VERSION,
 );

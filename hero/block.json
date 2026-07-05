@@ -11,31 +11,31 @@
 	"attributes": {
 		"eyebrow": {
 			"type": "string",
-			"default": "Category · Location"
+			"default": ""
 		},
 		"titleBeforeHighlight": {
 			"type": "string",
-			"default": "Your"
+			"default": ""
 		},
 		"titleHighlight": {
 			"type": "string",
-			"default": "Headline"
+			"default": ""
 		},
 		"titleAfterHighlight": {
 			"type": "string",
-			"default": "."
+			"default": ""
 		},
 		"titleEmphasis": {
 			"type": "string",
-			"default": "Goes here."
+			"default": ""
 		},
 		"subtitle": {
 			"type": "string",
-			"default": "Add a short introduction that explains what this page is about. Keep it concise and inviting."
+			"default": ""
 		},
 		"primaryBtnText": {
 			"type": "string",
-			"default": "Get started →"
+			"default": ""
 		},
 		"primaryBtnUrl": {
 			"type": "string",
@@ -43,11 +43,11 @@
 		},
 		"secondaryBtnText": {
 			"type": "string",
-			"default": "Learn more"
+			"default": ""
 		},
 		"secondaryBtnUrl": {
 			"type": "string",
-			"default": "#"
+			"default": ""
 		},
 		"backgroundColor": {
 			"type": "string",
@@ -63,7 +63,7 @@
 		},
 		"glowColor": {
 			"type": "string",
-			"default": "rgba(26,147,164,0.28)"
+			"default": "#1a93a4"
 		},
 		"iconUrl": {
 			"type": "string",

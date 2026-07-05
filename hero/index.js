@@ -5,6 +5,7 @@
 	var useBlockProps = wp.blockEditor.useBlockProps;
 	var InspectorControls = wp.blockEditor.InspectorControls;
 	var RichText = wp.blockEditor.RichText;
+	var RichTextContent = RichText.Content;
 	var MediaUpload = wp.blockEditor.MediaUpload;
 	var MediaUploadCheck = wp.blockEditor.MediaUploadCheck;
 	var PanelBody = wp.components.PanelBody;
@@ -15,6 +16,9 @@
 	var ToggleControl = wp.components.ToggleControl;
 	var RangeControl = wp.components.RangeControl;
 	var __ = wp.i18n.__;
+	var usePaletteGroups = wp.arriva.usePaletteGroups;
+
+	var DEFAULT_GLOW = 'rgba(26,147,164,0.28)';
 
 	var DEFAULT_ICON = el(
 		'svg',
@@ -30,12 +34,64 @@
 		el( 'path', { d: 'M100 30 C110 35 130 45 140 55 L100 55Z' } )
 	);
 
+	function hasRichTextContent( value ) {
+		if ( ! value ) {
+			return false;
+		}
+		return value
+			.replace( /<[^>]+>/g, '' )
+			.replace( /&nbsp;/g, ' ' )
+			.trim().length > 0;
+	}
+
+	function intersperse( items, separator ) {
+		var result = [];
+		items.forEach( function ( item, index ) {
+			if ( ! item ) {
+				return;
+			}
+			if ( result.length && separator ) {
+				result.push( separator );
+			}
+			result.push( item );
+		} );
+		return result;
+	}
+
+	function glowVarValue( color ) {
+		if ( ! color ) {
+			return DEFAULT_GLOW;
+		}
+		if ( color.indexOf( 'rgba' ) === 0 || color.indexOf( 'hsla' ) === 0 ) {
+			return color;
+		}
+		if ( color === 'transparent' ) {
+			return 'transparent';
+		}
+		var hex = color.replace( '#', '' );
+		if ( hex.length === 3 ) {
+			hex = hex
+				.split( '' )
+				.map( function ( ch ) {
+					return ch + ch;
+				} )
+				.join( '' );
+		}
+		if ( hex.length !== 6 ) {
+			return color;
+		}
+		var r = parseInt( hex.slice( 0, 2 ), 16 );
+		var g = parseInt( hex.slice( 2, 4 ), 16 );
+		var b = parseInt( hex.slice( 4, 6 ), 16 );
+		return 'rgba(' + r + ',' + g + ',' + b + ',0.28)';
+	}
+
 	function heroStyleVars( attrs ) {
 		return {
 			'--arriva-hero-bg': attrs.backgroundColor || '#18222a',
 			'--arriva-hero-accent': attrs.accentColor || '#1a93a4',
 			'--arriva-hero-accent-d': attrs.accentDarkColor || '#117585',
-			'--arriva-hero-glow': attrs.glowColor || 'rgba(26,147,164,0.28)',
+			'--arriva-hero-glow': glowVarValue( attrs.glowColor ),
 			'--arriva-hero-min-height': ( attrs.minHeight || 600 ) + 'px',
 		};
 	}
@@ -52,58 +108,182 @@
 		return DEFAULT_ICON;
 	}
 
-	function renderHeroInner( attrs, isEditor, setAttributes ) {
-		var titleChildren = isEditor
-			? [
-				el( RichText, {
+	function editRichText( config ) {
+		return el( RichText, {
+			tagName: config.tagName,
+			className: config.className,
+			value: config.value,
+			onChange: config.onChange,
+			placeholder: config.placeholder,
+		} );
+	}
+
+	function saveRichText( config ) {
+		if ( ! hasRichTextContent( config.value ) ) {
+			return null;
+		}
+		return el( RichTextContent, {
+			tagName: config.tagName,
+			className: config.className,
+			value: config.value,
+		} );
+	}
+
+	function renderTitle( attrs, isEditor, setAttributes ) {
+		if ( isEditor ) {
+			return el(
+				'h1',
+				{ className: 'arriva-hero__title' },
+				editRichText( {
 					tagName: 'span',
 					value: attrs.titleBeforeHighlight,
 					onChange: function ( value ) {
 						setAttributes( { titleBeforeHighlight: value } );
 					},
 					placeholder: __( 'Title…', 'arriva' ),
-					allowedFormats: [],
 				} ),
 				' ',
-				el( RichText, {
+				editRichText( {
 					tagName: 'span',
-					className: 'arriva-wkw',
 					value: attrs.titleHighlight,
 					onChange: function ( value ) {
 						setAttributes( { titleHighlight: value } );
 					},
 					placeholder: __( 'Highlight…', 'arriva' ),
-					allowedFormats: [ 'arriva/wavy-underline' ],
 				} ),
-				el( RichText, {
+				editRichText( {
 					tagName: 'span',
 					value: attrs.titleAfterHighlight,
 					onChange: function ( value ) {
 						setAttributes( { titleAfterHighlight: value } );
 					},
-					allowedFormats: [],
 				} ),
 				el( 'br', {} ),
-				el( RichText, {
+				editRichText( {
 					tagName: 'em',
 					value: attrs.titleEmphasis,
 					onChange: function ( value ) {
 						setAttributes( { titleEmphasis: value } );
 					},
 					placeholder: __( 'Emphasis…', 'arriva' ),
-					allowedFormats: [],
-				} ),
-			]
-			: [
-				attrs.titleBeforeHighlight ? el( 'span', {}, attrs.titleBeforeHighlight ) : null,
-				' ',
-				attrs.titleHighlight
-					? el( 'span', { className: 'arriva-wkw' }, attrs.titleHighlight )
-					: null,
-				attrs.titleAfterHighlight ? el( 'span', {}, attrs.titleAfterHighlight ) : null,
-				el( 'br', {} ),
-				attrs.titleEmphasis ? el( 'em', {}, attrs.titleEmphasis ) : null,
-			];
+				} )
+			);
+		}
+
+		var lineOne = intersperse(
+			[
+				saveRichText( { tagName: 'span', value: attrs.titleBeforeHighlight } ),
+				saveRichText( { tagName: 'span', value: attrs.titleHighlight } ),
+				saveRichText( { tagName: 'span', value: attrs.titleAfterHighlight } ),
+			],
+			' '
+		);
+
+		var titleChildren = lineOne.slice();
+
+		if ( hasRichTextContent( attrs.titleEmphasis ) ) {
+			if ( titleChildren.length ) {
+				titleChildren.push( el( 'br', {} ) );
+			}
+			titleChildren.push(
+				saveRichText( { tagName: 'em', value: attrs.titleEmphasis } )
+			);
+		}
+
+		if ( ! titleChildren.length ) {
+			return null;
+		}
+
+		return el( 'h1', { className: 'arriva-hero__title' }, titleChildren );
+	}
+
+	function renderButton( attrs, isEditor, setAttributes, variant, textKey, urlKey, placeholder ) {
+		var text = attrs[ textKey ];
+		var url = attrs[ urlKey ];
+		var className = 'arriva-hero__btn arriva-hero__btn--' + variant;
+
+		if ( isEditor ) {
+			return editRichText( {
+				tagName: 'span',
+				value: text,
+				onChange: function ( value ) {
+					var update = {};
+					update[ textKey ] = value;
+					setAttributes( update );
+				},
+				placeholder: placeholder,
+			} );
+		}
+
+		if ( ! hasRichTextContent( text ) ) {
+			return null;
+		}
+
+		return el(
+			'a',
+			{
+				className: className,
+				href: url || '#',
+			},
+			saveRichText( { tagName: 'span', value: text } )
+		);
+	}
+
+	function renderHeroInner( attrs, isEditor, setAttributes ) {
+		var title = renderTitle( attrs, isEditor, setAttributes );
+		var primaryBtn = renderButton(
+			attrs,
+			isEditor,
+			setAttributes,
+			'main',
+			'primaryBtnText',
+			'primaryBtnUrl',
+			__( 'Primary button…', 'arriva' )
+		);
+		var secondaryBtn = renderButton(
+			attrs,
+			isEditor,
+			setAttributes,
+			'ghost',
+			'secondaryBtnText',
+			'secondaryBtnUrl',
+			__( 'Secondary button…', 'arriva' )
+		);
+
+		var buttons = null;
+		if ( isEditor ) {
+			buttons = el(
+				'div',
+				{ className: 'arriva-hero__btns' },
+				el(
+					'a',
+					{
+						className: 'arriva-hero__btn arriva-hero__btn--main',
+						href: '#',
+						onClick: function ( event ) {
+							event.preventDefault();
+						},
+					},
+					primaryBtn
+				),
+				el(
+					'a',
+					{
+						className: 'arriva-hero__btn arriva-hero__btn--ghost',
+						href: '#',
+						onClick: function ( event ) {
+							event.preventDefault();
+						},
+					},
+					secondaryBtn
+				)
+			);
+		} else {
+			var savedButtons = [ primaryBtn, secondaryBtn ].filter( Boolean );
+			if ( savedButtons.length ) {
+				buttons = el( 'div', { className: 'arriva-hero__btns' }, savedButtons );
+			}
+		}
 
 		return el(
 			'section',
@@ -130,7 +310,7 @@
 					'div',
 					{ className: 'arriva-hero__content' },
 					isEditor
-						? el( RichText, {
+						? editRichText( {
 							tagName: 'span',
 							className: 'arriva-hero__eye',
 							value: attrs.eyebrow,
@@ -138,14 +318,15 @@
 								setAttributes( { eyebrow: value } );
 							},
 							placeholder: __( 'Eyebrow text…', 'arriva' ),
-							allowedFormats: [],
 						} )
-						: attrs.eyebrow
-							? el( 'span', { className: 'arriva-hero__eye' }, attrs.eyebrow )
-							: null,
-					el( 'h1', { className: 'arriva-hero__title' }, titleChildren ),
+						: saveRichText( {
+							tagName: 'span',
+							className: 'arriva-hero__eye',
+							value: attrs.eyebrow,
+						} ),
+					title,
 					isEditor
-						? el( RichText, {
+						? editRichText( {
 							tagName: 'p',
 							className: 'arriva-hero__sub',
 							value: attrs.subtitle,
@@ -153,61 +334,13 @@
 								setAttributes( { subtitle: value } );
 							},
 							placeholder: __( 'Subtitle…', 'arriva' ),
-							allowedFormats: [],
 						} )
-						: attrs.subtitle
-							? el( 'p', { className: 'arriva-hero__sub' }, attrs.subtitle )
-							: null,
-					el(
-						'div',
-						{ className: 'arriva-hero__btns' },
-						el(
-							'a',
-							{
-								className: 'arriva-hero__btn arriva-hero__btn--main',
-								href: isEditor ? undefined : attrs.primaryBtnUrl || '#',
-								onClick: isEditor
-									? function ( event ) {
-										event.preventDefault();
-									}
-									: undefined,
-							},
-							isEditor
-								? el( RichText, {
-									tagName: 'span',
-									value: attrs.primaryBtnText,
-									onChange: function ( value ) {
-										setAttributes( { primaryBtnText: value } );
-									},
-									placeholder: __( 'Primary button…', 'arriva' ),
-									allowedFormats: [],
-								} )
-								: attrs.primaryBtnText || null
-						),
-						el(
-							'a',
-							{
-								className: 'arriva-hero__btn arriva-hero__btn--ghost',
-								href: isEditor ? undefined : attrs.secondaryBtnUrl || '#',
-								onClick: isEditor
-									? function ( event ) {
-										event.preventDefault();
-									}
-									: undefined,
-							},
-							isEditor
-								? el( RichText, {
-									tagName: 'span',
-									value: attrs.secondaryBtnText,
-									onChange: function ( value ) {
-										setAttributes( { secondaryBtnText: value } );
-									},
-									placeholder: __( 'Secondary button…', 'arriva' ),
-									allowedFormats: [],
-								} )
-								: attrs.secondaryBtnText || null
-						)
-					)
+						: saveRichText( {
+							tagName: 'p',
+							className: 'arriva-hero__sub',
+							value: attrs.subtitle,
+						} ),
+					buttons
 				)
 			)
 		);
@@ -217,6 +350,7 @@
 		edit: function ( props ) {
 			var attributes = props.attributes;
 			var setAttributes = props.setAttributes;
+			var palette = usePaletteGroups();
 			var blockProps = useBlockProps( {
 				className:
 					( attributes.fixedScroll ? 'is-fixed-scroll' : '' ) +
@@ -276,6 +410,7 @@
 							BaseControl,
 							{ label: __( 'Background', 'arriva' ) },
 							el( ColorPalette, {
+								colors: palette.paletteGroups,
 								value: attributes.backgroundColor,
 								onChange: function ( color ) {
 									setAttributes( { backgroundColor: color } );
@@ -286,6 +421,7 @@
 							BaseControl,
 							{ label: __( 'Accent', 'arriva' ) },
 							el( ColorPalette, {
+								colors: palette.paletteGroups,
 								value: attributes.accentColor,
 								onChange: function ( color ) {
 									setAttributes( { accentColor: color } );
@@ -296,20 +432,30 @@
 							BaseControl,
 							{ label: __( 'Accent (dark)', 'arriva' ) },
 							el( ColorPalette, {
+								colors: palette.paletteGroups,
 								value: attributes.accentDarkColor,
 								onChange: function ( color ) {
 									setAttributes( { accentDarkColor: color } );
 								},
 							} )
 						),
-						el( TextControl, {
-							label: __( 'Glow colour (CSS)', 'arriva' ),
-							value: attributes.glowColor,
-							onChange: function ( value ) {
-								setAttributes( { glowColor: value } );
+						el(
+							BaseControl,
+							{
+								label: __( 'Glow colour', 'arriva' ),
+								help: __(
+									'Theme preset colours are applied at 28% opacity for the radial glow.',
+									'arriva'
+								),
 							},
-							help: __( 'Radial glow overlay, e.g. rgba(26,147,164,0.28)', 'arriva' ),
-						} )
+							el( ColorPalette, {
+								colors: palette.paletteGroups,
+								value: attributes.glowColor,
+								onChange: function ( color ) {
+									setAttributes( { glowColor: color } );
+								},
+							} )
+						)
 					),
 					el(
 						PanelBody,

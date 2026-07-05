@@ -5,7 +5,6 @@
 	var useEffect = wp.element.useEffect;
 	var useBlockProps = wp.blockEditor.useBlockProps;
 	var InspectorControls = wp.blockEditor.InspectorControls;
-	var useMultipleOriginColorsAndGradients = wp.blockEditor.__experimentalUseMultipleOriginColorsAndGradients;
 	var PanelBody = wp.components.PanelBody;
 	var BaseControl = wp.components.BaseControl;
 	var Button = wp.components.Button;
@@ -13,42 +12,43 @@
 	var ToggleControl = wp.components.ToggleControl;
 	var useSelect = wp.data.useSelect;
 	var __ = wp.i18n.__;
+	var usePaletteGroups = wp.arriva.usePaletteGroups;
 
 	var TRANSPARENT = 'transparent';
 
 	var WAVES = {
 		wave: {
-			height: 56,
+			height: 54,
 			pathWidth: 1080,
 			tileWidth: 1440,
 			tilePath: 'M0 28C180 56 360 0 540 28C720 56 900 0 1080 28L1080 56L0 56Z',
 		},
 		'wave-flip': {
-			height: 56,
+			height: 54,
 			pathWidth: 1080,
 			tileWidth: 1440,
 			tilePath: 'M0 28C180 0 360 56 540 28C720 0 900 56 1080 28L1080 56L0 56Z',
 		},
 		curve: {
-			height: 48,
+			height: 46,
 			pathWidth: 1440,
 			tileWidth: 1920,
 			tilePath: 'M0 24C240 48 480 0 720 24C960 48 1200 0 1440 24L1440 48L0 48Z',
 		},
 		'curve-flip': {
-			height: 48,
+			height: 46,
 			pathWidth: 1440,
 			tileWidth: 1920,
 			tilePath: 'M0 24C240 0 480 48 720 24C960 0 1200 48 1440 24L1440 48L0 48Z',
 		},
 		ripple: {
-			height: 48,
+			height: 46,
 			pathWidth: 1080,
 			tileWidth: 1440,
 			tilePath: 'M0 24C180 0 360 48 540 24C720 0 900 48 1080 24L1080 48L0 48Z',
 		},
 		'ripple-flip': {
-			height: 48,
+			height: 46,
 			pathWidth: 1080,
 			tileWidth: 1440,
 			tilePath: 'M0 24C180 48 360 0 540 24C720 48 900 0 1080 24L1080 48L0 48Z',
@@ -178,23 +178,9 @@
 			var topColor = attributes.topColor;
 			var bottomColor = attributes.bottomColor;
 			var blockProps = useBlockProps( blockPropsFor( attributes, shape ) );
-
-			var colorGroups = useSelect( function ( select ) {
-				if ( useMultipleOriginColorsAndGradients ) {
-					return null;
-				}
-				return select( 'core/block-editor' ).getSettings().colors || [];
-			}, [] );
-			var multiOrigin = useMultipleOriginColorsAndGradients ? useMultipleOriginColorsAndGradients() : null;
-			var paletteGroups = TRANSPARENT_GROUP.concat( multiOrigin ? multiOrigin.colors : colorGroups );
-			var flatColors = [];
-			( paletteGroups || [] ).forEach( function ( entry ) {
-				if ( entry.colors ) {
-					flatColors = flatColors.concat( entry.colors );
-				} else {
-					flatColors.push( entry );
-				}
-			} );
+			var palette = usePaletteGroups( TRANSPARENT_GROUP );
+			var paletteGroups = palette.paletteGroups;
+			var flatColors = palette.flatColors;
 
 			var siblings = useSelect( function ( select ) {
 				var editor = select( 'core/block-editor' );

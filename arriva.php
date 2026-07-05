@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Arriva
  * Description: Custom Gutenberg blocks for Arriva Speyer e.V.
- * Version: 1.3.3
+ * Version: 1.4.0
  * Author: Arriva Speyer e.V.
  * License: GPL-2.0-or-later
  * Text Domain: arriva
@@ -17,6 +17,15 @@ if ( ! defined( 'ARRIVA_VERSION' ) ) {
 
 add_action( 'init', function () {
 	$formats_asset = require __DIR__ . '/shared/formats.asset.php';
+	$color_palette_asset = require __DIR__ . '/shared/color-palette.asset.php';
+
+	wp_register_script(
+		'arriva-color-palette',
+		plugins_url( 'shared/color-palette.js', __FILE__ ),
+		$color_palette_asset['dependencies'],
+		$color_palette_asset['version'],
+		true
+	);
 
 	wp_register_script(
 		'arriva-formats',

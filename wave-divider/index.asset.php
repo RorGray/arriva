@@ -1,6 +1,7 @@
 <?php
 return array(
 	'dependencies' => array(
+		'arriva-color-palette',
 		'wp-blocks',
 		'wp-element',
 		'wp-block-editor',
