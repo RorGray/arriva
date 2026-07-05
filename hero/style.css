@@ -8,15 +8,26 @@
 	width: 100%;
 }
 
+/* Break out of constrained content width */
+.wp-block-arriva-hero.alignfull,
+.wp-block-arriva-hero.is-fixed-scroll {
+	width: 100dvw;
+	max-width: 100dvw;
+	margin-left: calc(50% - 50dvw);
+	margin-right: calc(50% - 50dvw);
+}
+
 .wp-block-arriva-hero.is-fixed-scroll .arriva-hero__layer {
 	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
+	left: 50%;
+	width: 100dvw;
+	max-width: 100dvw;
+	margin-left: -50dvw;
 	z-index: 0;
 }
 
 .wp-block-arriva-hero.is-fixed-scroll .arriva-hero__spacer {
+	width: 100%;
 	height: var(--arriva-fixed-height, var(--arriva-hero-min-height));
 	pointer-events: none;
 }
@@ -203,6 +214,45 @@
 	}
 }
 
+@media (max-width: 720px) {
+	.wp-block-arriva-hero {
+		--arriva-hero-min-height: 480px;
+	}
+
+	.wp-block-arriva-hero .arriva-hero__inner {
+		padding-block: clamp(3rem, 12vw, 4.5rem) clamp(2.5rem, 8vw, 3.5rem);
+	}
+
+	.wp-block-arriva-hero .arriva-hero__icon {
+		display: none;
+	}
+
+	.wp-block-arriva-hero .arriva-hero__wrap {
+		padding-inline: clamp(1rem, 5vw, 1.5rem);
+	}
+
+	.wp-block-arriva-hero .arriva-hero__title {
+		font-size: clamp(2.1rem, 1.4rem + 5.5vw, 3rem);
+		margin-bottom: 1rem;
+	}
+
+	.wp-block-arriva-hero .arriva-hero__sub {
+		font-size: clamp(1rem, 0.95rem + 0.35vw, 1.125rem);
+		margin-bottom: 1.5rem;
+	}
+
+	.wp-block-arriva-hero .arriva-hero__btns {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.wp-block-arriva-hero .arriva-hero__btn {
+		justify-content: center;
+		text-align: center;
+		white-space: normal;
+	}
+}
+
 /* Editor: show fixed layout inline for easier editing */
 .block-editor-block-list__layout .wp-block-arriva-hero.is-fixed-scroll .arriva-hero__layer {
 	position: relative;
@@ -212,12 +262,13 @@
 	display: none;
 }
 
-.admin-bar .wp-block-arriva-hero.is-fixed-scroll .arriva-hero__layer {
-	top: var(--wp-admin--admin-bar--height, 32px);
-}
-
 /* Siblings after a fixed hero scroll above it */
 body:not(.block-editor-page) .wp-block-arriva-hero.is-fixed-scroll ~ * {
 	position: relative;
 	z-index: 2;
+}
+
+/* Ensure scrolling sections after the hero stack flush (no theme gap) */
+:root :where(.is-layout-constrained) > .wp-block-arriva-hero.is-fixed-scroll + *:not(.wp-block-arriva-wave-divider) {
+	margin-block-start: 0;
 }

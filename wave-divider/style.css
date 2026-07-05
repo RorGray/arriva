@@ -6,6 +6,15 @@
 	margin-bottom: 0;
 }
 
+/* Break out of constrained content width */
+.wp-block-arriva-wave-divider.alignfull,
+.wp-block-arriva-wave-divider.is-overlap-previous {
+	width: 100dvw;
+	max-width: 100dvw;
+	margin-left: calc(50% - 50dvw);
+	margin-right: calc(50% - 50dvw);
+}
+
 .wp-block-arriva-wave-divider svg {
 	display: block;
 	width: 100%;
@@ -14,5 +23,18 @@
 
 /* Pull the wave up by its height so a transparent top reveals the section above */
 .wp-block-arriva-wave-divider.is-overlap-previous {
-	margin-top: calc(-1 * var(--arriva-wave-height, 56px));
+	margin-block-start: calc(-1 * var(--arriva-wave-height, 56px));
+}
+
+/* Override WP constrained layout gap that exposes the fixed hero between sections */
+:root :where(.is-layout-constrained) > .wp-block-arriva-wave-divider.is-overlap-previous {
+	margin-block-start: calc(-1 * var(--arriva-wave-height, 56px));
+}
+
+:root :where(.is-layout-constrained) > .wp-block-arriva-wave-divider.is-overlap-previous + * {
+	margin-block-start: 0;
+}
+
+:root :where(.is-layout-constrained) > .wp-block-arriva-hero.is-fixed-scroll:first-child {
+	margin-block-start: 0;
 }
