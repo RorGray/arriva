@@ -10,6 +10,7 @@
 	"textdomain": "arriva",
 	"attributes": {
 		"shape": { "type": "string", "default": "" },
+		"offset": { "type": "number", "default": 0 },
 		"topColor": { "type": "string", "default": "" },
 		"bottomColor": { "type": "string", "default": "" }
 	},

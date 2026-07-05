@@ -13,8 +13,13 @@
 	var useSelect = wp.data.useSelect;
 	var __ = wp.i18n.__;
 
-	var TOP_FALLBACK = '#18222a';
-	var BOTTOM_FALLBACK = '#ffffff';
+	var TRANSPARENT = 'transparent';
+	var TRANSPARENT_GROUP = [
+		{
+			name: __( 'Special', 'arriva' ),
+			colors: [ { name: __( 'Transparent', 'arriva' ), color: TRANSPARENT, slug: 'transparent' } ],
+		},
+	];
 
 	var WAVES = {
 		wave: {
@@ -50,17 +55,65 @@
 	};
 
 	var SHAPE_KEYS = Object.keys( WAVES );
+	// One full artboard tile — wide enough to avoid a repetitive feel, fixed px scale for consistent wave strength.
+	var TILE_WIDTH = 1440;
 
 	function randomShape() {
 		return SHAPE_KEYS[ Math.floor( Math.random() * SHAPE_KEYS.length ) ];
 	}
 
-	function waveSvg( shape, bottomColor ) {
+	function randomOffset() {
+		return Math.floor( Math.random() * TILE_WIDTH );
+	}
+
+	/**
+	 * Picks a new shape ~60% of the time; otherwise keeps the current shape and
+	 * only shifts phase so the same pattern reads differently.
+	 */
+	function randomizeWave( currentShape ) {
+		var keepShape = currentShape && Math.random() < 0.4;
+		return {
+			shape: keepShape ? currentShape : randomShape(),
+			offset: randomOffset(),
+		};
+	}
+
+	function patternId( shape, bottomColor, offset, unique ) {
+		var colorPart = ( bottomColor || 'transparent' ).replace( /[^a-zA-Z0-9]/g, '' );
+		return 'arriva-' + shape + '-' + colorPart + '-' + offset + ( unique ? '-' + unique : '' );
+	}
+
+	function waveSvg( shape, bottomColor, offset, id ) {
 		var wave = WAVES[ shape ] || WAVES.wave;
+		var fill = bottomColor || TRANSPARENT;
+		var phase = offset || 0;
 		return el(
 			'svg',
-			{ viewBox: '0 0 1440 ' + wave.height, preserveAspectRatio: 'none', height: wave.height },
-			el( 'path', { d: wave.path, fill: bottomColor || BOTTOM_FALLBACK } )
+			{
+				xmlns: 'http://www.w3.org/2000/svg',
+				width: '100%',
+				height: wave.height,
+			},
+			el(
+				'defs',
+				{},
+				el(
+					'pattern',
+					{
+						id: id,
+						width: TILE_WIDTH,
+						height: wave.height,
+						patternUnits: 'userSpaceOnUse',
+						patternTransform: 'translate(' + -phase + ', 0)',
+					},
+					el( 'path', { d: wave.path, fill: fill } )
+				)
+			),
+			el( 'rect', {
+				width: '100%',
+				height: wave.height,
+				fill: 'url(#' + id + ')',
+			} )
 		);
 	}
 
@@ -96,9 +149,10 @@
 			var setAttributes = props.setAttributes;
 			var clientId = props.clientId;
 			var shape = attributes.shape;
+			var offset = attributes.offset;
 			var topColor = attributes.topColor;
 			var bottomColor = attributes.bottomColor;
-			var blockProps = useBlockProps( { style: { background: topColor || TOP_FALLBACK } } );
+			var blockProps = useBlockProps( { style: { background: topColor || TRANSPARENT } } );
 
 			var colorGroups = useSelect( function ( select ) {
 				if ( useMultipleOriginColorsAndGradients ) {
@@ -107,7 +161,7 @@
 				return select( 'core/block-editor' ).getSettings().colors || [];
 			}, [] );
 			var multiOrigin = useMultipleOriginColorsAndGradients ? useMultipleOriginColorsAndGradients() : null;
-			var paletteGroups = multiOrigin ? multiOrigin.colors : colorGroups;
+			var paletteGroups = TRANSPARENT_GROUP.concat( multiOrigin ? multiOrigin.colors : colorGroups );
 			var flatColors = [];
 			( paletteGroups || [] ).forEach( function ( entry ) {
 				if ( entry.colors ) {
@@ -130,13 +184,17 @@
 
 			useEffect( function () {
 				if ( ! shape ) {
-					setAttributes( { shape: randomShape() } );
+					var initial = randomizeWave( null );
+					setAttributes( {
+						shape: initial.shape,
+						offset: initial.offset,
+					} );
 				}
 				if ( ! topColor ) {
-					setAttributes( { topColor: detectBlockBackground( siblings.prev, flatColors ) || TOP_FALLBACK } );
+					setAttributes( { topColor: detectBlockBackground( siblings.prev, flatColors ) || TRANSPARENT } );
 				}
 				if ( ! bottomColor ) {
-					setAttributes( { bottomColor: detectBlockBackground( siblings.next, flatColors ) || BOTTOM_FALLBACK } );
+					setAttributes( { bottomColor: detectBlockBackground( siblings.next, flatColors ) || TRANSPARENT } );
 				}
 			}, [] );
 
@@ -157,7 +215,7 @@
 								{
 									variant: 'secondary',
 									onClick: function () {
-										setAttributes( { shape: randomShape() } );
+										setAttributes( randomizeWave( shape ) );
 									},
 								},
 								__( 'Randomize shape', 'arriva' )
@@ -170,7 +228,7 @@
 								colors: paletteGroups,
 								value: topColor,
 								onChange: function ( color ) {
-									setAttributes( { topColor: color || TOP_FALLBACK } );
+									setAttributes( { topColor: color || TRANSPARENT } );
 								},
 							} )
 						),
@@ -181,23 +239,32 @@
 								colors: paletteGroups,
 								value: bottomColor,
 								onChange: function ( color ) {
-									setAttributes( { bottomColor: color || BOTTOM_FALLBACK } );
+									setAttributes( { bottomColor: color || TRANSPARENT } );
 								},
 							} )
 						)
 					)
 				),
-				el( 'div', blockProps, waveSvg( shape, bottomColor ) )
+				el(
+					'div',
+					blockProps,
+					waveSvg( shape, bottomColor, offset, patternId( shape, bottomColor, offset, clientId ) )
+				)
 			);
 		},
 		save: function ( props ) {
 			var attributes = props.attributes;
 			var shape = attributes.shape;
+			var offset = attributes.offset;
 			var topColor = attributes.topColor;
 			var bottomColor = attributes.bottomColor;
-			var blockProps = useBlockProps.save( { style: { background: topColor || TOP_FALLBACK } } );
+			var blockProps = useBlockProps.save( { style: { background: topColor || TRANSPARENT } } );
 
-			return el( 'div', blockProps, waveSvg( shape, bottomColor ) );
+			return el(
+				'div',
+				blockProps,
+				waveSvg( shape, bottomColor, offset, patternId( shape, bottomColor, offset ) )
+			);
 		},
 	} );
 } )();

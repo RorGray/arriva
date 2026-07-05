@@ -8,4 +8,5 @@
 .wp-block-arriva-wave-divider svg {
 	display: block;
 	width: 100%;
+	height: auto;
 }
