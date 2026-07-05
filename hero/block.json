@@ -5,7 +5,7 @@
 	"title": "Hero Section",
 	"category": "design",
 	"icon": "cover-image",
-	"description": "Full-width hero with editable text, colours, and imagery. Supports fixed scroll-over behaviour — pair with a Wave Divider in overlay mode for the transition.",
+	"description": "Full-width hero with editable text, colours, and imagery. Supports fixed scroll-over behaviour — pair with a Wave Divider using overlap after the hero.",
 	"keywords": [ "hero", "banner", "header", "cover" ],
 	"textdomain": "arriva",
 	"attributes": {

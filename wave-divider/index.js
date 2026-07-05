@@ -10,7 +10,6 @@
 	var BaseControl = wp.components.BaseControl;
 	var Button = wp.components.Button;
 	var ColorPalette = wp.components.ColorPalette;
-	var SelectControl = wp.components.SelectControl;
 	var ToggleControl = wp.components.ToggleControl;
 	var useSelect = wp.data.useSelect;
 	var __ = wp.i18n.__;
@@ -155,42 +154,18 @@
 		return null;
 	}
 
-	function isFixedOverlayCandidate( block ) {
-		if ( ! block ) {
-			return false;
-		}
-		if ( block.name === 'arriva/hero' ) {
-			return block.attributes.fixedScroll !== false;
-		}
-		return false;
+	function isFixedHeroBefore( block ) {
+		return block && block.name === 'arriva/hero' && block.attributes.fixedScroll !== false;
 	}
 
-	function isOverlayMode( overlayMode ) {
-		return overlayMode === 'overlay';
-	}
-
-	function renderWaveMarkup( shape, bottomColor, offset, unique, overlayMode ) {
-		var svg = waveSvg(
-			shape,
-			bottomColor,
-			offset,
-			patternId( shape, bottomColor, offset, unique )
-		);
-
-		if ( isOverlayMode( overlayMode ) ) {
-			return el(
-				Fragment,
-				{},
-				el( 'div', { className: 'arriva-wave-divider__fixed' }, svg ),
-				el( 'div', {
-					className: 'arriva-wave-divider__spacer',
-					'aria-hidden': 'true',
-					style: { height: waveHeight( shape ) + 'px' },
-				} )
-			);
-		}
-
-		return svg;
+	function blockPropsFor( attributes, shape ) {
+		return {
+			className: attributes.overlapPrevious ? 'is-overlap-previous' : '',
+			style: {
+				background: attributes.topColor || TRANSPARENT,
+				'--arriva-wave-height': waveHeight( shape ) + 'px',
+			},
+		};
 	}
 
 	registerBlockType( 'arriva/wave-divider', {
@@ -202,15 +177,7 @@
 			var offset = attributes.offset;
 			var topColor = attributes.topColor;
 			var bottomColor = attributes.bottomColor;
-			var overlayMode = attributes.overlayMode || 'none';
-			var isOverlay = isOverlayMode( overlayMode );
-			var blockProps = useBlockProps( {
-				className: isOverlay ? 'is-fixed-overlay' : '',
-				style: {
-					background: isOverlay ? TRANSPARENT : topColor || TRANSPARENT,
-					'--arriva-wave-height': waveHeight( shape ) + 'px',
-				},
-			} );
+			var blockProps = useBlockProps( blockPropsFor( attributes, shape ) );
 
 			var colorGroups = useSelect( function ( select ) {
 				if ( useMultipleOriginColorsAndGradients ) {
@@ -241,21 +208,26 @@
 			}, [ clientId ] );
 
 			useEffect( function () {
+				var updates = {};
+
 				if ( ! shape ) {
 					var initial = randomizeWave( null );
-					setAttributes( {
-						shape: initial.shape,
-						offset: initial.offset,
-					} );
+					updates.shape = initial.shape;
+					updates.offset = initial.offset;
 				}
 				if ( ! topColor ) {
-					setAttributes( { topColor: detectBlockBackground( siblings.prev, flatColors ) || TRANSPARENT } );
+					updates.topColor = detectBlockBackground( siblings.prev, flatColors ) || TRANSPARENT;
 				}
 				if ( ! bottomColor ) {
-					setAttributes( { bottomColor: detectBlockBackground( siblings.next, flatColors ) || TRANSPARENT } );
+					updates.bottomColor = detectBlockBackground( siblings.next, flatColors ) || TRANSPARENT;
 				}
-				if ( isFixedOverlayCandidate( siblings.prev ) && ! isOverlayMode( overlayMode ) ) {
-					setAttributes( { overlayMode: 'overlay', topColor: TRANSPARENT } );
+				if ( isFixedHeroBefore( siblings.prev ) && ! attributes.overlapPrevious ) {
+					updates.overlapPrevious = true;
+					updates.topColor = TRANSPARENT;
+				}
+
+				if ( Object.keys( updates ).length ) {
+					setAttributes( updates );
 				}
 			}, [] );
 
@@ -268,27 +240,16 @@
 					el(
 						PanelBody,
 						{ title: __( 'Wave Settings', 'arriva' ), initialOpen: true },
-						el( SelectControl, {
-							label: __( 'Position mode', 'arriva' ),
-							value: overlayMode,
-							options: [
-								{ label: __( 'Default (between sections)', 'arriva' ), value: 'none' },
-								{
-									label: __( 'Overlay fixed section (transparent top)', 'arriva' ),
-									value: 'overlay',
-								},
-							],
-							onChange: function ( value ) {
-								var next = { overlayMode: value };
-								if ( value === 'overlay' ) {
-									next.topColor = TRANSPARENT;
-								}
-								setAttributes( next );
-							},
+						el( ToggleControl, {
+							label: __( 'Overlap previous section', 'arriva' ),
 							help: __(
-								'Place after a fixed Hero block (or other fixed section). The wave overlays the bottom edge with a transparent top so no gap appears before scrolling.',
+								'Pulls the wave up by its height so a transparent top reveals the section above instead of the page background. The next section starts flush with no extra gap.',
 								'arriva'
 							),
+							checked: attributes.overlapPrevious,
+							onChange: function ( value ) {
+								setAttributes( { overlapPrevious: value } );
+							},
 						} ),
 						el(
 							BaseControl,
@@ -307,25 +268,13 @@
 						el(
 							BaseControl,
 							{ label: __( 'Top background (matches section above)', 'arriva' ) },
-							el( ToggleControl, {
-								label: __( 'Transparent top', 'arriva' ),
-								checked: topColor === TRANSPARENT,
-								disabled: isOverlay,
-								onChange: function ( isTransparent ) {
-									setAttributes( {
-										topColor: isTransparent ? TRANSPARENT : detectBlockBackground( siblings.prev, flatColors ) || '#ffffff',
-									} );
+							el( ColorPalette, {
+								colors: paletteGroups,
+								value: topColor,
+								onChange: function ( color ) {
+									setAttributes( { topColor: color || TRANSPARENT } );
 								},
-							} ),
-							topColor !== TRANSPARENT
-								? el( ColorPalette, {
-									colors: paletteGroups,
-									value: topColor,
-									onChange: function ( color ) {
-										setAttributes( { topColor: color || TRANSPARENT } );
-									},
-								} )
-								: null
+							} )
 						),
 						el(
 							BaseControl,
@@ -343,7 +292,12 @@
 				el(
 					'div',
 					blockProps,
-					renderWaveMarkup( shape, bottomColor, offset, clientId, overlayMode )
+					waveSvg(
+						shape,
+						bottomColor,
+						offset,
+						patternId( shape, bottomColor, offset, clientId )
+					)
 				)
 			);
 		},
@@ -351,22 +305,18 @@
 			var attributes = props.attributes;
 			var shape = attributes.shape;
 			var offset = attributes.offset;
-			var topColor = attributes.topColor;
 			var bottomColor = attributes.bottomColor;
-			var overlayMode = attributes.overlayMode || 'none';
-			var isOverlay = isOverlayMode( overlayMode );
-			var blockProps = useBlockProps.save( {
-				className: isOverlay ? 'is-fixed-overlay' : '',
-				style: {
-					background: isOverlay ? TRANSPARENT : topColor || TRANSPARENT,
-					'--arriva-wave-height': waveHeight( shape ) + 'px',
-				},
-			} );
+			var blockProps = useBlockProps.save( blockPropsFor( attributes, shape ) );
 
 			return el(
 				'div',
 				blockProps,
-				renderWaveMarkup( shape, bottomColor, offset, '', overlayMode )
+				waveSvg(
+					shape,
+					bottomColor,
+					offset,
+					patternId( shape, bottomColor, offset, '' )
+				)
 			);
 		},
 	} );

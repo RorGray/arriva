@@ -5,7 +5,7 @@
 	"title": "Wave Divider",
 	"category": "design",
 	"icon": "marker",
-	"description": "A wave-shaped section divider. Use overlay mode after a fixed hero so the wave sits on the section above with a transparent top.",
+	"description": "A wave-shaped section divider between content sections. Pull up over the previous section so a transparent top reveals it instead of the page background.",
 	"keywords": [ "wave", "divider", "separator", "section" ],
 	"textdomain": "arriva",
 	"attributes": {
@@ -13,7 +13,7 @@
 		"offset": { "type": "number", "default": 0 },
 		"topColor": { "type": "string", "default": "" },
 		"bottomColor": { "type": "string", "default": "" },
-		"overlayMode": { "type": "string", "default": "none" }
+		"overlapPrevious": { "type": "boolean", "default": false }
 	},
 	"supports": { "html": false, "align": [ "full", "wide" ] },
 	"editorScript": "file:./index.js",

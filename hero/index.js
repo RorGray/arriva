@@ -236,7 +236,7 @@
 						el( ToggleControl, {
 							label: __( 'Fixed scroll-over effect', 'arriva' ),
 							help: __(
-								'Keeps the hero fixed while content below scrolls over it. Add a Wave Divider block after this hero and set its position mode to “Overlay fixed section”.',
+								'Keeps the hero fixed while content below scrolls over it. Place a Wave Divider after this block with “Overlap previous section” enabled and a transparent top colour.',
 								'arriva'
 							),
 							checked: attributes.fixedScroll,
