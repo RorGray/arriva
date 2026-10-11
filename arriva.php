@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Arriva
  * Description: Custom Gutenberg blocks for Arriva Speyer e.V.
- * Version: 1.9.8
+ * Version: 1.10.0
  * Author: Arriva Speyer e.V.
  * License: GPL-2.0-or-later
  * Text Domain: arriva
@@ -11,6 +11,7 @@
 defined( 'ABSPATH' ) || exit;
 
 require_once __DIR__ . '/includes/events.php';
+require_once __DIR__ . '/includes/ical.php';
 require_once __DIR__ . '/includes/merch.php';
 require_once __DIR__ . '/includes/member-access.php';
 
@@ -46,6 +47,13 @@ add_action( 'init', function () {
 		$formats_asset['dependencies'],
 		$formats_asset['version'],
 		true
+	);
+
+	wp_register_style(
+		'arriva-events',
+		plugins_url( 'shared/events.css', __FILE__ ),
+		array(),
+		ARRIVA_VERSION
 	);
 
 	register_block_type( __DIR__ . '/wave-divider' );

@@ -27,7 +27,7 @@
 			var attributes = props.attributes;
 			var setAttributes = props.setAttributes;
 			var blockProps = useBlockProps( {
-				className: 'arriva-upcoming-events alignfull',
+				className: 'arriva-events alignfull',
 			} );
 
 			function bind( key ) {
@@ -71,31 +71,31 @@
 					blockProps,
 					el(
 						'div',
-						{ className: 'arriva-upcoming-events__inner' },
+						{ className: 'arriva-events__inner' },
 						textField(
 							'p',
-							'arriva-upcoming-events__eyebrow',
+							'arriva-events__eyebrow',
 							attributes.eyebrow,
 							bind( 'eyebrow' ),
 							__( 'Dachzeile…', 'arriva' )
 						),
 						textField(
 							'h2',
-							'arriva-upcoming-events__heading',
+							'arriva-events__heading',
 							attributes.heading,
 							bind( 'heading' ),
 							__( 'Überschrift…', 'arriva' )
 						),
 						textField(
 							'p',
-							'arriva-upcoming-events__intro',
+							'arriva-events__intro',
 							attributes.subtitle,
 							bind( 'subtitle' ),
 							__( 'Einleitung…', 'arriva' )
 						),
 						el(
 							'div',
-							{ className: 'arriva-upcoming-events__preview' },
+							{ className: 'arriva-events__preview' },
 							el( ServerSideRender, {
 								block: 'arriva/upcoming-events',
 								attributes: { count: attributes.count },
@@ -104,7 +104,7 @@
 						props.isSelected
 							? textField(
 								'p',
-								'arriva-upcoming-events__empty arriva-upcoming-events__empty--editor',
+								'arriva-events__empty arriva-events__editor-only',
 								attributes.emptyText,
 								bind( 'emptyText' ),
 								__( 'Text, wenn keine Termine anstehen…', 'arriva' )
@@ -115,7 +115,7 @@
 							{},
 							textField(
 								'span',
-								'arriva-upcoming-events__more',
+								'arriva-events__more',
 								attributes.moreLabel,
 								bind( 'moreLabel' ),
 								__( 'Link-Text…', 'arriva' )

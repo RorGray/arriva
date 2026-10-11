@@ -5,7 +5,7 @@
 	"title": "Events List",
 	"category": "widgets",
 	"icon": "list-view",
-	"description": "Full Termine list for a calendar year, grouped by type.",
+	"description": "Full Termine list for a calendar year, grouped by month.",
 	"keywords": [ "termine", "events", "calendar" ],
 	"textdomain": "arriva",
 	"attributes": {
@@ -13,20 +13,57 @@
 			"type": "number",
 			"default": 0
 		},
-		"heading": {
-			"type": "string",
-			"default": "Termine"
-		},
-		"showDisclaimer": {
+		"showYear": {
 			"type": "boolean",
 			"default": true
+		},
+		"eyebrow": {
+			"type": "string",
+			"default": ""
+		},
+		"heading": {
+			"type": "string",
+			"default": ""
+		},
+		"subtitle": {
+			"type": "string",
+			"default": ""
+		},
+		"emptyText": {
+			"type": "string",
+			"default": ""
+		},
+		"note": {
+			"type": "string",
+			"default": ""
+		},
+		"showCalendar": {
+			"type": "boolean",
+			"default": true
+		},
+		"listLabel": {
+			"type": "string",
+			"default": ""
+		},
+		"calendarLabel": {
+			"type": "string",
+			"default": ""
+		},
+		"icalLabel": {
+			"type": "string",
+			"default": ""
 		}
 	},
 	"supports": {
 		"html": false,
-		"align": [ "wide", "full" ]
+		"align": [ "full", "wide" ],
+		"color": {
+			"background": true,
+			"text": true
+		}
 	},
 	"editorScript": "file:./index.js",
-	"style": "file:./style.css",
+	"style": "arriva-events",
+	"viewScript": "file:./view.js",
 	"render": "file:./render.php"
 }

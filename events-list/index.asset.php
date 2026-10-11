@@ -6,6 +6,7 @@ return array(
 		'wp-block-editor',
 		'wp-components',
 		'wp-i18n',
+		'wp-server-side-render',
 	),
 	'version'      => ARRIVA_VERSION,
 );

@@ -1,0 +1,598 @@
+/* Shared by Upcoming Events + Events List. Colours: block colour control, else theme contrast/base. */
+
+.arriva-events {
+	width: 100dvw;
+	max-width: 100dvw;
+	margin-left: calc(50% - 50dvw);
+	margin-right: calc(50% - 50dvw);
+	padding-block: clamp(3.5rem, 8vw, 6rem);
+	box-sizing: border-box;
+}
+
+.arriva-events:not(.has-background) {
+	background-color: var(--wp--preset--color--contrast);
+}
+
+.arriva-events:not(.has-text-color) {
+	color: var(--wp--preset--color--base);
+}
+
+.arriva-events__inner {
+	max-width: var(--wp--style--global--wide-size, 1100px);
+	margin-inline: auto;
+	padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+/* ── Section header ── */
+
+.arriva-events__eyebrow {
+	margin: 0 0 0.75rem;
+	font-size: 0.64rem;
+	font-weight: 700;
+	letter-spacing: 0.18em;
+	line-height: 1.2;
+	text-transform: uppercase;
+	color: color-mix(in srgb, currentColor 40%, transparent);
+}
+
+.arriva-events__heading {
+	margin: 0;
+	max-width: 22ch;
+	font-size: clamp(1.75rem, 1.35rem + 2vw, 2.8rem);
+	font-weight: 500;
+	font-style: normal;
+	letter-spacing: -0.015em;
+	line-height: 1.1;
+	color: inherit;
+}
+
+.arriva-events__year {
+	color: var(--wp--preset--color--accent);
+}
+
+.arriva-events__intro {
+	margin: 0.75rem 0 0;
+	max-width: 52ch;
+	font-size: 1rem;
+	line-height: 1.7;
+	color: color-mix(in srgb, currentColor 50%, transparent);
+}
+
+/* ── Card list ── */
+
+.arriva-events__list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	margin: clamp(2rem, 4vw, 3.5rem) 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.arriva-events__item {
+	margin: 0;
+}
+
+.arriva-events__card {
+	display: grid;
+	grid-template-columns: 64px minmax(0, 1fr) auto;
+	align-items: center;
+	gap: 1rem;
+	padding: 1rem 1.5rem;
+	border: 1px solid color-mix(in srgb, currentColor 8%, transparent);
+	border-radius: 16px;
+	background: color-mix(in srgb, currentColor 5%, transparent);
+	color: inherit;
+	text-decoration: none;
+	transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.arriva-events__card:hover {
+	background: color-mix(in srgb, currentColor 9%, transparent);
+	color: inherit;
+}
+
+.arriva-events__card:focus-visible {
+	outline: 2px solid var(--wp--preset--color--accent);
+	outline-offset: 3px;
+}
+
+.arriva-events__card.is-next {
+	border-color: color-mix(in srgb, var(--wp--preset--color--accent) 70%, transparent);
+	box-shadow: inset 3px 0 0 var(--wp--preset--color--accent);
+}
+
+.arriva-events__card.is-past {
+	opacity: 0.5;
+}
+
+.arriva-events__card.is-past .arriva-events__date {
+	background: color-mix(in srgb, currentColor 18%, transparent);
+	color: inherit;
+}
+
+.arriva-events__date {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 0.5rem 0.25rem;
+	border-radius: 8px;
+	background: var(--wp--preset--color--accent);
+	color: var(--wp--preset--color--base);
+	line-height: 1;
+	text-align: center;
+}
+
+.arriva-events__day {
+	font-size: 1.4rem;
+	font-weight: 500;
+	line-height: 1;
+}
+
+.arriva-events__sub {
+	margin-top: 0.15rem;
+	font-size: 0.6rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: color-mix(in srgb, currentColor 75%, transparent);
+}
+
+.arriva-events__title {
+	display: block;
+	margin-bottom: 0.2rem;
+	font-size: 0.875rem;
+	font-weight: 600;
+	line-height: 1.3;
+	color: inherit;
+}
+
+.arriva-events__detail {
+	display: block;
+	font-size: 0.75rem;
+	line-height: 1.4;
+	color: color-mix(in srgb, currentColor 45%, transparent);
+}
+
+.arriva-events__type {
+	padding: 0.28rem 0.7rem;
+	border: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+	border-radius: 999px;
+	background: color-mix(in srgb, currentColor 8%, transparent);
+	font-size: 0.6rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	line-height: 1.2;
+	text-transform: uppercase;
+	color: color-mix(in srgb, currentColor 60%, transparent);
+	white-space: nowrap;
+}
+
+.arriva-events__type--public,
+.arriva-events__type--sport {
+	border-color: color-mix(in srgb, var(--wp--preset--color--accent) 30%, transparent);
+	background: color-mix(in srgb, var(--wp--preset--color--accent) 20%, transparent);
+	color: color-mix(in srgb, var(--wp--preset--color--accent) 90%, currentColor);
+}
+
+/* ── Year list: month groups ── */
+
+.arriva-events__months {
+	display: flex;
+	flex-direction: column;
+	gap: clamp(1.75rem, 3vw, 2.5rem);
+	margin: clamp(2rem, 4vw, 3.5rem) 0 0;
+}
+
+.arriva-events__month-group {
+	display: grid;
+	grid-template-columns: 9rem minmax(0, 1fr);
+	gap: 1.5rem;
+	align-items: start;
+}
+
+.arriva-events__month-label {
+	position: sticky;
+	top: 6rem;
+	margin: 0;
+	padding-top: 1rem;
+	font-size: 1.25rem;
+	font-weight: 500;
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	color: inherit;
+}
+
+.arriva-events__month-group.is-past .arriva-events__month-label {
+	color: color-mix(in srgb, currentColor 45%, transparent);
+}
+
+.arriva-events__month-group .arriva-events__list {
+	margin: 0;
+}
+
+/* ── List / calendar switch (shown once view.js runs) ── */
+
+.arriva-events__toolbar {
+	display: none;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	margin-top: clamp(2rem, 4vw, 3.5rem);
+}
+
+.arriva-events.is-enhanced .arriva-events__toolbar {
+	display: flex;
+}
+
+.arriva-events.is-enhanced .arriva-events__toolbar + .arriva-events__months {
+	margin-top: 1.5rem;
+}
+
+.arriva-events__switch {
+	display: inline-flex;
+	padding: 3px;
+	border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+	border-radius: 999px;
+}
+
+.arriva-events__switch-btn {
+	padding: 0.45rem 1rem;
+	border: 0;
+	border-radius: 999px;
+	background: transparent;
+	font: inherit;
+	font-size: 0.8125rem;
+	font-weight: 600;
+	line-height: 1.2;
+	color: color-mix(in srgb, currentColor 65%, transparent);
+	cursor: pointer;
+}
+
+.arriva-events__switch-btn[aria-pressed='true'],
+.arriva-events__switch-btn.is-active {
+	background: color-mix(in srgb, currentColor 12%, transparent);
+	color: inherit;
+}
+
+.arriva-events__switch-btn:focus-visible,
+.arriva-cal__step:focus-visible {
+	outline: 2px solid var(--wp--preset--color--accent);
+	outline-offset: 2px;
+}
+
+.arriva-cal__nav {
+	display: none;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+.arriva-events[data-view='calendar'] .arriva-cal__nav {
+	display: flex;
+}
+
+.arriva-cal__current {
+	min-width: 9rem;
+	font-size: 1.25rem;
+	font-weight: 500;
+	text-align: center;
+}
+
+.arriva-cal__step {
+	display: grid;
+	place-items: center;
+	width: 2.25rem;
+	height: 2.25rem;
+	padding: 0;
+	border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+	border-radius: 50%;
+	background: transparent;
+	font: inherit;
+	font-size: 1.1rem;
+	line-height: 1;
+	color: inherit;
+	cursor: pointer;
+}
+
+.arriva-cal__step:hover:not(:disabled) {
+	border-color: color-mix(in srgb, currentColor 45%, transparent);
+}
+
+.arriva-cal__step:disabled {
+	opacity: 0.3;
+	cursor: default;
+}
+
+/* ── Month grid ── */
+
+.arriva-cal {
+	display: none;
+	margin-top: 1.25rem;
+}
+
+.arriva-events[data-view='calendar'] .arriva-cal {
+	display: block;
+}
+
+.arriva-events[data-view='calendar'] .arriva-events__months {
+	display: none;
+}
+
+.arriva-cal__month {
+	display: none;
+}
+
+.arriva-cal__month.is-active {
+	display: block;
+}
+
+.arriva-cal .screen-reader-text {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
+}
+
+.arriva-cal__weekdays,
+.arriva-cal__grid {
+	display: grid;
+	grid-template-columns: repeat(7, minmax(0, 1fr));
+	gap: 6px;
+}
+
+.arriva-cal__weekdays span {
+	padding: 0.25rem 0.5rem;
+	font-size: 0.6rem;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: color-mix(in srgb, currentColor 45%, transparent);
+}
+
+.arriva-cal__grid {
+	margin-top: 6px;
+}
+
+.arriva-cal__day {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+	min-width: 0;
+	min-height: 6.5rem;
+	padding: 0.5rem;
+	border: 1px solid color-mix(in srgb, currentColor 8%, transparent);
+	border-radius: 12px;
+	background: color-mix(in srgb, currentColor 4%, transparent);
+}
+
+.arriva-cal__day.is-outside {
+	border-color: transparent;
+	background: none;
+}
+
+.arriva-cal__day.is-past {
+	opacity: 0.5;
+}
+
+.arriva-cal__day.is-today {
+	border-color: var(--wp--preset--color--accent);
+}
+
+.arriva-cal__num {
+	font-size: 0.8rem;
+	font-weight: 600;
+	line-height: 1.6;
+}
+
+.arriva-cal__day.is-today .arriva-cal__num {
+	display: inline-grid;
+	place-items: center;
+	align-self: flex-start;
+	width: 1.6rem;
+	height: 1.6rem;
+	margin: -0.2rem;
+	border-radius: 50%;
+	background: var(--wp--preset--color--accent);
+	color: var(--wp--preset--color--base);
+}
+
+.arriva-cal__event {
+	display: block;
+	padding: 0.3rem 0.45rem;
+	border-left: 3px solid var(--wp--preset--color--accent);
+	border-radius: 6px;
+	background: color-mix(in srgb, var(--wp--preset--color--accent) 22%, transparent);
+	color: inherit;
+	text-decoration: none;
+	overflow-wrap: break-word;
+	hyphens: auto;
+}
+
+.arriva-cal__event:hover {
+	background: color-mix(in srgb, var(--wp--preset--color--accent) 34%, transparent);
+	color: inherit;
+}
+
+.arriva-cal__event:focus-visible {
+	outline: 2px solid var(--wp--preset--color--accent);
+	outline-offset: 2px;
+}
+
+.arriva-cal__event-title {
+	display: block;
+	font-size: 0.6875rem;
+	font-weight: 600;
+	line-height: 1.25;
+}
+
+.arriva-cal__event-detail {
+	display: block;
+	margin-top: 0.1rem;
+	font-size: 0.625rem;
+	line-height: 1.3;
+	opacity: 0.65;
+}
+
+/* ── Footer bits ── */
+
+.arriva-events__ical {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	margin-top: 2rem;
+	padding: 0.55rem 1.1rem;
+	border: 1px solid color-mix(in srgb, var(--wp--preset--color--accent) 45%, transparent);
+	border-radius: 999px;
+	font-size: 0.8125rem;
+	font-weight: 600;
+	line-height: 1.2;
+	text-decoration: none;
+	color: inherit;
+}
+
+.arriva-events__ical::before {
+	content: '';
+	width: 0.85rem;
+	height: 0.85rem;
+	border: 1.5px solid currentColor;
+	border-top-width: 3px;
+	border-radius: 3px;
+	opacity: 0.75;
+}
+
+.arriva-events__ical:hover,
+.arriva-events__ical:focus-visible {
+	border-color: var(--wp--preset--color--accent);
+	color: inherit;
+}
+
+.arriva-events__ical:focus-visible {
+	outline: 2px solid var(--wp--preset--color--accent);
+	outline-offset: 3px;
+}
+
+.arriva-events__ical + .arriva-events__note {
+	margin-top: 1rem;
+}
+
+.arriva-events__more {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	margin-top: 2rem;
+	padding: 0.72rem 1.55rem;
+	border: 1.5px solid color-mix(in srgb, currentColor 25%, transparent);
+	border-radius: 999px;
+	background: transparent;
+	font-size: 0.875rem;
+	font-weight: 600;
+	line-height: 1;
+	text-decoration: none;
+	color: color-mix(in srgb, currentColor 80%, transparent);
+	transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.arriva-events__more::after {
+	content: '→';
+}
+
+.arriva-events__more:hover,
+.arriva-events__more:focus-visible {
+	border-color: color-mix(in srgb, currentColor 60%, transparent);
+	color: inherit;
+}
+
+.arriva-events__more:focus-visible {
+	outline: 2px solid var(--wp--preset--color--accent);
+	outline-offset: 3px;
+}
+
+.arriva-events__note {
+	margin: 2rem 0 0;
+	font-size: 0.8125rem;
+	line-height: 1.5;
+	color: color-mix(in srgb, currentColor 50%, transparent);
+}
+
+.arriva-events__empty {
+	margin: clamp(2rem, 4vw, 3.5rem) 0 0;
+	color: color-mix(in srgb, currentColor 70%, transparent);
+}
+
+/* Phones: the grid is too narrow to read, so always show the list. */
+@media (max-width: 720px) {
+	.arriva-events.is-enhanced .arriva-events__toolbar,
+	.arriva-events[data-view='calendar'] .arriva-cal {
+		display: none;
+	}
+
+	.arriva-events[data-view='calendar'] .arriva-events__months {
+		display: flex;
+	}
+
+	.arriva-events.is-enhanced .arriva-events__toolbar + .arriva-events__months {
+		margin-top: clamp(2rem, 4vw, 3.5rem);
+	}
+
+	.arriva-events__month-group {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 0.75rem;
+	}
+
+	.arriva-events__month-label {
+		position: static;
+		padding-top: 0;
+	}
+}
+
+@media (max-width: 560px) {
+	.arriva-events__card {
+		grid-template-columns: 52px minmax(0, 1fr);
+		padding: 0.85rem 1rem;
+	}
+
+	.arriva-events__type {
+		display: none;
+	}
+
+	.arriva-events__more {
+		white-space: nowrap;
+	}
+}
+
+/* ── Editor ── */
+
+.block-editor-block-list__layout .arriva-events {
+	width: 100dvw;
+	max-width: 100dvw;
+	margin-left: calc(50% - 50dvw);
+	margin-right: calc(50% - 50dvw);
+}
+
+/* Server preview renders a nested copy of the block — show only its list. */
+.arriva-events__preview {
+	pointer-events: none;
+}
+
+.arriva-events .arriva-events__preview .arriva-events {
+	width: auto;
+	max-width: none;
+	margin: 0;
+	padding: 0;
+	background: none;
+	color: inherit;
+}
+
+.arriva-events .arriva-events__preview .arriva-events__inner {
+	max-width: none;
+	padding: 0;
+}
+
+.arriva-events .arriva-events__editor-only {
+	padding: 0.5rem 0.75rem;
+	border: 1px dashed color-mix(in srgb, currentColor 30%, transparent);
+	border-radius: 8px;
+}

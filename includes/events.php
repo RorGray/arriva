@@ -205,10 +205,10 @@ function arriva_format_event_date( WP_Post $post ) {
 }
 
 /**
- * Day and short month for the event date tile.
+ * Day, short month and short weekday for the event date tile.
  *
  * @param WP_Post $post Event post.
- * @return array{iso: string, day: string, month: string}|null
+ * @return array{iso: string, day: string, month: string, weekday: string}|null
  */
 function arriva_event_date_badge( WP_Post $post ) {
 	$iso = get_post_meta( $post->ID, ARRIVA_EVENT_DATE_META, true );
@@ -220,10 +220,77 @@ function arriva_event_date_badge( WP_Post $post ) {
 		return null;
 	}
 	return array(
-		'iso'   => $iso,
-		'day'   => wp_date( 'd', $ts ),
-		'month' => wp_date( 'M', $ts ),
+		'iso'     => $iso,
+		'day'     => wp_date( 'd', $ts ),
+		'month'   => wp_date( 'M', $ts ),
+		'weekday' => wp_date( 'D', $ts ),
 	);
+}
+
+/**
+ * Echo one event card (<li>) for the shared events list styles.
+ *
+ * @param WP_Post $post  Event post.
+ * @param array   $args  tile: 'month'|'weekday', today: Y-m-d, is_next: bool.
+ */
+function arriva_render_event_card( WP_Post $post, array $args = array() ) {
+	$args = wp_parse_args(
+		$args,
+		array(
+			'tile'    => 'month',
+			'today'   => wp_date( 'Y-m-d' ),
+			'is_next' => false,
+		)
+	);
+
+	$badge   = arriva_event_date_badge( $post );
+	$type    = arriva_event_type_label( $post );
+	$variant = arriva_event_type_variant( $post );
+	$detail  = trim( wp_strip_all_tags( (string) get_post_field( 'post_excerpt', $post ) ) );
+
+	$classes = array( 'arriva-events__card' );
+	if ( $badge && $badge['iso'] < $args['today'] ) {
+		$classes[] = 'is-past';
+	}
+	if ( $args['is_next'] ) {
+		$classes[] = 'is-next';
+	}
+
+	echo '<li class="arriva-events__item">';
+	echo '<a class="' . esc_attr( implode( ' ', $classes ) ) . '" href="' . esc_url( get_permalink( $post ) ) . '">';
+
+	if ( $badge ) {
+		$sub = 'weekday' === $args['tile'] ? $badge['weekday'] : $badge['month'];
+		echo '<time class="arriva-events__date" datetime="' . esc_attr( $badge['iso'] ) . '">';
+		echo '<span class="arriva-events__day">' . esc_html( $badge['day'] ) . '</span>';
+		echo '<span class="arriva-events__sub">' . esc_html( $sub ) . '</span>';
+		echo '</time>';
+	}
+
+	echo '<span class="arriva-events__body">';
+	echo '<span class="arriva-events__title">' . esc_html( get_the_title( $post ) ) . '</span>';
+	if ( $detail ) {
+		echo '<span class="arriva-events__detail">' . esc_html( $detail ) . '</span>';
+	}
+	echo '</span>';
+
+	if ( $type ) {
+		$variant_class = $variant ? ' arriva-events__type--' . $variant : '';
+		echo '<span class="arriva-events__type' . esc_attr( $variant_class ) . '">' . esc_html( $type ) . '</span>';
+	}
+
+	echo '</a>';
+	echo '</li>';
+}
+
+/**
+ * Whether a RichText attribute has visible text.
+ *
+ * @param string $value Attribute HTML.
+ * @return bool
+ */
+function arriva_has_rich_text( $value ) {
+	return '' !== trim( wp_strip_all_tags( (string) $value ) );
 }
 
 /**
@@ -267,42 +334,118 @@ function arriva_event_type_variant( WP_Post $post ) {
 }
 
 /**
- * Group event posts by Termin-Typ term (term order: name ASC). Posts without a type go last.
+ * Echo a month-grid calendar (all 12 months of $year; view.js shows one at a time).
  *
- * @param WP_Post[] $posts Event posts.
- * @return array<int, array{term: WP_Term|null, posts: WP_Post[]}>
+ * @param int       $year  Year.
+ * @param WP_Post[] $posts Event posts in that year.
+ * @param string    $today Y-m-d.
  */
-function arriva_group_events_by_type( array $posts ) {
-	$groups   = array();
-	$ungrouped = array();
+function arriva_render_events_calendar( $year, array $posts, $today ) {
+	$by_day = array();
+	foreach ( $posts as $post ) {
+		$iso = (string) get_post_meta( $post->ID, ARRIVA_EVENT_DATE_META, true );
+		if ( $iso ) {
+			$by_day[ $iso ][] = $post;
+		}
+	}
+
+	$start_of_week = (int) get_option( 'start_of_week', 1 );
+
+	$weekdays = array();
+	for ( $i = 0; $i < 7; $i++ ) {
+		// 2023-01-01 was a Sunday, so day N of January 2023 has weekday index N-1.
+		$weekdays[] = wp_date( 'D', gmmktime( 12, 0, 0, 1, 1 + ( ( $start_of_week + $i ) % 7 ), 2023 ) );
+	}
+
+	echo '<div class="arriva-cal">';
+
+	for ( $month = 1; $month <= 12; $month++ ) {
+		$first   = gmmktime( 12, 0, 0, $month, 1, $year );
+		$label   = wp_date( 'F', $first );
+		$days    = (int) gmdate( 't', $first );
+		$leading = ( (int) gmdate( 'w', $first ) - $start_of_week + 7 ) % 7;
+
+		echo '<div class="arriva-cal__month" data-month="' . esc_attr( (string) $month ) . '" data-label="' . esc_attr( $label ) . '">';
+		echo '<h3 class="screen-reader-text">' . esc_html( $label . ' ' . $year ) . '</h3>';
+
+		echo '<div class="arriva-cal__weekdays" aria-hidden="true">';
+		foreach ( $weekdays as $weekday ) {
+			echo '<span>' . esc_html( $weekday ) . '</span>';
+		}
+		echo '</div>';
+
+		echo '<div class="arriva-cal__grid">';
+
+		for ( $i = 0; $i < $leading; $i++ ) {
+			echo '<div class="arriva-cal__day is-outside" aria-hidden="true"></div>';
+		}
+
+		for ( $day = 1; $day <= $days; $day++ ) {
+			$iso     = sprintf( '%04d-%02d-%02d', $year, $month, $day );
+			$classes = array( 'arriva-cal__day' );
+			if ( $iso === $today ) {
+				$classes[] = 'is-today';
+			} elseif ( $iso < $today ) {
+				$classes[] = 'is-past';
+			}
+			if ( ! empty( $by_day[ $iso ] ) ) {
+				$classes[] = 'has-events';
+			}
+
+			echo '<div class="' . esc_attr( implode( ' ', $classes ) ) . '">';
+			echo '<span class="arriva-cal__num">' . esc_html( (string) $day ) . '</span>';
+
+			if ( ! empty( $by_day[ $iso ] ) ) {
+				foreach ( $by_day[ $iso ] as $post ) {
+					$detail = trim( wp_strip_all_tags( (string) get_post_field( 'post_excerpt', $post ) ) );
+					echo '<a class="arriva-cal__event" href="' . esc_url( get_permalink( $post ) ) . '">';
+					echo '<span class="arriva-cal__event-title">' . esc_html( get_the_title( $post ) ) . '</span>';
+					if ( $detail ) {
+						echo '<span class="arriva-cal__event-detail">' . esc_html( $detail ) . '</span>';
+					}
+					echo '</a>';
+				}
+			}
+
+			echo '</div>';
+		}
+
+		$trailing = ( 7 - ( ( $leading + $days ) % 7 ) ) % 7;
+		for ( $i = 0; $i < $trailing; $i++ ) {
+			echo '<div class="arriva-cal__day is-outside" aria-hidden="true"></div>';
+		}
+
+		echo '</div>';
+		echo '</div>';
+	}
+
+	echo '</div>';
+}
+
+/**
+ * Group date-sorted event posts by month (keeps input order).
+ *
+ * @param WP_Post[] $posts Event posts, sorted by date.
+ * @return array<string, array{label: string, posts: WP_Post[]}> Keyed by Y-m.
+ */
+function arriva_group_events_by_month( array $posts ) {
+	$groups = array();
 
 	foreach ( $posts as $post ) {
-		$term = arriva_get_event_type_term( $post );
-		if ( ! $term ) {
-			$ungrouped[] = $post;
+		$iso = (string) get_post_meta( $post->ID, ARRIVA_EVENT_DATE_META, true );
+		$ts  = $iso ? strtotime( $iso . ' 12:00:00' ) : false;
+		if ( ! $ts ) {
 			continue;
 		}
-		if ( ! isset( $groups[ $term->term_id ] ) ) {
-			$groups[ $term->term_id ] = array(
-				'term'  => $term,
+
+		$key = wp_date( 'Y-m', $ts );
+		if ( ! isset( $groups[ $key ] ) ) {
+			$groups[ $key ] = array(
+				'label' => wp_date( 'F', $ts ),
 				'posts' => array(),
 			);
 		}
-		$groups[ $term->term_id ]['posts'][] = $post;
-	}
-
-	uasort(
-		$groups,
-		function ( $a, $b ) {
-			return strcasecmp( $a['term']->name, $b['term']->name );
-		}
-	);
-
-	if ( $ungrouped ) {
-		$groups[] = array(
-			'term'  => null,
-			'posts' => $ungrouped,
-		);
+		$groups[ $key ]['posts'][] = $post;
 	}
 
 	return $groups;

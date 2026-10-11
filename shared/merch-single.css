@@ -1,5 +1,12 @@
 /* Hallmark · PDP · utilitarian editorial · club WP tokens */
 
+.arriva-merch-single,
+.arriva-merch-single *,
+.arriva-merch-single *::before,
+.arriva-merch-single *::after {
+	box-sizing: border-box;
+}
+
 .arriva-merch-single {
 	overflow-x: clip;
 	width: 100%;
@@ -262,6 +269,7 @@
 }
 
 .arriva-merch-single__order {
+	box-sizing: border-box;
 	display: flex;
 	align-items: center;
 	justify-content: center;

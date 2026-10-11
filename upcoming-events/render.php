@@ -15,10 +15,6 @@ $empty_text = isset( $attributes['emptyText'] ) ? (string) $attributes['emptyTex
 $more_label = isset( $attributes['moreLabel'] ) ? (string) $attributes['moreLabel'] : '';
 $more_url   = isset( $attributes['moreUrl'] ) ? trim( (string) $attributes['moreUrl'] ) : '';
 
-$has_text = static function ( $value ) {
-	return '' !== trim( wp_strip_all_tags( $value ) );
-};
-
 $today = wp_date( 'Y-m-d' );
 $posts = arriva_query_events(
 	array(
@@ -30,70 +26,39 @@ $posts = arriva_query_events(
 
 $wrapper = get_block_wrapper_attributes(
 	array(
-		'class' => 'arriva-upcoming-events alignfull',
+		'class' => 'arriva-events alignfull',
 	)
 );
 
 echo '<section ' . $wrapper . '>';
-echo '<div class="arriva-upcoming-events__inner">';
+echo '<div class="arriva-events__inner">';
 
-if ( $has_text( $eyebrow ) ) {
-	echo '<p class="arriva-upcoming-events__eyebrow">' . wp_kses_post( $eyebrow ) . '</p>';
+if ( arriva_has_rich_text( $eyebrow ) ) {
+	echo '<p class="arriva-events__eyebrow">' . wp_kses_post( $eyebrow ) . '</p>';
 }
 
-if ( $has_text( $heading ) ) {
-	echo '<h2 class="arriva-upcoming-events__heading">' . wp_kses_post( $heading ) . '</h2>';
+if ( arriva_has_rich_text( $heading ) ) {
+	echo '<h2 class="arriva-events__heading">' . wp_kses_post( $heading ) . '</h2>';
 }
 
-if ( $has_text( $subtitle ) ) {
-	echo '<p class="arriva-upcoming-events__intro">' . wp_kses_post( $subtitle ) . '</p>';
+if ( arriva_has_rich_text( $subtitle ) ) {
+	echo '<p class="arriva-events__intro">' . wp_kses_post( $subtitle ) . '</p>';
 }
 
 if ( empty( $posts ) ) {
-	if ( $has_text( $empty_text ) ) {
-		echo '<p class="arriva-upcoming-events__empty">' . wp_kses_post( $empty_text ) . '</p>';
+	if ( arriva_has_rich_text( $empty_text ) ) {
+		echo '<p class="arriva-events__empty">' . wp_kses_post( $empty_text ) . '</p>';
 	}
 } else {
-	echo '<ul class="arriva-upcoming-events__list">';
-
+	echo '<ul class="arriva-events__list">';
 	foreach ( $posts as $post ) {
-		$badge   = arriva_event_date_badge( $post );
-		$variant = arriva_event_type_variant( $post );
-		$type    = arriva_event_type_label( $post );
-		$detail  = trim( wp_strip_all_tags( (string) get_post_field( 'post_excerpt', $post ) ) );
-		$url     = get_permalink( $post );
-
-		echo '<li class="arriva-upcoming-events__item">';
-		echo '<a class="arriva-upcoming-events__card" href="' . esc_url( $url ) . '">';
-
-		if ( $badge ) {
-			echo '<time class="arriva-upcoming-events__date" datetime="' . esc_attr( $badge['iso'] ) . '">';
-			echo '<span class="arriva-upcoming-events__day">' . esc_html( $badge['day'] ) . '</span>';
-			echo '<span class="arriva-upcoming-events__month">' . esc_html( $badge['month'] ) . '</span>';
-			echo '</time>';
-		}
-
-		echo '<span class="arriva-upcoming-events__body">';
-		echo '<span class="arriva-upcoming-events__title">' . esc_html( get_the_title( $post ) ) . '</span>';
-		if ( $detail ) {
-			echo '<span class="arriva-upcoming-events__detail">' . esc_html( $detail ) . '</span>';
-		}
-		echo '</span>';
-
-		if ( $type ) {
-			$variant_class = $variant ? ' arriva-upcoming-events__type--' . $variant : '';
-			echo '<span class="arriva-upcoming-events__type' . esc_attr( $variant_class ) . '">' . esc_html( $type ) . '</span>';
-		}
-
-		echo '</a>';
-		echo '</li>';
+		arriva_render_event_card( $post, array( 'today' => $today ) );
 	}
-
 	echo '</ul>';
 }
 
-if ( $has_text( $more_label ) && '' !== $more_url ) {
-	echo '<a class="arriva-upcoming-events__more" href="' . esc_url( $more_url ) . '">' . wp_kses_post( $more_label ) . '</a>';
+if ( arriva_has_rich_text( $more_label ) && '' !== $more_url ) {
+	echo '<a class="arriva-events__more" href="' . esc_url( $more_url ) . '">' . wp_kses_post( $more_label ) . '</a>';
 }
 
 echo '</div>';

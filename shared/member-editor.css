@@ -27,7 +27,7 @@
 
 .editor-styles-wrapper .wp-block-arriva-page-header.alignfull,
 .editor-styles-wrapper .wp-block-arriva-wave-divider,
-.editor-styles-wrapper .wp-block-arriva-upcoming-events {
+.editor-styles-wrapper .arriva-events:not(.arriva-events__preview .arriva-events) {
 	width: 100dvw !important;
 	max-width: 100dvw !important;
 	margin-left: calc(50% - 50dvw) !important;

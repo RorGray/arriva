@@ -21,16 +21,22 @@ body.arriva-mitglied-area.arriva-has-page-header main .entry-header .wp-block-po
 
 /* Text inside full-bleed bands lines up with the 1100px content column. */
 body.arriva-mitglied-area .wp-block-arriva-page-header .arriva-page-header__inner,
-body.arriva-mitglied-area .arriva-upcoming-events__inner {
+body.arriva-mitglied-area .arriva-events__inner {
 	box-sizing: border-box;
 	max-width: calc(var(--arriva-member-content-max) + 2 * var(--arriva-member-gutter));
 	margin-inline: auto;
 	padding-inline: var(--arriva-member-gutter);
 }
 
-/* "Nächste Termine" on the hub: white band inside the page — homepage padding (up to 6rem) is too much. */
-body.arriva-mitglied-area .wp-block-arriva-upcoming-events {
+/* Event bands inside member pages — homepage padding (up to 6rem) is too much. */
+body.arriva-mitglied-area .arriva-events {
 	padding-block: 1.5rem 2.5rem;
+}
+
+/* Site header is position: fixed (theme custom CSS) — the singles templates have no breadcrumb row to clear it. */
+body.arriva-mitglied-area.single-arriva_merch main,
+body.arriva-mitglied-area.single-arriva_event main {
+	padding-top: calc(var(--arriva-header-height, 5.5rem) + 1rem) !important;
 }
 
 /* Fallback if a single is rendered with the theme's generic template (~620px column). */
