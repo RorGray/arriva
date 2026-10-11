@@ -1,0 +1,22 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "arriva/merch-product",
+	"title": "Produktseite",
+	"category": "widgets",
+	"icon": "tag",
+	"description": "Produktdetailseite eines Vereinsprodukts — direkt in der Vorschau bearbeitbar.",
+	"keywords": [ "merch", "produkt", "shop" ],
+	"textdomain": "arriva",
+	"usesContext": [ "postId", "postType" ],
+	"attributes": {},
+	"supports": {
+		"html": false,
+		"multiple": false,
+		"reusable": false,
+		"inserter": false
+	},
+	"editorScript": "file:./index.js",
+	"editorStyle": [ "arriva-merch-single", "file:./editor.css" ],
+	"render": "file:./render.php"
+}

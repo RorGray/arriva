@@ -41,6 +41,17 @@ function arriva_register_merch_content_type() {
 			'rest_base'           => 'arriva-merch',
 			'menu_icon'           => 'dashicons-tag',
 			'supports'            => array( 'title', 'editor', 'excerpt', 'thumbnail', 'page-attributes', 'custom-fields' ),
+			'template'            => array(
+				array(
+					'arriva/merch-product',
+					array(
+						'lock' => array(
+							'remove' => true,
+							'move'   => true,
+						),
+					),
+				),
+			),
 			'capability_type'     => 'post',
 			'exclude_from_search' => true,
 		)
@@ -169,12 +180,7 @@ add_action(
 
 		$asset = require __DIR__ . '/../shared/merch-single.asset.php';
 
-		wp_enqueue_style(
-			'arriva-merch-single',
-			plugins_url( 'shared/merch-single.css', __DIR__ . '/../arriva.php' ),
-			array( 'arriva-merch-catalog' ),
-			ARRIVA_VERSION
-		);
+		wp_enqueue_style( 'arriva-merch-single' );
 
 		wp_enqueue_script(
 			'arriva-merch-single',
@@ -522,7 +528,7 @@ function arriva_merch_render_gallery( WP_Post $post ) {
 }
 
 /**
- * Single product layout (meta + back link).
+ * Single product layout (meta + back link) for posts without the arriva/merch-product block.
  *
  * @param string $content Post content.
  * @return string
@@ -541,11 +547,28 @@ function arriva_merch_single_content( $content ) {
 		return $content;
 	}
 
+	if ( has_block( 'arriva/merch-product', $post ) ) {
+		return $content;
+	}
+
 	static $done = false;
 	if ( $done ) {
 		return $content;
 	}
 	$done = true;
+
+	return arriva_merch_render_single( $post, $content );
+}
+add_filter( 'the_content', 'arriva_merch_single_content', 9 );
+
+/**
+ * Product detail page markup.
+ *
+ * @param WP_Post $post    Product.
+ * @param string  $content Rendered description ("Weitere Informationen").
+ * @return string
+ */
+function arriva_merch_render_single( WP_Post $post, $content ) {
 	$price = get_post_meta( $post->ID, ARRIVA_MERCH_PRICE_META, true );
 	$price = $price ? $price : __( 'Preis auf Anfrage', 'arriva' );
 
@@ -656,7 +679,6 @@ function arriva_merch_single_content( $content ) {
 
 	return ob_get_clean();
 }
-add_filter( 'the_content', 'arriva_merch_single_content', 9 );
 
 /**
  * Lightbox markup at end of document (not in post content — avoids layout gaps).
