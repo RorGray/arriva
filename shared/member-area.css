@@ -1,0 +1,23 @@
+/**
+ * Mitgliederbereich — align main column with site wide size (1100px).
+ */
+
+body.arriva-mitglied-area main .wp-block-group.arriva-member-layout.is-layout-constrained,
+body.arriva-mitglied-area .arriva-member-nav-bar.is-layout-constrained {
+	--wp--style--global--content-size: min(1100px, 100% - 2.5rem);
+}
+
+body.arriva-mitglied-area.single-arriva_event main .wp-block-post-content,
+body.arriva-mitglied-area.post-type-archive-arriva_event main .wp-block-query {
+	max-width: min(1100px, 100% - 2.5rem);
+	margin-inline: auto;
+	width: 100%;
+}
+
+body.arriva-mitglied-area.single-arriva_event main .wp-block-post-title,
+body.arriva-mitglied-area.single-arriva_event main .wp-block-post-date,
+body.arriva-mitglied-area.post-type-archive-arriva_event main .wp-block-query-title {
+	max-width: min(1100px, 100% - 2.5rem);
+	margin-inline: auto;
+	width: 100%;
+}

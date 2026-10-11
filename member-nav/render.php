@@ -26,6 +26,11 @@ $links = array(
 		'key'   => 'termine',
 	),
 	array(
+		'label' => __( 'Vorstand', 'arriva' ),
+		'url'   => home_url( '/mitglieder/vorstand/' ),
+		'key'   => 'vorstand',
+	),
+	array(
 		'label' => __( 'Neuigkeiten', 'arriva' ),
 		'url'   => home_url( '/mitglieder/neuigkeiten/' ),
 		'key'   => 'neuigkeiten',

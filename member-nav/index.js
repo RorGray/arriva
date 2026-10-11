@@ -17,7 +17,7 @@
 					'p',
 					{ className: 'arriva-member-nav-editor__label' },
 					__(
-						'Mitglieder-Navigation: Übersicht · Termine · Neuigkeiten · Dokumente',
+						'Mitglieder-Navigation: Übersicht · Termine · Vorstand · Neuigkeiten · Dokumente',
 						'arriva'
 					)
 				)

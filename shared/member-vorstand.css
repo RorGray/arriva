@@ -1,0 +1,146 @@
+/**
+ * Mitglieder → Vorstand page (person cards + tel links).
+ */
+
+.arriva-vorstand__intro {
+	max-width: 42rem;
+	margin: 0 0 var(--wp--preset--spacing--40, 1.5rem);
+	line-height: 1.6;
+	opacity: 0.88;
+}
+
+.arriva-vorstand__grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: var(--wp--preset--spacing--40, 1.5rem);
+	margin-bottom: var(--wp--preset--spacing--50, 2rem);
+}
+
+@media (max-width: 781px) {
+	.arriva-vorstand__grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+.arriva-vorstand__section {
+	height: 100%;
+	padding: var(--wp--preset--spacing--40, 1.5rem);
+	background: var(--wp--preset--color--base-2, #f6f5f1);
+	border: 1px solid var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.1));
+	border-left: 4px solid var(--wp--preset--color--accent, #1a93a4);
+	border-radius: 0.75rem;
+	box-shadow: 0 10px 32px color-mix(in srgb, var(--wp--preset--color--contrast, #18222a) 5%, transparent);
+}
+
+.arriva-vorstand__section-title {
+	margin: 0 0 var(--wp--preset--spacing--30, 1.25rem);
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--wp--preset--color--contrast, inherit);
+}
+
+.arriva-vorstand__people {
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+}
+
+.arriva-vorstand__person {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	align-items: center;
+	gap: 0.35rem 1rem;
+	padding: 0.85rem 0;
+	border-bottom: 1px solid var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.08));
+}
+
+.arriva-vorstand__person:last-child {
+	border-bottom: none;
+	padding-bottom: 0;
+}
+
+.arriva-vorstand__person:first-child {
+	padding-top: 0;
+}
+
+.arriva-vorstand__meta {
+	min-width: 0;
+}
+
+.arriva-vorstand__role {
+	display: block;
+	margin: 0 0 0.2rem;
+	font-size: 0.75rem;
+	font-weight: 600;
+	line-height: 1.35;
+	color: inherit;
+	opacity: 0.72;
+}
+
+.arriva-vorstand__name {
+	margin: 0;
+	font-size: 1.0625rem;
+	font-weight: 600;
+	line-height: 1.35;
+}
+
+.arriva-vorstand__phone {
+	justify-self: end;
+}
+
+.arriva-vorstand__phone a {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.45rem 0.9rem;
+	border-radius: 999px;
+	background: var(--wp--preset--color--base, #fff);
+	border: 1px solid var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.12));
+	font-size: 0.875rem;
+	font-weight: 600;
+	line-height: 1.2;
+	text-decoration: none;
+	color: inherit;
+	white-space: nowrap;
+	transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.arriva-vorstand__phone a:hover,
+.arriva-vorstand__phone a:focus-visible {
+	border-color: var(--wp--preset--color--accent, #1a93a4);
+	background: color-mix(in srgb, var(--wp--preset--color--accent, #1a93a4) 8%, var(--wp--preset--color--base, #fff));
+	box-shadow: 0 4px 14px color-mix(in srgb, var(--wp--preset--color--accent, #1a93a4) 18%, transparent);
+}
+
+.arriva-vorstand__person--pending .arriva-vorstand__name {
+	font-weight: 500;
+	opacity: 0.85;
+}
+
+.arriva-vorstand__email {
+	max-width: 32rem;
+	margin-inline: auto;
+	padding: var(--wp--preset--spacing--50, 2rem);
+	text-align: center;
+	background: var(--wp--preset--color--base-2, #f6f5f1);
+	border: 1px solid var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.1));
+	border-radius: 0.75rem;
+}
+
+.arriva-vorstand__email .wp-block-heading {
+	margin-top: 0;
+}
+
+.arriva-vorstand__email .wp-block-arriva-protected-email {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.arriva-vorstand__email-note {
+	margin: var(--wp--preset--spacing--30, 1rem) 0 0;
+	font-size: 0.8125rem;
+	opacity: 0.75;
+}

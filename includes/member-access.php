@@ -5,6 +5,24 @@
 
 defined( 'ABSPATH' ) || exit;
 
+/** Main column width for Mitgliederbereich (matches theme wide size). */
+const ARRIVA_MEMBER_CONTENT_SIZE = '1100px';
+
+/**
+ * @return bool Front-end Mitglieder hub, subpages, or Termine views.
+ */
+function arriva_is_mitglied_area_view() {
+	if ( is_page( 'mitglieder' ) || arriva_is_mitglied_subpage() ) {
+		return true;
+	}
+
+	if ( is_singular( ARRIVA_EVENT_POST_TYPE ) || is_post_type_archive( ARRIVA_EVENT_POST_TYPE ) ) {
+		return true;
+	}
+
+	return false;
+}
+
 /**
  * @return int Mitglieder hub page ID (0 if missing).
  */
@@ -179,7 +197,7 @@ add_filter( 'rest_pre_dispatch', 'arriva_restrict_events_rest_dispatch', 10, 3 )
  */
 function arriva_member_nav_bar_markup() {
 	return do_blocks(
-		'<!-- wp:group {"align":"full","className":"arriva-member-nav-bar","layout":{"type":"constrained","contentSize":"720px"}} -->
+		'<!-- wp:group {"align":"full","className":"arriva-member-nav-bar","layout":{"type":"constrained","contentSize":"' . ARRIVA_MEMBER_CONTENT_SIZE . '"}} -->
 <!-- wp:arriva/member-nav /-->
 <!-- /wp:group -->'
 	);
@@ -226,3 +244,18 @@ function arriva_inject_member_nav_before_termine_title( $block_content, $block, 
 	return arriva_member_nav_bar_markup() . $block_content;
 }
 add_filter( 'render_block', 'arriva_inject_member_nav_before_termine_title', 10, 3 );
+
+/**
+ * Body class for member-area layout CSS.
+ *
+ * @param string[] $classes Body classes.
+ * @return string[]
+ */
+function arriva_mitglied_area_body_class( $classes ) {
+	if ( arriva_is_mitglied_area_view() ) {
+		$classes[] = 'arriva-mitglied-area';
+	}
+
+	return $classes;
+}
+add_filter( 'body_class', 'arriva_mitglied_area_body_class' );
