@@ -154,14 +154,18 @@ function arriva_restrict_events_rest_endpoints( $endpoints ) {
 		'/wp/v2/arriva_event_type/(?P<id>[\\d]+)',
 	);
 
+	$logged_in = static function () {
+		return is_user_logged_in();
+	};
+
 	foreach ( $routes as $route ) {
-		if ( empty( $endpoints[ $route ] ) ) {
+		if ( empty( $endpoints[ $route ] ) || ! is_array( $endpoints[ $route ] ) ) {
 			continue;
 		}
-		foreach ( $endpoints[ $route ] as &$handler ) {
-			$handler['permission_callback'] = function () {
-				return is_user_logged_in();
-			};
+		foreach ( array_keys( $endpoints[ $route ] ) as $key ) {
+			if ( is_array( $endpoints[ $route ][ $key ] ) ) {
+				$endpoints[ $route ][ $key ]['permission_callback'] = $logged_in;
+			}
 		}
 	}
 
