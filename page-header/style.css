@@ -17,8 +17,14 @@
 .wp-block-arriva-page-header .arriva-page-header__inner {
 	max-width: var(--wp--style--global--wide-size);
 	margin-inline: auto;
-	padding: clamp(1.25rem, 2.5vw, 1.75rem) clamp(1.25rem, 4vw, 2.5rem);
+	padding: clamp(1.25rem, 2.5vw, 1.75rem) clamp(1.25rem, 4vw, 2.5rem)
+		clamp(1.5rem, 2.5vw, 2rem);
 	border-bottom: 3px solid var(--wp--preset--color--accent);
+}
+
+/* Overlap wave pulls up by --arriva-wave-height (~46px); keep subtitle clear. */
+.wp-block-arriva-page-header:has(+ .wp-block-arriva-wave-divider.is-overlap-previous) .arriva-page-header__inner {
+	padding-bottom: clamp(2.75rem, 3vw + 1.25rem, 3.35rem);
 }
 
 body.arriva-mitglied-area .wp-block-arriva-page-header .arriva-page-header__inner {

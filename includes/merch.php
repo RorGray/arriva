@@ -215,37 +215,62 @@ function arriva_merch_single_content( $content ) {
 	$price = get_post_meta( $post->ID, ARRIVA_MERCH_PRICE_META, true );
 	$price = $price ? $price : __( 'Preis auf Anfrage', 'arriva' );
 
+	$options = arriva_merch_option_lines( $post );
+	$group   = arriva_merch_product_group( $post );
+
 	ob_start();
 	echo '<article class="arriva-merch-single">';
 
+	echo '<div class="arriva-merch-single__layout">';
+
+	echo '<div class="arriva-merch-single__gallery">';
 	if ( has_post_thumbnail( $post ) ) {
-		echo '<div class="arriva-merch-single__media">';
+		echo '<figure class="arriva-merch-single__figure">';
 		echo get_the_post_thumbnail( $post, 'large', array( 'class' => 'arriva-merch-single__image' ) );
-		echo '</div>';
+		echo '</figure>';
+	} else {
+		echo '<div class="arriva-merch-single__figure arriva-merch-single__figure--empty" aria-hidden="true"></div>';
 	}
+	echo '</div>';
 
-	echo '<p class="arriva-merch-single__price">' . esc_html( $price ) . '</p>';
+	echo '<aside class="arriva-merch-single__buy" aria-label="' . esc_attr__( 'Bestellinformationen', 'arriva' ) . '">';
+	if ( 'featured' === $group ) {
+		echo '<p class="arriva-merch-single__badge">' . esc_html__( 'Korrekturabzug', 'arriva' ) . '</p>';
+	}
+	echo '<p class="arriva-merch-single__price-row">';
+	echo '<span class="arriva-merch-single__price-label">' . esc_html__( 'Preis', 'arriva' ) . '</span>';
+	echo '<span class="arriva-merch-single__price">' . esc_html( $price ) . '</span>';
+	echo '</p>';
 
-	$options = arriva_merch_option_lines( $post );
 	if ( $options ) {
+		echo '<div class="arriva-merch-single__options">';
 		echo '<h2 class="arriva-merch-single__options-title">' . esc_html__( 'Optionen', 'arriva' ) . '</h2>';
-		echo '<ul class="arriva-merch-single__options">';
+		echo '<ul class="arriva-merch-single__options-list">';
 		foreach ( $options as $line ) {
 			echo '<li>' . esc_html( $line ) . '</li>';
 		}
 		echo '</ul>';
-	}
-
-	if ( trim( $content ) ) {
-		echo '<div class="arriva-merch-single__body">';
-		echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- filtered content.
 		echo '</div>';
 	}
 
-	echo '<p class="arriva-merch-single__actions">';
+	echo '<p class="arriva-merch-single__order-note">' . esc_html__( 'Kein Online-Warenkorb — Bestellung über den Vorstand.', 'arriva' ) . '</p>';
+	echo '<a class="arriva-merch-single__order" href="' . esc_url( home_url( '/mitglieder/vorstand/' ) ) . '">' . esc_html__( 'Beim Vorstand bestellen', 'arriva' ) . '</a>';
+	echo '</aside>';
+
+	echo '</div>';
+
+	if ( trim( $content ) ) {
+		echo '<div class="arriva-merch-single__details">';
+		echo '<h2 class="arriva-merch-single__details-title">' . esc_html__( 'Beschreibung', 'arriva' ) . '</h2>';
+		echo '<div class="arriva-merch-single__body">';
+		echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- filtered content.
+		echo '</div>';
+		echo '</div>';
+	}
+
+	echo '<nav class="arriva-merch-single__actions" aria-label="' . esc_attr__( 'Navigation', 'arriva' ) . '">';
 	echo '<a class="arriva-merch-single__back" href="' . esc_url( home_url( '/mitglieder/merch/' ) ) . '">' . esc_html__( '← Zurück zur Übersicht', 'arriva' ) . '</a>';
-	echo ' <a class="arriva-merch-single__order" href="' . esc_url( home_url( '/mitglieder/vorstand/' ) ) . '">' . esc_html__( 'Beim Vorstand bestellen', 'arriva' ) . '</a>';
-	echo '</p>';
+	echo '</nav>';
 
 	echo '</article>';
 

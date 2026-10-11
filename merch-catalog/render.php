@@ -22,16 +22,22 @@ $render_grid = static function ( array $posts ) {
 	echo '<ul class="arriva-merch-shop__grid">';
 
 	foreach ( $posts as $post ) {
-		$price = get_post_meta( $post->ID, ARRIVA_MERCH_PRICE_META, true );
-		$price = $price ? $price : __( 'Preis auf Anfrage', 'arriva' );
-		$url   = get_permalink( $post );
-		$thumb = get_the_post_thumbnail( $post, 'medium_large', array( 'class' => 'arriva-merch-shop__image' ) );
+		$price   = get_post_meta( $post->ID, ARRIVA_MERCH_PRICE_META, true );
+		$price   = $price ? $price : __( 'auf Anfrage', 'arriva' );
+		$url     = get_permalink( $post );
+		$thumb   = get_the_post_thumbnail( $post, 'medium_large', array( 'class' => 'arriva-merch-shop__image' ) );
 		$excerpt = has_excerpt( $post ) ? get_the_excerpt( $post ) : '';
+		$group   = function_exists( 'arriva_merch_product_group' ) ? arriva_merch_product_group( $post ) : 'catalog';
+		$options = function_exists( 'arriva_merch_option_lines' ) ? arriva_merch_option_lines( $post ) : array();
+		$teaser  = $options ? $options[0] : '';
 
 		echo '<li class="arriva-merch-shop__item">';
 		echo '<a class="arriva-merch-shop__card" href="' . esc_url( $url ) . '">';
 
 		echo '<div class="arriva-merch-shop__media">';
+		if ( 'featured' === $group ) {
+			echo '<span class="arriva-merch-shop__badge">' . esc_html__( 'Korrekturabzug', 'arriva' ) . '</span>';
+		}
 		if ( $thumb ) {
 			echo $thumb; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} else {
@@ -41,11 +47,15 @@ $render_grid = static function ( array $posts ) {
 
 		echo '<div class="arriva-merch-shop__body">';
 		echo '<h3 class="arriva-merch-shop__title">' . esc_html( get_the_title( $post ) ) . '</h3>';
-		echo '<p class="arriva-merch-shop__price">' . esc_html( $price ) . '</p>';
 		if ( $excerpt ) {
 			echo '<p class="arriva-merch-shop__excerpt">' . esc_html( wp_strip_all_tags( $excerpt ) ) . '</p>';
+		} elseif ( $teaser ) {
+			echo '<p class="arriva-merch-shop__excerpt">' . esc_html( $teaser ) . '</p>';
 		}
-		echo '<span class="arriva-merch-shop__cta">' . esc_html__( 'Details ansehen', 'arriva' ) . '</span>';
+		echo '<div class="arriva-merch-shop__meta">';
+		echo '<span class="arriva-merch-shop__price">' . esc_html( $price ) . '</span>';
+		echo '<span class="arriva-merch-shop__cta" aria-hidden="true">' . esc_html__( 'Details', 'arriva' ) . '</span>';
+		echo '</div>';
 		echo '</div>';
 
 		echo '</a></li>';
