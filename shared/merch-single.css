@@ -112,7 +112,7 @@
 
 .arriva-merch-single__buy {
 	position: sticky;
-	top: 1.5rem;
+	top: calc(var(--arriva-header-height, 5.5rem) + 1rem);
 	min-width: 0;
 	padding: 1rem;
 	background: var(--wp--preset--color--base, #fff);

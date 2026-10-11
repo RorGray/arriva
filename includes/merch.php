@@ -644,7 +644,10 @@ function arriva_merch_render_single( WP_Post $post, $content ) {
 
 	echo '</div>';
 
-	if ( trim( $content ) ) {
+	$has_description = '' !== trim( wp_strip_all_tags( $content ) )
+		|| preg_match( '/<(img|svg|iframe|video|audio|figure|table)\b/i', $content );
+
+	if ( $has_description ) {
 		echo '<div class="arriva-merch-single__details">';
 		echo '<h2 class="arriva-merch-single__details-title">' . esc_html__( 'Weitere Informationen', 'arriva' ) . '</h2>';
 		echo '<div class="arriva-merch-single__body">';
