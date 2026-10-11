@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Arriva
  * Description: Custom Gutenberg blocks for Arriva Speyer e.V.
- * Version: 1.7.9
+ * Version: 1.8.0
  * Author: Arriva Speyer e.V.
  * License: GPL-2.0-or-later
  * Text Domain: arriva
@@ -11,12 +11,14 @@
 defined( 'ABSPATH' ) || exit;
 
 require_once __DIR__ . '/includes/events.php';
+require_once __DIR__ . '/includes/merch.php';
 require_once __DIR__ . '/includes/member-access.php';
 
 register_activation_hook(
 	__FILE__,
 	static function () {
 		arriva_register_events_content_types();
+		arriva_register_merch_content_type();
 		flush_rewrite_rules();
 	}
 );
@@ -53,6 +55,7 @@ add_action( 'init', function () {
 	register_block_type( __DIR__ . '/upcoming-events' );
 	register_block_type( __DIR__ . '/events-list' );
 	register_block_type( __DIR__ . '/member-nav' );
+	register_block_type( __DIR__ . '/merch-catalog' );
 
 	register_block_pattern(
 		'arriva/hero-full-width',
@@ -98,10 +101,10 @@ add_action( 'wp_enqueue_scripts', function () {
 		);
 	}
 
-	if ( is_page( 'merch' ) ) {
+	if ( is_page( 'merch' ) || is_singular( ARRIVA_MERCH_POST_TYPE ) ) {
 		wp_enqueue_style(
-			'arriva-member-merch',
-			plugins_url( 'shared/member-merch.css', __FILE__ ),
+			'arriva-merch-catalog',
+			plugins_url( 'merch-catalog/style.css', __FILE__ ),
 			array( 'arriva-member-area' ),
 			ARRIVA_VERSION
 		);

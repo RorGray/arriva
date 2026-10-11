@@ -31,11 +31,6 @@ $links = array(
 		'key'   => 'vorstand',
 	),
 	array(
-		'label' => __( 'Neuigkeiten', 'arriva' ),
-		'url'   => home_url( '/mitglieder/neuigkeiten/' ),
-		'key'   => 'neuigkeiten',
-	),
-	array(
 		'label' => __( 'Dokumente', 'arriva' ),
 		'url'   => home_url( '/mitglieder/dokumente/' ),
 		'key'   => 'dokumente',

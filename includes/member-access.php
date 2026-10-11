@@ -20,6 +20,10 @@ function arriva_is_mitglied_area_view() {
 		return true;
 	}
 
+	if ( is_singular( ARRIVA_MERCH_POST_TYPE ) ) {
+		return true;
+	}
+
 	return false;
 }
 
@@ -81,6 +85,10 @@ function arriva_is_member_only_request() {
 		return true;
 	}
 
+	if ( is_singular( ARRIVA_MERCH_POST_TYPE ) ) {
+		return true;
+	}
+
 	if ( is_page() && arriva_is_mitglied_subpage() ) {
 		return true;
 	}
@@ -129,15 +137,19 @@ add_action( 'template_redirect', 'arriva_redirect_guests_from_member_content', 5
  * @param int  $post_id Post ID.
  * @return bool
  */
-function arriva_wpmem_block_events( $block, $post_id ) {
+function arriva_wpmem_block_member_cpts( $block, $post_id ) {
 	$post = get_post( $post_id );
-	if ( $post && ARRIVA_EVENT_POST_TYPE === $post->post_type ) {
+	if ( ! $post ) {
+		return $block;
+	}
+
+	if ( in_array( $post->post_type, array( ARRIVA_EVENT_POST_TYPE, ARRIVA_MERCH_POST_TYPE ), true ) ) {
 		return true;
 	}
 
 	return $block;
 }
-add_filter( 'wpmem_block', 'arriva_wpmem_block_events', 10, 2 );
+add_filter( 'wpmem_block', 'arriva_wpmem_block_member_cpts', 10, 2 );
 
 /**
  * Hide Termine from public search results.
@@ -153,6 +165,13 @@ function arriva_hide_events_from_public_search( $query ) {
 		$post_types = $query->get( 'post_type' );
 		if ( empty( $post_types ) || 'any' === $post_types ) {
 			$query->set( 'post_type', array( 'post', 'page' ) );
+		} elseif ( is_array( $post_types ) ) {
+			$query->set(
+				'post_type',
+				array_values(
+					array_diff( $post_types, array( ARRIVA_EVENT_POST_TYPE, ARRIVA_MERCH_POST_TYPE ) )
+				)
+			);
 		}
 	}
 }
@@ -178,10 +197,10 @@ function arriva_restrict_events_rest_dispatch( $result, $server, $request ) {
 	}
 
 	$route = $request->get_route();
-	if ( preg_match( '#^/wp/v2/(arriva-events|arriva_event_type)(/|$)#', $route ) ) {
+	if ( preg_match( '#^/wp/v2/(arriva-events|arriva_event_type|arriva-merch)(/|$)#', $route ) ) {
 		return new WP_Error(
 			'rest_forbidden',
-			__( 'Termine sind nur für angemeldete Mitglieder verfügbar.', 'arriva' ),
+			__( 'Nur für angemeldete Mitglieder verfügbar.', 'arriva' ),
 			array( 'status' => 401 )
 		);
 	}
@@ -223,7 +242,7 @@ function arriva_inject_member_nav_before_termine_title( $block_content, $block, 
 	$block_name = isset( $block['blockName'] ) ? $block['blockName'] : '';
 	$inject     = false;
 
-	if ( 'core/post-title' === $block_name && is_singular( ARRIVA_EVENT_POST_TYPE ) ) {
+	if ( 'core/post-title' === $block_name && is_singular( array( ARRIVA_EVENT_POST_TYPE, ARRIVA_MERCH_POST_TYPE ) ) ) {
 		$inject = true;
 	}
 

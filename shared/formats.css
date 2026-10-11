@@ -19,13 +19,13 @@
 	pointer-events: none;
 	background-repeat: no-repeat;
 	background-size: 100% 100%;
-	opacity: 0.65;
-	/* viewBox height 14 fits path y (2–10) plus stroke bleed; was 8 and clipped the wave. */
-	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 14' preserveAspectRatio='none'%3E%3Cpath d='M0 6C10 2 20 2 30 6S50 10 60 6 75 2 80 6' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E");
+	/* viewBox height 14 fits path y (2–10) plus stroke bleed; was 8 and clipped the wave.
+	   Stroke is baked in: currentColor inside a background-image SVG resolves to black. */
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 14' preserveAspectRatio='none'%3E%3Cpath d='M0 6C10 2 20 2 30 6S50 10 60 6 75 2 80 6' fill='none' stroke='rgba(26%2C147%2C164%2C0.65)' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E");
 }
 
 .wp-block-arriva-hero .arriva-wkw::after {
-	opacity: 0.85;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 14' preserveAspectRatio='none'%3E%3Cpath d='M0 6C10 2 20 2 30 6S50 10 60 6 75 2 80 6' fill='none' stroke='rgba(26%2C147%2C164%2C0.85)' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E");
 }
 
 /* Room for the wave — avoid clipping in overflow containers */

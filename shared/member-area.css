@@ -7,17 +7,30 @@ body.arriva-mitglied-area .arriva-member-nav-bar.is-layout-constrained {
 	--wp--style--global--content-size: min(1100px, 100% - 2.5rem);
 }
 
-body.arriva-mitglied-area.single-arriva_event main .wp-block-post-content,
-body.arriva-mitglied-area.post-type-archive-arriva_event main .wp-block-query {
-	max-width: min(1100px, 100% - 2.5rem);
+/* Termin & Produkt detail templates (theme default is often ~620px). */
+body.arriva-mitglied-area.single-arriva_event main,
+body.arriva-mitglied-area.single-arriva_merch main {
+	width: min(1100px, calc(100% - 2.5rem));
+	max-width: none;
 	margin-inline: auto;
-	width: 100%;
 }
 
+body.arriva-mitglied-area.single-arriva_event main .wp-block-post-content,
+body.arriva-mitglied-area.single-arriva_merch main .wp-block-post-content,
+body.arriva-mitglied-area.single-arriva_event main .entry-content,
+body.arriva-mitglied-area.single-arriva_merch main .entry-content,
 body.arriva-mitglied-area.single-arriva_event main .wp-block-post-title,
+body.arriva-mitglied-area.single-arriva_merch main .wp-block-post-title,
 body.arriva-mitglied-area.single-arriva_event main .wp-block-post-date,
+body.arriva-mitglied-area.single-arriva_merch main .wp-block-post-excerpt,
+body.arriva-mitglied-area.post-type-archive-arriva_event main .wp-block-query,
 body.arriva-mitglied-area.post-type-archive-arriva_event main .wp-block-query-title {
-	max-width: min(1100px, 100% - 2.5rem);
-	margin-inline: auto;
+	max-width: 100%;
 	width: 100%;
+	margin-inline: auto;
+}
+
+body.arriva-mitglied-area.single-arriva_event main .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)),
+body.arriva-mitglied-area.single-arriva_merch main .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+	max-width: 100%;
 }

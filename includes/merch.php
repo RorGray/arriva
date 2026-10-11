@@ -1,0 +1,192 @@
+<?php
+/**
+ * Vereinsprodukte — editable in WP (like Termine), member-only singles.
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+const ARRIVA_MERCH_POST_TYPE   = 'arriva_merch';
+const ARRIVA_MERCH_PRICE_META  = 'arriva_merch_price';
+const ARRIVA_MERCH_OPTIONS_META = 'arriva_merch_options';
+const ARRIVA_MERCH_GROUP_META  = 'arriva_merch_group';
+
+/**
+ * Register CPT (call on init and plugin activation).
+ */
+function arriva_register_merch_content_type() {
+	register_post_type(
+		ARRIVA_MERCH_POST_TYPE,
+		array(
+			'labels'              => array(
+				'name'               => __( 'Vereinsprodukte', 'arriva' ),
+				'singular_name'      => __( 'Produkt', 'arriva' ),
+				'add_new'            => __( 'Produkt hinzufügen', 'arriva' ),
+				'add_new_item'       => __( 'Neues Produkt hinzufügen', 'arriva' ),
+				'edit_item'          => __( 'Produkt bearbeiten', 'arriva' ),
+				'new_item'           => __( 'Neues Produkt', 'arriva' ),
+				'view_item'          => __( 'Produkt ansehen', 'arriva' ),
+				'search_items'       => __( 'Produkte suchen', 'arriva' ),
+				'not_found'          => __( 'Keine Produkte gefunden', 'arriva' ),
+				'not_found_in_trash' => __( 'Keine Produkte im Papierkorb', 'arriva' ),
+				'menu_name'          => __( 'Vereinsprodukte', 'arriva' ),
+			),
+			'public'              => true,
+			'has_archive'         => false,
+			'rewrite'             => array( 'slug' => 'merch-artikel' ),
+			'show_in_rest'        => true,
+			'rest_base'           => 'arriva-merch',
+			'menu_icon'           => 'dashicons-tag',
+			'supports'            => array( 'title', 'editor', 'excerpt', 'thumbnail' ),
+			'capability_type'     => 'post',
+			'exclude_from_search' => true,
+		)
+	);
+
+	register_post_meta(
+		ARRIVA_MERCH_POST_TYPE,
+		ARRIVA_MERCH_PRICE_META,
+		array(
+			'type'              => 'string',
+			'single'            => true,
+			'show_in_rest'      => true,
+			'sanitize_callback' => 'sanitize_text_field',
+		)
+	);
+
+	register_post_meta(
+		ARRIVA_MERCH_POST_TYPE,
+		ARRIVA_MERCH_OPTIONS_META,
+		array(
+			'type'              => 'string',
+			'single'            => true,
+			'show_in_rest'      => true,
+			'sanitize_callback' => 'sanitize_textarea_field',
+		)
+	);
+
+	register_post_meta(
+		ARRIVA_MERCH_POST_TYPE,
+		ARRIVA_MERCH_GROUP_META,
+		array(
+			'type'              => 'string',
+			'single'            => true,
+			'show_in_rest'      => true,
+			'default'           => 'featured',
+			'sanitize_callback' => function ( $value ) {
+				return in_array( $value, array( 'featured', 'catalog' ), true ) ? $value : 'featured';
+			},
+		)
+	);
+}
+
+add_action( 'init', 'arriva_register_merch_content_type' );
+
+/**
+ * @param string $group featured|catalog|'' for all.
+ * @return WP_Post[]
+ */
+function arriva_query_merch( $group = '' ) {
+	$args = array(
+		'post_type'      => ARRIVA_MERCH_POST_TYPE,
+		'post_status'    => 'publish',
+		'posts_per_page' => -1,
+		'orderby'        => 'menu_order title',
+		'order'          => 'ASC',
+	);
+
+	if ( $group ) {
+		$args['meta_query'] = array(
+			array(
+				'key'   => ARRIVA_MERCH_GROUP_META,
+				'value' => $group,
+			),
+		);
+	}
+
+	return get_posts( $args );
+}
+
+/**
+ * @param WP_Post $post Product.
+ * @return string[]
+ */
+function arriva_merch_option_lines( WP_Post $post ) {
+	$raw = get_post_meta( $post->ID, ARRIVA_MERCH_OPTIONS_META, true );
+	if ( ! is_string( $raw ) || '' === trim( $raw ) ) {
+		return array();
+	}
+
+	$lines = preg_split( '/\r\n|\r|\n/', $raw );
+
+	return array_values(
+		array_filter(
+			array_map( 'trim', $lines ),
+			static function ( $line ) {
+				return '' !== $line;
+			}
+		)
+	);
+}
+
+/**
+ * Single product layout (meta + back link).
+ *
+ * @param string $content Post content.
+ * @return string
+ */
+function arriva_merch_single_content( $content ) {
+	if ( ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || is_admin() ) {
+		return $content;
+	}
+
+	if ( ! is_singular( ARRIVA_MERCH_POST_TYPE ) || ! in_the_loop() || ! is_main_query() ) {
+		return $content;
+	}
+
+	static $done = false;
+	if ( $done ) {
+		return $content;
+	}
+	$done = true;
+
+	$post  = get_post();
+	$price = get_post_meta( $post->ID, ARRIVA_MERCH_PRICE_META, true );
+	$price = $price ? $price : __( 'Preis auf Anfrage', 'arriva' );
+
+	ob_start();
+	echo '<article class="arriva-merch-single">';
+
+	if ( has_post_thumbnail( $post ) ) {
+		echo '<div class="arriva-merch-single__media">';
+		echo get_the_post_thumbnail( $post, 'large', array( 'class' => 'arriva-merch-single__image' ) );
+		echo '</div>';
+	}
+
+	echo '<p class="arriva-merch-single__price">' . esc_html( $price ) . '</p>';
+
+	$options = arriva_merch_option_lines( $post );
+	if ( $options ) {
+		echo '<h2 class="arriva-merch-single__options-title">' . esc_html__( 'Optionen', 'arriva' ) . '</h2>';
+		echo '<ul class="arriva-merch-single__options">';
+		foreach ( $options as $line ) {
+			echo '<li>' . esc_html( $line ) . '</li>';
+		}
+		echo '</ul>';
+	}
+
+	if ( trim( $content ) ) {
+		echo '<div class="arriva-merch-single__body">';
+		echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- filtered content.
+		echo '</div>';
+	}
+
+	echo '<p class="arriva-merch-single__actions">';
+	echo '<a class="arriva-merch-single__back" href="' . esc_url( home_url( '/mitglieder/merch/' ) ) . '">' . esc_html__( '← Zurück zur Übersicht', 'arriva' ) . '</a>';
+	echo ' <a class="arriva-merch-single__order" href="' . esc_url( home_url( '/mitglieder/vorstand/' ) ) . '">' . esc_html__( 'Beim Vorstand bestellen', 'arriva' ) . '</a>';
+	echo '</p>';
+
+	echo '</article>';
+
+	return ob_get_clean();
+}
+add_filter( 'the_content', 'arriva_merch_single_content', 9 );

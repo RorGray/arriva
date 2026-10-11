@@ -1,0 +1,19 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "arriva/merch-catalog",
+	"title": "Merch Catalog",
+	"category": "widgets",
+	"icon": "store",
+	"description": "Shop-style grid of Vereinsprodukte (arriva_merch).",
+	"keywords": [ "merch", "shop", "produkte" ],
+	"textdomain": "arriva",
+	"attributes": {},
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ]
+	},
+	"editorScript": "file:./index.js",
+	"style": "file:./style.css",
+	"render": "file:./render.php"
+}
