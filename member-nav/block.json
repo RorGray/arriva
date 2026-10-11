@@ -1,0 +1,19 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "arriva/member-nav",
+	"title": "Member Area Navigation",
+	"category": "widgets",
+	"icon": "networking",
+	"description": "Sub-navigation for the Mitgliederbereich (logged-in members).",
+	"keywords": [ "mitglieder", "navigation", "intern" ],
+	"textdomain": "arriva",
+	"attributes": {},
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ],
+		"multiple": false
+	},
+	"style": "file:./style.css",
+	"render": "file:./render.php"
+}

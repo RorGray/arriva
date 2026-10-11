@@ -1,0 +1,42 @@
+.arriva-member-nav {
+	margin: 0 0 var(--wp--preset--spacing--40, 1.5rem);
+	padding-bottom: var(--wp--preset--spacing--20, 0.75rem);
+	border-bottom: 1px solid var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.12));
+}
+
+.arriva-member-nav__list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35rem 1.25rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.arriva-member-nav__item {
+	margin: 0;
+}
+
+.arriva-member-nav__link {
+	display: inline-block;
+	padding: 0.15rem 0;
+	font-size: 0.9375rem;
+	line-height: 1.4;
+	text-decoration: none;
+	color: inherit;
+	opacity: 0.82;
+	border-bottom: 2px solid transparent;
+	transition: opacity 0.15s ease, border-color 0.15s ease;
+}
+
+.arriva-member-nav__link:hover,
+.arriva-member-nav__link:focus-visible {
+	opacity: 1;
+	border-bottom-color: var(--wp--preset--color--accent, currentColor);
+}
+
+.arriva-member-nav__link.is-active {
+	opacity: 1;
+	font-weight: 600;
+	border-bottom-color: var(--wp--preset--color--accent, currentColor);
+}

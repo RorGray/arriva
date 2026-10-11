@@ -7,13 +7,14 @@ defined( 'ABSPATH' ) || exit;
 
 const ARRIVA_EVENT_DATE_META = 'arriva_event_date';
 const ARRIVA_EVENT_TYPE_TAX  = 'arriva_event_type';
+const ARRIVA_EVENT_POST_TYPE = 'arriva_event';
 
 /**
  * Register CPT + taxonomy (also called on plugin activation before flush_rewrite_rules).
  */
 function arriva_register_events_content_types() {
 	register_post_type(
-		'arriva_event',
+		ARRIVA_EVENT_POST_TYPE,
 		array(
 			'labels'              => array(
 				'name'               => __( 'Termine', 'arriva' ),
@@ -36,7 +37,7 @@ function arriva_register_events_content_types() {
 			'menu_icon'           => 'dashicons-calendar-alt',
 			'supports'            => array( 'title', 'editor', 'excerpt', 'custom-fields' ),
 			'capability_type'     => 'post',
-			'exclude_from_search' => false,
+			'exclude_from_search' => true,
 			'taxonomies'          => array( ARRIVA_EVENT_TYPE_TAX ),
 		)
 	);
