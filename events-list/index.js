@@ -74,6 +74,14 @@
 							'p',
 							{ className: 'components-base-control__help' },
 							__(
+								'Vergangene Monate werden in der Liste hinter einem Button versteckt, sobald dessen Text ausgefüllt ist. Die Vorschau im Editor zeigt immer alle Monate.',
+								'arriva'
+							)
+						),
+						el(
+							'p',
+							{ className: 'components-base-control__help' },
+							__(
 								'Der Kalender-Abo-Link ist nur für angemeldete Mitglieder sichtbar und enthält einen persönlichen Schlüssel.',
 								'arriva'
 							)
@@ -138,6 +146,17 @@
 								)
 							)
 							: null,
+						el(
+							'div',
+							{ className: 'arriva-events__past-editor' },
+							textField(
+								'span',
+								'arriva-events__past-toggle',
+								attributes.pastLabel,
+								bind( 'pastLabel' ),
+								__( 'Button-Text für vergangene Monate (z. B. „Frühere Termine“)…', 'arriva' )
+							)
+						),
 						el(
 							'div',
 							{ className: 'arriva-events__preview' },

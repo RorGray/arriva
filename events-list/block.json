@@ -52,6 +52,10 @@
 		"icalLabel": {
 			"type": "string",
 			"default": ""
+		},
+		"pastLabel": {
+			"type": "string",
+			"default": ""
 		}
 	},
 	"supports": {

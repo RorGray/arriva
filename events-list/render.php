@@ -19,6 +19,7 @@ $note           = isset( $attributes['note'] ) ? (string) $attributes['note'] : 
 $list_label     = isset( $attributes['listLabel'] ) ? (string) $attributes['listLabel'] : '';
 $calendar_label = isset( $attributes['calendarLabel'] ) ? (string) $attributes['calendarLabel'] : '';
 $ical_label     = isset( $attributes['icalLabel'] ) ? (string) $attributes['icalLabel'] : '';
+$past_label     = isset( $attributes['pastLabel'] ) ? (string) $attributes['pastLabel'] : '';
 
 $today = wp_date( 'Y-m-d' );
 $posts = arriva_query_events(
@@ -89,12 +90,23 @@ if ( empty( $posts ) ) {
 		echo '<p class="arriva-events__empty">' . wp_kses_post( $empty_text ) . '</p>';
 	}
 } else {
-	$next_marked   = false;
 	$current_month = wp_date( 'Y-m' );
-
-	echo '<div class="arriva-events__months">';
+	$past_groups   = array();
+	$open_groups   = array();
 
 	foreach ( arriva_group_events_by_month( $posts ) as $month_key => $group ) {
+		if ( $month_key < $current_month ) {
+			$past_groups[ $month_key ] = $group;
+		} else {
+			$open_groups[ $month_key ] = $group;
+		}
+	}
+
+	// Collapse only when something current remains visible; a fully past year stays open.
+	$collapse_past = arriva_has_rich_text( $past_label ) && $past_groups && $open_groups;
+	$next_marked   = false;
+
+	$render_group = static function ( $month_key, array $group ) use ( $current_month, $today, &$next_marked ) {
 		$group_class = 'arriva-events__month-group' . ( $month_key < $current_month ? ' is-past' : '' );
 
 		echo '<div class="' . esc_attr( $group_class ) . '">';
@@ -120,6 +132,33 @@ if ( empty( $posts ) ) {
 
 		echo '</ul>';
 		echo '</div>';
+	};
+
+	echo '<div class="arriva-events__months">';
+
+	if ( $collapse_past ) {
+		$past_count = 0;
+		foreach ( $past_groups as $group ) {
+			$past_count += count( $group['posts'] );
+		}
+
+		echo '<details class="arriva-events__past">';
+		echo '<summary class="arriva-events__past-toggle">' . wp_kses_post( $past_label );
+		echo ' <span class="arriva-events__past-count">' . esc_html( (string) $past_count ) . '</span></summary>';
+		echo '<div class="arriva-events__past-months">';
+		foreach ( $past_groups as $month_key => $group ) {
+			$render_group( $month_key, $group );
+		}
+		echo '</div>';
+		echo '</details>';
+	} else {
+		foreach ( $past_groups as $month_key => $group ) {
+			$render_group( $month_key, $group );
+		}
+	}
+
+	foreach ( $open_groups as $month_key => $group ) {
+		$render_group( $month_key, $group );
 	}
 
 	echo '</div>';

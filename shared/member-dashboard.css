@@ -37,7 +37,17 @@
 	padding: 0.5rem 0.85rem;
 	font-size: 0.9375rem;
 	background: color-mix(in srgb, var(--wp--preset--color--accent, #1a93a4) 10%, transparent);
-	border-radius: 999px;
+	border-radius: 0.65rem;
+}
+
+@media (max-width: 600px) {
+	.arriva-dash-welcome__next {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.1rem;
+		padding: 0.65rem 0.85rem;
+	}
 }
 
 .arriva-dash-welcome__next-label {

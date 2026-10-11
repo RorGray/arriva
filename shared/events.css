@@ -212,6 +212,65 @@ a.arriva-events__card:hover {
 	margin: 0;
 }
 
+/* Past months collapsed behind a toggle (<details>, works without JS). */
+.arriva-events__past-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.55rem 1.1rem;
+	border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+	border-radius: 999px;
+	font-size: 0.8125rem;
+	font-weight: 600;
+	line-height: 1.2;
+	color: color-mix(in srgb, currentColor 75%, transparent);
+	cursor: pointer;
+	list-style: none;
+	transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.arriva-events__past-toggle::-webkit-details-marker {
+	display: none;
+}
+
+.arriva-events__past-toggle::after {
+	content: '';
+	width: 0.4rem;
+	height: 0.4rem;
+	border-right: 1.5px solid currentColor;
+	border-bottom: 1.5px solid currentColor;
+	transform: translateY(-2px) rotate(45deg);
+	transition: transform 0.15s ease;
+}
+
+.arriva-events__past[open] > .arriva-events__past-toggle::after {
+	transform: translateY(1px) rotate(-135deg);
+}
+
+.arriva-events__past-toggle:hover {
+	border-color: color-mix(in srgb, currentColor 45%, transparent);
+	color: inherit;
+}
+
+.arriva-events__past-toggle:focus-visible {
+	outline: 2px solid var(--wp--preset--color--accent);
+	outline-offset: 3px;
+}
+
+.arriva-events__past-count {
+	padding: 0.1rem 0.45rem;
+	border-radius: 999px;
+	background: color-mix(in srgb, currentColor 12%, transparent);
+	font-size: 0.6875rem;
+}
+
+.arriva-events__past-months {
+	display: flex;
+	flex-direction: column;
+	gap: clamp(1.75rem, 3vw, 2.5rem);
+	margin-top: clamp(1.75rem, 3vw, 2.5rem);
+}
+
 /* ── List / calendar switch (shown once view.js runs) ── */
 
 .arriva-events__toolbar {
@@ -589,6 +648,14 @@ a.arriva-events__card:hover {
 .arriva-events .arriva-events__preview .arriva-events__inner {
 	max-width: none;
 	padding: 0;
+}
+
+.arriva-events__past-editor {
+	margin-top: clamp(2rem, 4vw, 3.5rem);
+}
+
+.arriva-events__past-editor + .arriva-events__preview .arriva-events__months {
+	margin-top: 1.5rem;
 }
 
 .arriva-events .arriva-events__editor-only {
