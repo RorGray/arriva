@@ -22,6 +22,7 @@
 		"html": false,
 		"align": [ "wide", "full" ]
 	},
+	"editorScript": "file:./index.js",
 	"style": "file:./style.css",
 	"render": "file:./render.php"
 }
