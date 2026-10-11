@@ -88,7 +88,7 @@ function arriva_current_request_url() {
  * Redirect guests away from member-only URLs (Termine + Mitglieder subpages).
  */
 function arriva_redirect_guests_from_member_content() {
-	if ( is_user_logged_in() || is_admin() ) {
+	if ( is_user_logged_in() || is_admin() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
 		return;
 	}
 
@@ -143,35 +143,34 @@ add_action( 'pre_get_posts', 'arriva_hide_events_from_public_search' );
 /**
  * REST: Termine only for logged-in users.
  *
- * @param array $endpoints Registered REST routes.
- * @return array
+ * Do not mutate rest_endpoints (foreach-by-reference bugs broke the whole REST API in 1.7.0).
+ *
+ * @param mixed           $result  Response to replace the requested version with.
+ * @param WP_REST_Server  $server  Server instance.
+ * @param WP_REST_Request $request Request used to generate the response.
+ * @return mixed
  */
-function arriva_restrict_events_rest_endpoints( $endpoints ) {
-	$routes = array(
-		'/wp/v2/arriva-events',
-		'/wp/v2/arriva-events/(?P<id>[\\d]+)',
-		'/wp/v2/arriva_event_type',
-		'/wp/v2/arriva_event_type/(?P<id>[\\d]+)',
-	);
-
-	$logged_in = static function () {
-		return is_user_logged_in();
-	};
-
-	foreach ( $routes as $route ) {
-		if ( empty( $endpoints[ $route ] ) || ! is_array( $endpoints[ $route ] ) ) {
-			continue;
-		}
-		foreach ( array_keys( $endpoints[ $route ] ) as $key ) {
-			if ( is_array( $endpoints[ $route ][ $key ] ) ) {
-				$endpoints[ $route ][ $key ]['permission_callback'] = $logged_in;
-			}
-		}
+function arriva_restrict_events_rest_dispatch( $result, $server, $request ) {
+	if ( is_user_logged_in() ) {
+		return $result;
 	}
 
-	return $endpoints;
+	if ( ! $request instanceof WP_REST_Request ) {
+		return $result;
+	}
+
+	$route = $request->get_route();
+	if ( preg_match( '#^/wp/v2/(arriva-events|arriva_event_type)(/|$)#', $route ) ) {
+		return new WP_Error(
+			'rest_forbidden',
+			__( 'Termine sind nur für angemeldete Mitglieder verfügbar.', 'arriva' ),
+			array( 'status' => 401 )
+		);
+	}
+
+	return $result;
 }
-add_filter( 'rest_endpoints', 'arriva_restrict_events_rest_endpoints' );
+add_filter( 'rest_pre_dispatch', 'arriva_restrict_events_rest_dispatch', 10, 3 );
 
 /**
  * Show member sub-nav on single Termin views (theme has no CPT template).
@@ -180,6 +179,10 @@ add_filter( 'rest_endpoints', 'arriva_restrict_events_rest_endpoints' );
  * @return string
  */
 function arriva_prepend_member_nav_on_event_singular( $content ) {
+	if ( ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || is_admin() ) {
+		return $content;
+	}
+
 	if ( ! is_singular( ARRIVA_EVENT_POST_TYPE ) || ! is_user_logged_in() ) {
 		return $content;
 	}
