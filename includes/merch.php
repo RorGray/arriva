@@ -516,8 +516,9 @@ function arriva_merch_render_gallery( WP_Post $post ) {
 			$large  = wp_get_attachment_image_url( $id, 'large' );
 			$full   = wp_get_attachment_image_url( $id, 'full' );
 			$alt    = get_post_meta( $id, '_wp_attachment_image_alt', true );
+			$srcset = wp_get_attachment_image_srcset( $id, 'large' );
 			$active = 0 === $index ? ' is-active' : '';
-			echo '<li><button type="button" class="arriva-merch-single__thumb' . esc_attr( $active ) . '" data-src="' . esc_url( $large ? $large : $full ) . '" data-full="' . esc_url( $full ) . '" data-alt="' . esc_attr( $alt ) . '" aria-current="' . ( 0 === $index ? 'true' : 'false' ) . '">';
+			echo '<li><button type="button" class="arriva-merch-single__thumb' . esc_attr( $active ) . '" data-src="' . esc_url( $large ? $large : $full ) . '" data-srcset="' . esc_attr( $srcset ? $srcset : '' ) . '" data-full="' . esc_url( $full ) . '" data-alt="' . esc_attr( $alt ) . '" aria-current="' . ( 0 === $index ? 'true' : 'false' ) . '">';
 			echo wp_get_attachment_image( $id, 'thumbnail', false, array( 'class' => 'arriva-merch-single__thumb-img' ) );
 			echo '</button></li>';
 		}

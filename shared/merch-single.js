@@ -18,6 +18,14 @@
 		var full = btn.getAttribute( 'data-full' ) || '';
 		var src = btn.getAttribute( 'data-src' ) || full;
 		var alt = btn.getAttribute( 'data-alt' ) || '';
+		var srcset = btn.getAttribute( 'data-srcset' ) || '';
+		// srcset wins over src, so it must be swapped (or dropped) too.
+		if ( srcset ) {
+			mainImg.srcset = srcset;
+		} else {
+			mainImg.removeAttribute( 'srcset' );
+			mainImg.removeAttribute( 'sizes' );
+		}
 		mainImg.src = src;
 		mainImg.alt = alt;
 		if ( mainLink ) {
