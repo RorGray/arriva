@@ -554,6 +554,11 @@ function arriva_merch_single_content( $content ) {
 	$excerpt  = has_excerpt( $post ) ? get_the_excerpt( $post ) : '';
 
 	ob_start();
+
+	if ( empty( $GLOBALS['arriva_member_nav_rendered'] ) ) {
+		echo do_blocks( '<!-- wp:arriva/member-nav /-->' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
 	echo '<article class="arriva-merch-single">';
 
 	echo '<div class="arriva-merch-single__layout">';

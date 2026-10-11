@@ -82,7 +82,7 @@ if ( $catalog ) {
 }
 
 if ( empty( $featured ) && empty( $catalog ) ) {
-	echo '<p class="arriva-merch-shop__empty">' . esc_html__( 'Noch keine Produkte. Legen Sie welche unter Vereinsprodukte an.', 'arriva' ) . '</p>';
+	echo '<p class="arriva-merch-shop__empty">' . esc_html__( 'Noch keine Produkte. Lege welche unter Vereinsprodukte an.', 'arriva' ) . '</p>';
 }
 
 echo '</div>';

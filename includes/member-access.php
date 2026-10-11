@@ -261,7 +261,7 @@ function arriva_inject_member_nav_before_termine_title( $block_content, $block, 
 	$block_name = isset( $block['blockName'] ) ? $block['blockName'] : '';
 	$inject     = false;
 
-	if ( 'core/post-title' === $block_name && is_singular( array( ARRIVA_EVENT_POST_TYPE, ARRIVA_MERCH_POST_TYPE ) ) ) {
+	if ( 'core/post-title' === $block_name && is_singular( ARRIVA_EVENT_POST_TYPE ) ) {
 		$inject = true;
 	}
 
@@ -274,7 +274,7 @@ function arriva_inject_member_nav_before_termine_title( $block_content, $block, 
 	}
 
 	static $done = false;
-	if ( $done ) {
+	if ( $done || ! empty( $GLOBALS['arriva_member_nav_rendered'] ) ) {
 		return $block_content;
 	}
 	$done = true;
@@ -305,11 +305,26 @@ function arriva_hide_merch_template_blocks( $block_content, $block, $instance ) 
 		'core/post-date',
 		'core/post-title',
 		'core/post-excerpt',
+		'core/post-featured-image',
+		'core/post-terms',
 		'core/separator',
+		'core/spacer',
+		'core/comments',
 		'core/post-navigation',
 	);
 
 	if ( in_array( $block_name, $hide, true ) ) {
+		return '';
+	}
+
+	if ( 'core/template-part' === $block_name && isset( $block['attrs']['slug'] ) && 'post-meta' === $block['attrs']['slug'] ) {
+		return '';
+	}
+
+	// Theme wrapper groups left empty after the removals above still add padding/margins.
+	if ( 'core/group' === $block_name
+		&& '' === trim( wp_strip_all_tags( $block_content ) )
+		&& ! preg_match( '/<(img|svg|iframe|form|input|video)\b/i', $block_content ) ) {
 		return '';
 	}
 

@@ -16,7 +16,7 @@
 .arriva-member-nav-bar,
 .arriva-member-nav-bar--content {
 	margin: 0;
-	padding: 0 0 var(--wp--preset--spacing--20, 0.75rem);
+	padding: 0;
 }
 
 body:not(.arriva-mitglied-area) .arriva-member-nav-bar,

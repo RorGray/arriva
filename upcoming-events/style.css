@@ -1,16 +1,3 @@
-.arriva-upcoming-events-editor {
-	margin: 0;
-	padding: 0.75rem 1rem;
-	border: 1px dashed var(--wp--preset--color--accent);
-	border-radius: 0.5rem;
-}
-
-.arriva-upcoming-events-editor__label {
-	margin: 0;
-	font-size: 0.875rem;
-	line-height: 1.45;
-}
-
 /* Background comes from the block colour control. Band is always viewport-wide. */
 .wp-block-arriva-upcoming-events {
 	width: 100dvw;
@@ -183,6 +170,10 @@
 	transition: border-color 0.15s ease, color 0.15s ease;
 }
 
+.arriva-upcoming-events__more::after {
+	content: '→';
+}
+
 .arriva-upcoming-events__more:hover,
 .arriva-upcoming-events__more:focus-visible {
 	border-color: color-mix(in srgb, currentColor 60%, transparent);
@@ -218,4 +209,29 @@
 	max-width: 100dvw;
 	margin-left: calc(50% - 50dvw);
 	margin-right: calc(50% - 50dvw);
+}
+
+/* Editor: server preview renders a nested block — show only its list. */
+.arriva-upcoming-events__preview {
+	pointer-events: none;
+}
+
+.wp-block-arriva-upcoming-events .arriva-upcoming-events__preview .wp-block-arriva-upcoming-events {
+	width: auto;
+	max-width: none;
+	margin: 0;
+	padding: 0;
+	background: none;
+	color: inherit;
+}
+
+.wp-block-arriva-upcoming-events .arriva-upcoming-events__preview .arriva-upcoming-events__inner {
+	max-width: none;
+	padding: 0;
+}
+
+.wp-block-arriva-upcoming-events .arriva-upcoming-events__empty--editor {
+	padding: 0.5rem 0.75rem;
+	border: 1px dashed color-mix(in srgb, currentColor 30%, transparent);
+	border-radius: 8px;
 }

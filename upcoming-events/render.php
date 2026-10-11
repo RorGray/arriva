@@ -7,16 +7,17 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$count     = isset( $attributes['count'] ) ? (int) $attributes['count'] : 8;
-$eyebrow   = isset( $attributes['eyebrow'] ) ? (string) $attributes['eyebrow'] : __( 'Termine', 'arriva' );
-$heading   = isset( $attributes['heading'] ) ? (string) $attributes['heading'] : __( 'Kommende Veranstaltungen', 'arriva' );
-$subtitle  = isset( $attributes['subtitle'] ) ? (string) $attributes['subtitle'] : '';
-$more_label = isset( $attributes['moreLabel'] ) ? (string) $attributes['moreLabel'] : __( 'Alle Termine im Mitgliederbereich', 'arriva' );
+$count      = isset( $attributes['count'] ) ? (int) $attributes['count'] : 8;
+$eyebrow    = isset( $attributes['eyebrow'] ) ? (string) $attributes['eyebrow'] : '';
+$heading    = isset( $attributes['heading'] ) ? (string) $attributes['heading'] : '';
+$subtitle   = isset( $attributes['subtitle'] ) ? (string) $attributes['subtitle'] : '';
+$empty_text = isset( $attributes['emptyText'] ) ? (string) $attributes['emptyText'] : '';
+$more_label = isset( $attributes['moreLabel'] ) ? (string) $attributes['moreLabel'] : '';
 $more_url   = isset( $attributes['moreUrl'] ) ? trim( (string) $attributes['moreUrl'] ) : '';
 
-if ( '' === $more_url ) {
-	$more_url = home_url( '/mitglieder/termine/' );
-}
+$has_text = static function ( $value ) {
+	return '' !== trim( wp_strip_all_tags( $value ) );
+};
 
 $today = wp_date( 'Y-m-d' );
 $posts = arriva_query_events(
@@ -36,20 +37,22 @@ $wrapper = get_block_wrapper_attributes(
 echo '<section ' . $wrapper . '>';
 echo '<div class="arriva-upcoming-events__inner">';
 
-if ( $eyebrow ) {
-	echo '<p class="arriva-upcoming-events__eyebrow">' . esc_html( $eyebrow ) . '</p>';
+if ( $has_text( $eyebrow ) ) {
+	echo '<p class="arriva-upcoming-events__eyebrow">' . wp_kses_post( $eyebrow ) . '</p>';
 }
 
-if ( $heading ) {
-	echo '<h2 class="arriva-upcoming-events__heading">' . esc_html( $heading ) . '</h2>';
+if ( $has_text( $heading ) ) {
+	echo '<h2 class="arriva-upcoming-events__heading">' . wp_kses_post( $heading ) . '</h2>';
 }
 
-if ( $subtitle ) {
-	echo '<p class="arriva-upcoming-events__intro">' . esc_html( $subtitle ) . '</p>';
+if ( $has_text( $subtitle ) ) {
+	echo '<p class="arriva-upcoming-events__intro">' . wp_kses_post( $subtitle ) . '</p>';
 }
 
 if ( empty( $posts ) ) {
-	echo '<p class="arriva-upcoming-events__empty">' . esc_html__( 'Keine bevorstehenden Termine.', 'arriva' ) . '</p>';
+	if ( $has_text( $empty_text ) ) {
+		echo '<p class="arriva-upcoming-events__empty">' . wp_kses_post( $empty_text ) . '</p>';
+	}
 } else {
 	echo '<ul class="arriva-upcoming-events__list">';
 
@@ -89,8 +92,8 @@ if ( empty( $posts ) ) {
 	echo '</ul>';
 }
 
-if ( $more_label ) {
-	echo '<a class="arriva-upcoming-events__more" href="' . esc_url( $more_url ) . '">' . esc_html( $more_label ) . ' <span aria-hidden="true">→</span></a>';
+if ( $has_text( $more_label ) && '' !== $more_url ) {
+	echo '<a class="arriva-upcoming-events__more" href="' . esc_url( $more_url ) . '">' . wp_kses_post( $more_label ) . '</a>';
 }
 
 echo '</div>';

@@ -15,31 +15,27 @@
 		},
 		"eyebrow": {
 			"type": "string",
-			"default": "Termine"
+			"default": ""
 		},
 		"heading": {
 			"type": "string",
-			"default": "Kommende Veranstaltungen"
+			"default": ""
 		},
 		"subtitle": {
 			"type": "string",
-			"default": "Alle öffentlichen Vereinstermine. Interne Infos findest du im Mitgliederbereich."
+			"default": ""
+		},
+		"emptyText": {
+			"type": "string",
+			"default": ""
 		},
 		"moreLabel": {
 			"type": "string",
-			"default": "Alle Termine im Mitgliederbereich"
+			"default": ""
 		},
 		"moreUrl": {
 			"type": "string",
 			"default": ""
-		},
-		"backgroundColor": {
-			"type": "string",
-			"default": "contrast"
-		},
-		"textColor": {
-			"type": "string",
-			"default": "base"
 		}
 	},
 	"supports": {

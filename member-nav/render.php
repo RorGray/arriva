@@ -11,6 +11,8 @@ if ( ! is_user_logged_in() ) {
 	return;
 }
 
+$GLOBALS['arriva_member_nav_rendered'] = true;
+
 $hub = arriva_mitglieder_page_id();
 $hub = $hub ? get_permalink( $hub ) : home_url( '/mitglieder/' );
 
@@ -61,6 +63,10 @@ foreach ( $links as $link ) {
 
 	if ( ! $active && 'termine' === $link['key'] ) {
 		$active = is_singular( ARRIVA_EVENT_POST_TYPE ) || is_post_type_archive( ARRIVA_EVENT_POST_TYPE );
+	}
+
+	if ( ! $active && 'merch' === $link['key'] ) {
+		$active = is_singular( ARRIVA_MERCH_POST_TYPE );
 	}
 
 	$classes = 'arriva-member-nav__link';

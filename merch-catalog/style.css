@@ -7,7 +7,7 @@
 }
 
 .arriva-merch-shop__heading {
-	margin: 0 0 var(--wp--preset--spacing--30, 1rem);
+	margin: 0 0 1rem;
 	padding-bottom: 0.5rem;
 	font-size: 0.75rem;
 	font-weight: 700;
@@ -19,13 +19,13 @@
 }
 
 .arriva-merch-shop__heading:not(:first-child) {
-	margin-top: var(--wp--preset--spacing--50, 2rem);
+	margin-top: 2rem;
 }
 
 .arriva-merch-shop__grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(min(100%, 16.5rem), 1fr));
-	gap: var(--wp--preset--spacing--30, 1.25rem);
+	gap: 1.25rem;
 	margin: 0;
 	padding: 0;
 	list-style: none;
@@ -68,7 +68,7 @@
 .arriva-merch-shop__media {
 	position: relative;
 	aspect-ratio: 1 / 1;
-	padding: var(--wp--preset--spacing--30, 1rem);
+	padding: 1rem;
 	background: var(--wp--preset--color--base-2, #f6f5f1);
 	border-bottom: 1px solid var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.08));
 }
@@ -113,7 +113,7 @@
 	flex-direction: column;
 	gap: 0.4rem;
 	min-width: 0;
-	padding: var(--wp--preset--spacing--30, 1rem);
+	padding: 1rem;
 }
 
 .arriva-merch-shop__title {
@@ -173,7 +173,7 @@
 
 .arriva-merch-shop__empty {
 	margin: 0;
-	padding: var(--wp--preset--spacing--40, 1.5rem);
+	padding: 1.5rem;
 	text-align: center;
 	font-size: 0.9375rem;
 	border: 1px dashed var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.15));
@@ -187,7 +187,7 @@ body.single-arriva_merch .wp-block-post-featured-image {
 /* Single template block gap (TT4) — keep footer area tight after PDP. */
 body.arriva-mitglied-area.single-arriva_merch main,
 body.arriva-mitglied-area.single-arriva_merch main .is-layout-constrained {
-	--wp--style--block-gap: var(--wp--preset--spacing--30, 1rem);
+	--wp--style--block-gap: 1rem;
 }
 
 body.arriva-mitglied-area.single-arriva_merch main .wp-block-post-content {

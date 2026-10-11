@@ -4,19 +4,39 @@
 	var Fragment = wp.element.Fragment;
 	var useBlockProps = wp.blockEditor.useBlockProps;
 	var InspectorControls = wp.blockEditor.InspectorControls;
+	var RichText = wp.blockEditor.RichText;
 	var PanelBody = wp.components.PanelBody;
 	var TextControl = wp.components.TextControl;
-	var TextareaControl = wp.components.TextareaControl;
 	var RangeControl = wp.components.RangeControl;
+	var ServerSideRender = wp.serverSideRender;
 	var __ = wp.i18n.__;
+
+	function textField( tagName, className, value, onChange, placeholder ) {
+		return el( RichText, {
+			tagName: tagName,
+			className: className,
+			value: value,
+			onChange: onChange,
+			placeholder: placeholder,
+			allowedFormats: [ 'core/bold', 'core/italic', 'core/link', 'arriva/wavy-underline' ],
+		} );
+	}
 
 	registerBlockType( 'arriva/upcoming-events', {
 		edit: function ( props ) {
 			var attributes = props.attributes;
 			var setAttributes = props.setAttributes;
 			var blockProps = useBlockProps( {
-				className: 'arriva-upcoming-events-editor alignfull',
+				className: 'arriva-upcoming-events alignfull',
 			} );
+
+			function bind( key ) {
+				return function ( value ) {
+					var next = {};
+					next[ key ] = value;
+					setAttributes( next );
+				};
+			}
 
 			return el(
 				Fragment,
@@ -27,55 +47,22 @@
 					el(
 						PanelBody,
 						{ title: __( 'Termine', 'arriva' ), initialOpen: true },
-						el( TextControl, {
-							label: __( 'Dachzeile', 'arriva' ),
-							value: attributes.eyebrow,
-							onChange: function ( value ) {
-								setAttributes( { eyebrow: value } );
-							},
-						} ),
-						el( TextControl, {
-							label: __( 'Überschrift', 'arriva' ),
-							value: attributes.heading,
-							onChange: function ( value ) {
-								setAttributes( { heading: value } );
-							},
-						} ),
-						el( TextareaControl, {
-							label: __( 'Einleitung', 'arriva' ),
-							value: attributes.subtitle,
-							onChange: function ( value ) {
-								setAttributes( { subtitle: value } );
-							},
-						} ),
-						el( TextControl, {
-							label: __( 'Link-Text', 'arriva' ),
-							help: __( 'Leer lassen, um den Link auszublenden.', 'arriva' ),
-							value: attributes.moreLabel,
-							onChange: function ( value ) {
-								setAttributes( { moreLabel: value } );
-							},
-						} ),
-						el( TextControl, {
-							label: __( 'Link-URL', 'arriva' ),
-							help: __( 'Leer lassen für /mitglieder/termine/.', 'arriva' ),
-							value: attributes.moreUrl,
-							onChange: function ( value ) {
-								setAttributes( { moreUrl: value } );
-							},
-						} ),
 						el( RangeControl, {
 							label: __( 'Anzahl', 'arriva' ),
 							help: __(
-								'Die Zeile unter jedem Titel kommt aus dem Textauszug des Termins, z. B. „Ab 16:00 Uhr · Vereinsgelände“.',
+								'Die Zeile unter jedem Titel kommt aus dem Textauszug des Termins.',
 								'arriva'
 							),
 							value: attributes.count,
-							onChange: function ( value ) {
-								setAttributes( { count: value } );
-							},
+							onChange: bind( 'count' ),
 							min: 1,
 							max: 24,
+						} ),
+						el( TextControl, {
+							label: __( 'Link-URL', 'arriva' ),
+							help: __( 'Der Link wird nur mit Text und URL angezeigt.', 'arriva' ),
+							value: attributes.moreUrl,
+							onChange: bind( 'moreUrl' ),
 						} )
 					)
 				),
@@ -83,13 +70,57 @@
 					'section',
 					blockProps,
 					el(
-						'p',
-						{ className: 'arriva-upcoming-events-editor__label' },
-						attributes.heading || __( 'Kommende Veranstaltungen', 'arriva' ),
-						' · ',
-						__( 'max.', 'arriva' ),
-						' ',
-						String( attributes.count )
+						'div',
+						{ className: 'arriva-upcoming-events__inner' },
+						textField(
+							'p',
+							'arriva-upcoming-events__eyebrow',
+							attributes.eyebrow,
+							bind( 'eyebrow' ),
+							__( 'Dachzeile…', 'arriva' )
+						),
+						textField(
+							'h2',
+							'arriva-upcoming-events__heading',
+							attributes.heading,
+							bind( 'heading' ),
+							__( 'Überschrift…', 'arriva' )
+						),
+						textField(
+							'p',
+							'arriva-upcoming-events__intro',
+							attributes.subtitle,
+							bind( 'subtitle' ),
+							__( 'Einleitung…', 'arriva' )
+						),
+						el(
+							'div',
+							{ className: 'arriva-upcoming-events__preview' },
+							el( ServerSideRender, {
+								block: 'arriva/upcoming-events',
+								attributes: { count: attributes.count },
+							} )
+						),
+						props.isSelected
+							? textField(
+								'p',
+								'arriva-upcoming-events__empty arriva-upcoming-events__empty--editor',
+								attributes.emptyText,
+								bind( 'emptyText' ),
+								__( 'Text, wenn keine Termine anstehen…', 'arriva' )
+							)
+							: null,
+						el(
+							'div',
+							{},
+							textField(
+								'span',
+								'arriva-upcoming-events__more',
+								attributes.moreLabel,
+								bind( 'moreLabel' ),
+								__( 'Link-Text…', 'arriva' )
+							)
+						)
 					)
 				)
 			);

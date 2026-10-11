@@ -1,53 +1,16 @@
 /**
  * Mitgliederbereich
- * - Readable column: 1100px (text, nav, catalogs, singles)
- * - Viewport bands stay full window width: page header, wave, upcoming events
+ *
+ * Width + gutter live in the content itself:
+ * - Pages: `.arriva-member-layout` group = constrained 1100px, padding spacing|50.
+ * - Termin/Produkt singles: own block templates (single-arriva_event / single-arriva_merch), same values.
+ * Full-bleed bands (page header, wave, upcoming events) break out via their own block CSS.
  */
 
 body.arriva-mitglied-area {
 	--arriva-member-content-max: 1100px;
 	--arriva-member-gutter: var(--wp--preset--spacing--50, 2rem);
-	--arriva-member-column: min(
-		var(--arriva-member-content-max),
-		calc(100vw - 2 * var(--arriva-member-gutter))
-	);
-	--wp--style--global--content-size: var(--arriva-member-column) !important;
-	--wp--style--global--wide-size: var(--arriva-member-column) !important;
-}
-
-/* main stays as wide as the theme allows so 100dvw bands can break out. */
-body.arriva-mitglied-area main {
-	--wp--style--global--content-size: var(--arriva-member-column) !important;
-	--wp--style--global--wide-size: var(--arriva-member-column) !important;
-	width: auto !important;
-	max-width: none !important;
-	margin-inline: 0 !important;
-	overflow-x: visible;
-}
-
-body.arriva-mitglied-area main .wp-block-post-content,
-body.arriva-mitglied-area main .entry-content,
-body.arriva-mitglied-area main .is-layout-constrained {
-	--wp--style--global--content-size: var(--arriva-member-column) !important;
-	--wp--style--global--wide-size: var(--arriva-member-column) !important;
-}
-
-/* Non-full-bleed blocks → 1100px column. */
-body.arriva-mitglied-area main .is-layout-constrained > :where(
-		:not(.alignleft):not(.alignright):not(.alignfull):not(.alignwide)
-	) {
-	max-width: var(--arriva-member-column) !important;
-	margin-inline: auto !important;
-}
-
-/* Viewport-wide bands (do not inherit the column). */
-body.arriva-mitglied-area .wp-block-arriva-page-header.alignfull,
-body.arriva-mitglied-area .wp-block-arriva-wave-divider,
-body.arriva-mitglied-area .wp-block-arriva-upcoming-events {
-	width: 100dvw !important;
-	max-width: 100dvw !important;
-	margin-left: calc(50% - 50dvw) !important;
-	margin-right: calc(50% - 50dvw) !important;
+	--wp--style--global--wide-size: var(--arriva-member-content-max);
 }
 
 /* Page-header block already provides the H1. */
@@ -56,48 +19,29 @@ body.arriva-mitglied-area.arriva-has-page-header main .entry-header .wp-block-po
 	display: none;
 }
 
-/* Title text inside the full-bleed header stays on the 1100px column. */
-body.arriva-mitglied-area .wp-block-arriva-page-header .arriva-page-header__inner {
-	max-width: var(--arriva-member-column);
+/* Text inside full-bleed bands lines up with the 1100px content column. */
+body.arriva-mitglied-area .wp-block-arriva-page-header .arriva-page-header__inner,
+body.arriva-mitglied-area .arriva-upcoming-events__inner {
+	box-sizing: border-box;
+	max-width: calc(var(--arriva-member-content-max) + 2 * var(--arriva-member-gutter));
 	margin-inline: auto;
 	padding-inline: var(--arriva-member-gutter);
 }
 
-body.arriva-mitglied-area .arriva-upcoming-events__inner {
-	max-width: var(--arriva-member-column);
-	padding-inline: var(--arriva-member-gutter);
+/* "Nächste Termine" on the hub: white band inside the page — homepage padding (up to 6rem) is too much. */
+body.arriva-mitglied-area .wp-block-arriva-upcoming-events {
+	padding-block: 1.5rem 2.5rem;
 }
 
-/* Member content shell: vertical rhythm only. Horizontal inset comes from the column. */
-body.arriva-mitglied-area main .wp-block-group.arriva-member-layout.alignfull,
-body.arriva-mitglied-area main .wp-block-post-content > .wp-block-group.alignfull.has-global-padding.is-layout-constrained {
-	padding-top: var(--wp--preset--spacing--30, 1rem) !important;
-	padding-bottom: var(--wp--preset--spacing--70, 2.5rem) !important;
+/* Fallback if a single is rendered with the theme's generic template (~620px column). */
+body.arriva-mitglied-area.single-arriva_merch,
+body.arriva-mitglied-area.single-arriva_event {
+	--wp--style--global--content-size: var(--arriva-member-content-max);
 }
 
-body.arriva-mitglied-area.page-mitglieder main .wp-block-post-content > .wp-block-group.alignfull.has-global-padding.is-layout-constrained {
-	padding-bottom: var(--wp--preset--spacing--30, 1rem) !important;
-}
-
-body.arriva-mitglied-area main .wp-block-post-content.has-global-padding {
-	padding-inline: 0;
-}
-
-/* Produkt singles: theme title/date/excerpt are rendered in the PDP (plugin). */
+/* Produkt singles: title/date/excerpt are rendered in the PDP (plugin). */
 body.arriva-mitglied-area.single-arriva_merch main .wp-block-post-title,
 body.arriva-mitglied-area.single-arriva_merch main .wp-block-post-date,
 body.arriva-mitglied-area.single-arriva_merch main .wp-block-post-excerpt {
 	display: none;
-}
-
-/* CPT singles have no full-bleed bands in post content — column the content block. */
-body.arriva-mitglied-area.single-arriva_merch main .wp-block-post-content,
-body.arriva-mitglied-area.single-arriva_merch main .entry-content,
-body.arriva-mitglied-area.single-arriva_event main .wp-block-post-content,
-body.arriva-mitglied-area.single-arriva_event main .entry-content,
-body.arriva-mitglied-area.post-type-archive-arriva_event main .wp-block-query {
-	box-sizing: border-box;
-	width: min(var(--arriva-member-content-max), calc(100% - 2 * var(--arriva-member-gutter))) !important;
-	max-width: var(--arriva-member-content-max) !important;
-	margin-inline: auto !important;
 }
