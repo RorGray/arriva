@@ -1,0 +1,421 @@
+/* Mitglieder-Übersicht: welcome, tiles, cards (news, calendar, gauge, weather). */
+
+.arriva-dash-welcome,
+.arriva-dash-tiles,
+.arriva-dash-card {
+	box-sizing: border-box;
+}
+
+.arriva-dash-welcome *,
+.arriva-dash-tiles *,
+.arriva-dash-card * {
+	box-sizing: border-box;
+}
+
+/* Welcome */
+.arriva-dash-welcome {
+	margin-block: 1.5rem 0.5rem;
+}
+
+.arriva-dash-welcome__greeting {
+	margin: 0 0 0.35rem;
+	font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.25rem);
+	line-height: 1.15;
+}
+
+.arriva-dash-welcome__intro {
+	margin: 0 0 0.75rem;
+	color: var(--wp--preset--color--contrast-2, #3a4650);
+}
+
+.arriva-dash-welcome__next {
+	display: inline-flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 0.25rem 0.5rem;
+	margin: 0;
+	padding: 0.5rem 0.85rem;
+	font-size: 0.9375rem;
+	background: color-mix(in srgb, var(--wp--preset--color--accent, #1a93a4) 10%, transparent);
+	border-radius: 999px;
+}
+
+.arriva-dash-welcome__next-label {
+	font-weight: 600;
+}
+
+.arriva-dash-welcome__next a {
+	font-weight: 600;
+	color: var(--wp--preset--color--accent, #1a93a4);
+	text-decoration: none;
+}
+
+.arriva-dash-welcome__next a:hover,
+.arriva-dash-welcome__next a:focus-visible {
+	text-decoration: underline;
+}
+
+.arriva-dash-welcome__next time {
+	color: var(--wp--preset--color--contrast-2, #3a4650);
+}
+
+/* Tiles */
+.arriva-dash-tiles__list {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+	gap: 0.75rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.arriva-dash-tiles__list > li {
+	display: flex;
+}
+
+.arriva-dash-tiles__tile {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	gap: 0.25rem;
+	padding: 1rem 1.1rem;
+	color: inherit;
+	text-decoration: none;
+	background: var(--wp--preset--color--base-2, #f6f5f1);
+	border: 1px solid transparent;
+	border-radius: 12px;
+	transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.arriva-dash-tiles__tile:hover,
+.arriva-dash-tiles__tile:focus-visible {
+	border-color: var(--wp--preset--color--accent, #1a93a4);
+	transform: translateY(-2px);
+	outline: none;
+}
+
+.arriva-dash-tiles__icon {
+	width: 1.75rem;
+	height: 1.75rem;
+	margin-bottom: 0.35rem;
+	fill: none;
+	stroke: var(--wp--preset--color--accent, #1a93a4);
+	stroke-width: 1.6;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.arriva-dash-tiles__title {
+	font-size: 1.0625rem;
+	font-weight: 700;
+}
+
+.arriva-dash-tiles__text {
+	font-size: 0.875rem;
+	line-height: 1.45;
+	color: var(--wp--preset--color--contrast-2, #3a4650);
+}
+
+.arriva-dash-tiles__live {
+	margin-top: auto;
+	padding-top: 0.5rem;
+	font-size: 0.8125rem;
+	font-weight: 600;
+	color: var(--wp--preset--color--accent, #1a93a4);
+}
+
+/* Cards */
+.arriva-dash-card {
+	height: 100%;
+	padding: 1.25rem;
+	background: var(--wp--preset--color--base-2, #f6f5f1);
+	border-radius: 12px;
+}
+
+.arriva-dash-card__title {
+	margin: 0 0 0.85rem;
+	font-size: 1.125rem;
+	font-weight: 700;
+	line-height: 1.3;
+}
+
+.arriva-dash-card__empty {
+	margin: 0;
+	font-size: 0.9375rem;
+	color: var(--wp--preset--color--contrast-2, #3a4650);
+}
+
+.arriva-dash-card__note {
+	margin: 0.85rem 0 0;
+	font-size: 0.75rem;
+	line-height: 1.45;
+	color: var(--wp--preset--color--contrast-2, #3a4650);
+}
+
+.arriva-dash-card__note a {
+	color: inherit;
+}
+
+.arriva-dash-card__links {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem 1.25rem;
+	margin: 1rem 0 0;
+	font-size: 0.875rem;
+}
+
+.arriva-dash-card__link {
+	font-weight: 600;
+	color: var(--wp--preset--color--accent, #1a93a4);
+	text-decoration: none;
+}
+
+.arriva-dash-card__link:hover,
+.arriva-dash-card__link:focus-visible {
+	text-decoration: underline;
+}
+
+.arriva-dash-card__link--muted {
+	color: var(--wp--preset--color--contrast-2, #3a4650);
+}
+
+/* News */
+.arriva-dash-news__list {
+	display: grid;
+	gap: 0.85rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.arriva-dash-news__item {
+	display: grid;
+	gap: 0.15rem;
+	padding-bottom: 0.85rem;
+	border-bottom: 1px solid var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.1));
+}
+
+.arriva-dash-news__item:last-child {
+	padding-bottom: 0;
+	border-bottom: 0;
+}
+
+.arriva-dash-news__date {
+	font-size: 0.75rem;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var(--wp--preset--color--contrast-2, #3a4650);
+}
+
+.arriva-dash-news__title {
+	font-weight: 700;
+	color: inherit;
+	text-decoration: none;
+}
+
+.arriva-dash-news__title:hover,
+.arriva-dash-news__title:focus-visible {
+	color: var(--wp--preset--color--accent, #1a93a4);
+	text-decoration: underline;
+}
+
+.arriva-dash-news__excerpt {
+	margin: 0;
+	font-size: 0.875rem;
+	line-height: 1.5;
+	color: var(--wp--preset--color--contrast-2, #3a4650);
+}
+
+/* Rhine level */
+.arriva-dash-level__reading {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 0.25rem 0.5rem;
+	margin: 0;
+}
+
+.arriva-dash-level__value {
+	font-size: 2.5rem;
+	font-weight: 700;
+	line-height: 1;
+	font-variant-numeric: tabular-nums;
+}
+
+.arriva-dash-level__unit {
+	font-weight: 600;
+	color: var(--wp--preset--color--contrast-2, #3a4650);
+}
+
+.arriva-dash-level__trend {
+	font-size: 0.875rem;
+	font-weight: 600;
+}
+
+.arriva-dash-level__trend.is-rising {
+	color: #b45309;
+}
+
+.arriva-dash-level__trend.is-falling {
+	color: var(--wp--preset--color--accent, #1a93a4);
+}
+
+.arriva-dash-level__state {
+	display: inline-block;
+	margin: 0.6rem 0 0;
+	padding: 0.15rem 0.6rem;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	border-radius: 999px;
+	background: color-mix(in srgb, var(--wp--preset--color--accent, #1a93a4) 14%, transparent);
+}
+
+.arriva-dash-level__state.is-low {
+	background: #fef3c7;
+	color: #92400e;
+}
+
+.arriva-dash-level__state.is-high {
+	background: #fee2e2;
+	color: #991b1b;
+}
+
+/* Weather */
+.arriva-dash-weather__now {
+	display: flex;
+	align-items: center;
+	gap: 0.65rem;
+	margin: 0 0 0.85rem;
+}
+
+.arriva-dash-weather__icon {
+	font-size: 2.25rem;
+	line-height: 1;
+}
+
+.arriva-dash-weather__temp {
+	font-size: 2.25rem;
+	font-weight: 700;
+	line-height: 1;
+}
+
+.arriva-dash-weather__label {
+	font-size: 0.8125rem;
+	line-height: 1.35;
+	color: var(--wp--preset--color--contrast-2, #3a4650);
+}
+
+.arriva-dash-weather__days {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(3.5rem, 1fr));
+	gap: 0.35rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.arriva-dash-weather__day {
+	display: grid;
+	justify-items: center;
+	gap: 0.15rem;
+	padding: 0.5rem 0.25rem;
+	font-size: 0.8125rem;
+	text-align: center;
+	background: var(--wp--preset--color--base, #fff);
+	border-radius: 8px;
+}
+
+.arriva-dash-weather__day-name {
+	font-weight: 700;
+}
+
+.arriva-dash-weather__day-icon {
+	font-size: 1.35rem;
+	line-height: 1.2;
+}
+
+.arriva-dash-weather__day-temp span {
+	color: var(--wp--preset--color--contrast-2, #3a4650);
+}
+
+.arriva-dash-weather__day-rain {
+	font-size: 0.75rem;
+	color: var(--wp--preset--color--contrast-2, #3a4650);
+}
+
+/* Calendar subscription */
+.arriva-dash-calendar__text {
+	margin: 0 0 0.85rem;
+	font-size: 0.9375rem;
+	line-height: 1.5;
+}
+
+.arriva-dash-calendar__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+}
+
+.arriva-dash-calendar__button,
+.arriva-dash-calendar__copy {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.6rem 1rem;
+	font: inherit;
+	font-size: 0.875rem;
+	font-weight: 700;
+	text-decoration: none;
+	border-radius: 999px;
+	cursor: pointer;
+}
+
+.arriva-dash-calendar__button {
+	color: var(--wp--preset--color--base, #fff);
+	background: var(--wp--preset--color--contrast, #18222a);
+	border: 1px solid var(--wp--preset--color--contrast, #18222a);
+}
+
+.arriva-dash-calendar__button:hover,
+.arriva-dash-calendar__button:focus-visible {
+	color: var(--wp--preset--color--base, #fff);
+	background: var(--wp--preset--color--accent, #1a93a4);
+	border-color: var(--wp--preset--color--accent, #1a93a4);
+}
+
+.arriva-dash-calendar__url {
+	flex: 1 1 14rem;
+	min-width: 0;
+	padding: 0.55rem 0.85rem;
+	font: inherit;
+	font-size: 0.8125rem;
+	color: var(--wp--preset--color--contrast-2, #3a4650);
+	background: var(--wp--preset--color--base, #fff);
+	border: 1px solid var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.15));
+	border-radius: 999px;
+}
+
+.arriva-dash-calendar__copy {
+	color: inherit;
+	background: var(--wp--preset--color--base, #fff);
+	border: 1px solid var(--wp--preset--color--contrast, #18222a);
+}
+
+.arriva-dash-calendar__copy:hover,
+.arriva-dash-calendar__copy:focus-visible {
+	border-color: var(--wp--preset--color--accent, #1a93a4);
+	color: var(--wp--preset--color--accent, #1a93a4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.arriva-dash-tiles__tile {
+		transition: none;
+	}
+
+	.arriva-dash-tiles__tile:hover,
+	.arriva-dash-tiles__tile:focus-visible {
+		transform: none;
+	}
+}

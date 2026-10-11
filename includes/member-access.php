@@ -112,6 +112,16 @@ function arriva_is_member_only_request() {
 		return true;
 	}
 
+	if ( is_singular( 'post' ) && arriva_is_member_news_post( get_queried_object_id() ) ) {
+		return true;
+	}
+
+	// is_category( 0 ) would match every category archive.
+	$news_cat = arriva_member_news_category_id();
+	if ( $news_cat && is_category( $news_cat ) ) {
+		return true;
+	}
+
 	return false;
 }
 
@@ -163,6 +173,10 @@ function arriva_wpmem_block_member_cpts( $block, $post_id ) {
 	}
 
 	if ( in_array( $post->post_type, array( ARRIVA_EVENT_POST_TYPE, ARRIVA_MERCH_POST_TYPE ), true ) ) {
+		return true;
+	}
+
+	if ( arriva_is_member_news_post( $post ) ) {
 		return true;
 	}
 

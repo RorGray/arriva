@@ -1,0 +1,25 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "arriva/weather",
+	"title": "Mitglieder: Wetter",
+	"category": "widgets",
+	"icon": "cloud",
+	"description": "Wettervorhersage von Open-Meteo.",
+	"textdomain": "arriva",
+	"attributes": {
+		"heading": { "type": "string", "default": "Wetter in Speyer" },
+		"latitude": { "type": "number", "default": 49.3173 },
+		"longitude": { "type": "number", "default": 8.4412 },
+		"days": { "type": "number", "default": 4 },
+		"todayLabel": { "type": "string", "default": "Heute" },
+		"rainLabel": { "type": "string", "default": "Regen" },
+		"windLabel": { "type": "string", "default": "Wind" },
+		"sourceLabel": { "type": "string", "default": "Quelle: Open-Meteo" },
+		"errorText": { "type": "string", "default": "Wetterdaten sind gerade nicht verfügbar." }
+	},
+	"supports": { "html": false },
+	"editorScript": "arriva-member-dashboard-editor",
+	"style": "arriva-member-dashboard",
+	"render": "file:./render.php"
+}

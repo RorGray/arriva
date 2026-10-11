@@ -1,0 +1,23 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "arriva/calendar-subscribe",
+	"title": "Mitglieder: Kalender abonnieren",
+	"category": "widgets",
+	"icon": "calendar-alt",
+	"description": "Persönlicher Kalender-Link (iCal) für Handy, Outlook und Google Kalender.",
+	"textdomain": "arriva",
+	"attributes": {
+		"heading": { "type": "string", "default": "Termine im eigenen Kalender" },
+		"text": { "type": "string", "default": "Abonniere die Vereinstermine – neue und geänderte Termine erscheinen dann automatisch auf deinem Handy oder in Outlook." },
+		"buttonLabel": { "type": "string", "default": "Kalender abonnieren" },
+		"copyLabel": { "type": "string", "default": "Link kopieren" },
+		"copiedLabel": { "type": "string", "default": "Kopiert!" },
+		"note": { "type": "string", "default": "Der Link ist persönlich – bitte nicht weitergeben. Google Kalender: Link kopieren und unter „Weitere Kalender → Per URL“ einfügen." }
+	},
+	"supports": { "html": false },
+	"editorScript": "arriva-member-dashboard-editor",
+	"viewScript": "file:./view.js",
+	"style": "arriva-member-dashboard",
+	"render": "file:./render.php"
+}

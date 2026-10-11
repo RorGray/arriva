@@ -1,0 +1,20 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "arriva/member-welcome",
+	"title": "Mitglieder: Begrüßung",
+	"category": "widgets",
+	"icon": "smiley",
+	"description": "Persönliche Begrüßung mit dem nächsten Termin.",
+	"textdomain": "arriva",
+	"attributes": {
+		"greeting": { "type": "string", "default": "Hallo %s!" },
+		"intro": { "type": "string", "default": "Schön, dass du da bist." },
+		"nextLabel": { "type": "string", "default": "Nächster Termin:" },
+		"noEventText": { "type": "string", "default": "Gerade stehen keine Termine an." }
+	},
+	"supports": { "html": false },
+	"editorScript": "arriva-member-dashboard-editor",
+	"style": "arriva-member-dashboard",
+	"render": "file:./render.php"
+}

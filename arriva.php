@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Arriva
  * Description: Custom Gutenberg blocks for Arriva Speyer e.V.
- * Version: 1.10.6
+ * Version: 1.11.0
  * Author: Arriva Speyer e.V.
  * License: GPL-2.0-or-later
  * Text Domain: arriva
@@ -14,6 +14,7 @@ require_once __DIR__ . '/includes/events.php';
 require_once __DIR__ . '/includes/ical.php';
 require_once __DIR__ . '/includes/merch.php';
 require_once __DIR__ . '/includes/member-access.php';
+require_once __DIR__ . '/includes/member-dashboard.php';
 
 register_activation_hook(
 	__FILE__,
@@ -72,6 +73,24 @@ add_action( 'init', function () {
 		ARRIVA_VERSION
 	);
 	register_block_type( __DIR__ . '/merch-product' );
+
+	$dashboard_editor_asset = require __DIR__ . '/shared/member-dashboard-editor.asset.php';
+	wp_register_script(
+		'arriva-member-dashboard-editor',
+		plugins_url( 'shared/member-dashboard-editor.js', __FILE__ ),
+		$dashboard_editor_asset['dependencies'],
+		$dashboard_editor_asset['version'],
+		true
+	);
+	wp_register_style(
+		'arriva-member-dashboard',
+		plugins_url( 'shared/member-dashboard.css', __FILE__ ),
+		array(),
+		ARRIVA_VERSION
+	);
+	foreach ( array( 'member-welcome', 'member-tiles', 'member-news', 'calendar-subscribe', 'rhine-level', 'weather' ) as $dashboard_block ) {
+		register_block_type( __DIR__ . '/' . $dashboard_block );
+	}
 
 	register_block_pattern(
 		'arriva/hero-full-width',

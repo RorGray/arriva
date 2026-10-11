@@ -1,0 +1,26 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "arriva/member-tiles",
+	"title": "Mitglieder: Bereiche",
+	"category": "widgets",
+	"icon": "screenoptions",
+	"description": "Kacheln zu Termine, Vorstand, Dokumente und Merch mit Live-Infos.",
+	"textdomain": "arriva",
+	"attributes": {
+		"termineTitle": { "type": "string", "default": "Termine" },
+		"termineText": { "type": "string", "default": "Arbeitseinsätze, Sonntagskaffee und Veranstaltungen." },
+		"termineLive": { "type": "string", "default": "%1$d anstehend · nächster am %2$s" },
+		"vorstandTitle": { "type": "string", "default": "Vorstand" },
+		"vorstandText": { "type": "string", "default": "Ansprechpartner und direkter Kontakt." },
+		"dokumenteTitle": { "type": "string", "default": "Dokumente" },
+		"dokumenteText": { "type": "string", "default": "Formulare und Unterlagen zum Herunterladen." },
+		"merchTitle": { "type": "string", "default": "Merch" },
+		"merchText": { "type": "string", "default": "Vereinskleidung mit ARRIVA-Druck." },
+		"merchLive": { "type": "string", "default": "%1$d Artikel · neu: %2$s" }
+	},
+	"supports": { "html": false },
+	"editorScript": "arriva-member-dashboard-editor",
+	"style": "arriva-member-dashboard",
+	"render": "file:./render.php"
+}

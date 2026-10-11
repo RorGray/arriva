@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "arriva/rhine-level",
+	"title": "Mitglieder: Rhein-Pegel",
+	"category": "widgets",
+	"icon": "chart-line",
+	"description": "Aktueller Wasserstand von PEGELONLINE (Wasserstraßen- und Schifffahrtsverwaltung).",
+	"textdomain": "arriva",
+	"attributes": {
+		"heading": { "type": "string", "default": "Rhein-Pegel Speyer" },
+		"station": { "type": "string", "default": "SPEYER" },
+		"risingLabel": { "type": "string", "default": "steigend" },
+		"fallingLabel": { "type": "string", "default": "fallend" },
+		"steadyLabel": { "type": "string", "default": "gleichbleibend" },
+		"lowLabel": { "type": "string", "default": "Niedrigwasser" },
+		"normalLabel": { "type": "string", "default": "Normalbereich" },
+		"highLabel": { "type": "string", "default": "Hochwasser" },
+		"timeLabel": { "type": "string", "default": "Stand: %s Uhr" },
+		"sourceLabel": { "type": "string", "default": "Quelle: PEGELONLINE (WSV)" },
+		"errorText": { "type": "string", "default": "Pegeldaten sind gerade nicht verfügbar." }
+	},
+	"supports": { "html": false },
+	"editorScript": "arriva-member-dashboard-editor",
+	"style": "arriva-member-dashboard",
+	"render": "file:./render.php"
+}

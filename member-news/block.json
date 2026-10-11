@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "arriva/member-news",
+	"title": "Mitglieder: Mitteilungen",
+	"category": "widgets",
+	"icon": "megaphone",
+	"description": "Neueste Beiträge der Kategorie „Mitglieder“ (nur für Mitglieder sichtbar).",
+	"textdomain": "arriva",
+	"attributes": {
+		"heading": { "type": "string", "default": "Mitteilungen des Vorstands" },
+		"count": { "type": "number", "default": 3 },
+		"emptyText": { "type": "string", "default": "Aktuell gibt es keine neuen Mitteilungen." },
+		"moreLabel": { "type": "string", "default": "Alle Mitteilungen" },
+		"writeLabel": { "type": "string", "default": "+ Neue Mitteilung schreiben" }
+	},
+	"supports": { "html": false },
+	"editorScript": "arriva-member-dashboard-editor",
+	"style": "arriva-member-dashboard",
+	"render": "file:./render.php"
+}
