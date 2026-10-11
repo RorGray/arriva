@@ -1,0 +1,387 @@
+/* Hallmark · PDP · utilitarian editorial · club WP tokens */
+
+.arriva-merch-single {
+	overflow-x: clip;
+	width: 100%;
+	max-width: 100%;
+}
+
+.arriva-merch-single__layout {
+	display: grid;
+	grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+	gap: var(--wp--preset--spacing--50, 2rem);
+	align-items: start;
+	margin-bottom: var(--wp--preset--spacing--50, 2rem);
+}
+
+.arriva-merch-single__gallery {
+	min-width: 0;
+}
+
+.arriva-merch-single__stage {
+	padding: var(--wp--preset--spacing--40, 1.5rem);
+	background: var(--wp--preset--color--base-2, #f6f5f1);
+	border: 1px solid var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.1));
+	border-radius: 0.65rem;
+}
+
+.arriva-merch-single__stage--empty {
+	min-height: 20rem;
+}
+
+.arriva-merch-single__zoom {
+	display: block;
+	position: relative;
+	width: 100%;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	cursor: zoom-in;
+	border-radius: 0.35rem;
+}
+
+.arriva-merch-single__zoom:focus-visible {
+	outline: 2px solid var(--wp--preset--color--accent, #1a93a4);
+	outline-offset: 4px;
+}
+
+.arriva-merch-single__image {
+	display: block;
+	width: 100%;
+	height: auto;
+	max-height: min(72vh, 36rem);
+	margin-inline: auto;
+	object-fit: contain;
+}
+
+.arriva-merch-single__zoom-hint {
+	position: absolute;
+	right: 0.65rem;
+	bottom: 0.65rem;
+	padding: 0.25rem 0.55rem;
+	font-size: 0.6875rem;
+	font-weight: 700;
+	font-style: normal;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var(--wp--preset--color--base, #fff);
+	background: color-mix(in srgb, var(--wp--preset--color--contrast, #18222a) 72%, transparent);
+	border-radius: 0.25rem;
+	pointer-events: none;
+}
+
+.arriva-merch-single__thumbs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin: 0.75rem 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.arriva-merch-single__thumb {
+	display: block;
+	padding: 0;
+	border: 2px solid transparent;
+	border-radius: 0.4rem;
+	background: var(--wp--preset--color--base, #fff);
+	cursor: pointer;
+	overflow: hidden;
+	transition: border-color 0.15s ease;
+}
+
+.arriva-merch-single__thumb.is-active,
+.arriva-merch-single__thumb:focus-visible {
+	border-color: var(--wp--preset--color--accent, #1a93a4);
+	outline: none;
+}
+
+.arriva-merch-single__thumb-img {
+	display: block;
+	width: 4.5rem;
+	height: 4.5rem;
+	object-fit: cover;
+}
+
+.arriva-merch-single__buy {
+	position: sticky;
+	top: 1.5rem;
+	min-width: 0;
+	padding: var(--wp--preset--spacing--40, 1.5rem);
+	background: var(--wp--preset--color--base, #fff);
+	border: 1px solid var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.12));
+	border-radius: 0.65rem;
+	box-shadow: 0 8px 28px color-mix(in srgb, var(--wp--preset--color--contrast, #18222a) 6%, transparent);
+}
+
+.arriva-merch-single__title {
+	margin: 0 0 0.5rem;
+	font-size: clamp(1.35rem, 1.1rem + 0.8vw, 1.85rem);
+	font-weight: 700;
+	font-style: normal;
+	line-height: 1.2;
+	overflow-wrap: anywhere;
+}
+
+.arriva-merch-single__badge {
+	display: inline-block;
+	margin: 0 0 0.65rem;
+	padding: 0.2rem 0.55rem;
+	font-size: 0.625rem;
+	font-weight: 700;
+	font-style: normal;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--wp--preset--color--base, #fff);
+	background: var(--wp--preset--color--contrast, #18222a);
+	border-radius: 0.25rem;
+}
+
+.arriva-merch-single__lead {
+	margin: 0 0 var(--wp--preset--spacing--30, 1rem);
+	font-size: 0.9375rem;
+	line-height: 1.55;
+	color: color-mix(in srgb, var(--wp--preset--color--contrast, #18222a) 68%, transparent);
+}
+
+.arriva-merch-single__price-row {
+	display: flex;
+	flex-direction: column;
+	gap: 0.15rem;
+	margin: 0 0 var(--wp--preset--spacing--30, 1rem);
+	padding-bottom: var(--wp--preset--spacing--30, 1rem);
+	border-bottom: 1px solid var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.1));
+}
+
+.arriva-merch-single__price-label {
+	font-size: 0.6875rem;
+	font-weight: 700;
+	font-style: normal;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: color-mix(in srgb, var(--wp--preset--color--contrast, #18222a) 50%, transparent);
+}
+
+.arriva-merch-single__price {
+	font-size: 1.5rem;
+	font-weight: 700;
+	font-style: normal;
+	font-variant-numeric: tabular-nums;
+	line-height: 1.2;
+}
+
+.arriva-merch-single__colors,
+.arriva-merch-single__specs {
+	margin-bottom: var(--wp--preset--spacing--30, 1rem);
+}
+
+.arriva-merch-single__colors-title,
+.arriva-merch-single__specs-title {
+	margin: 0 0 0.5rem;
+	font-size: 0.75rem;
+	font-weight: 700;
+	font-style: normal;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.arriva-merch-single__swatches {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem 0.65rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.arriva-merch-single__swatch {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	min-width: 0;
+	padding: 0.25rem 0.5rem 0.25rem 0.35rem;
+	border: 1px solid var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.12));
+	border-radius: 999px;
+	background: var(--wp--preset--color--base-2, #f6f5f1);
+}
+
+.arriva-merch-single__swatch-dot {
+	flex-shrink: 0;
+	width: 1rem;
+	height: 1rem;
+	border-radius: 50%;
+	background: var(--arriva-swatch, var(--wp--preset--color--contrast, #888));
+	border: 1px solid color-mix(in srgb, var(--wp--preset--color--contrast, #18222a) 18%, transparent);
+}
+
+.arriva-merch-single__swatch-label {
+	font-size: 0.8125rem;
+	font-weight: 600;
+	font-style: normal;
+	line-height: 1.2;
+}
+
+.arriva-merch-single__colors-note {
+	margin: 0.5rem 0 0;
+	font-size: 0.75rem;
+	line-height: 1.45;
+	opacity: 0.75;
+}
+
+.arriva-merch-single__spec-list {
+	margin: 0;
+	display: grid;
+	gap: 0.35rem 1rem;
+	grid-template-columns: minmax(0, 7.5rem) minmax(0, 1fr);
+	font-size: 0.875rem;
+	line-height: 1.45;
+}
+
+.arriva-merch-single__spec-list dt {
+	margin: 0;
+	font-weight: 600;
+	color: color-mix(in srgb, var(--wp--preset--color--contrast, #18222a) 72%, transparent);
+}
+
+.arriva-merch-single__spec-list dd {
+	margin: 0;
+	min-width: 0;
+	overflow-wrap: anywhere;
+}
+
+.arriva-merch-single__spec-list dt.arriva-merch-single__spec-solo {
+	grid-column: 1 / -1;
+	font-weight: 500;
+}
+
+.arriva-merch-single__order-note {
+	margin: 0 0 var(--wp--preset--spacing--30, 1rem);
+	font-size: 0.8125rem;
+	line-height: 1.5;
+	opacity: 0.78;
+}
+
+.arriva-merch-single__order {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	padding: 0.8rem 1.25rem;
+	font-size: 0.9375rem;
+	font-weight: 700;
+	font-style: normal;
+	text-decoration: none;
+	color: var(--wp--preset--color--base, #fff);
+	background: var(--wp--preset--color--contrast, #18222a);
+	border-radius: 0.45rem;
+	transition: background 0.15s ease, transform 0.12s ease;
+}
+
+.arriva-merch-single__order:hover {
+	background: var(--wp--preset--color--accent, #1a93a4);
+	color: var(--wp--preset--color--base, #fff);
+}
+
+.arriva-merch-single__order:focus-visible {
+	outline: 2px solid var(--wp--preset--color--accent, #1a93a4);
+	outline-offset: 3px;
+}
+
+.arriva-merch-single__order:active {
+	transform: translateY(1px);
+}
+
+.arriva-merch-single__details {
+	margin-bottom: var(--wp--preset--spacing--40, 1.5rem);
+	padding-top: var(--wp--preset--spacing--40, 1.5rem);
+	border-top: 1px solid var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.1));
+}
+
+.arriva-merch-single__details-title {
+	margin: 0 0 var(--wp--preset--spacing--20, 0.75rem);
+	font-size: 1rem;
+	font-weight: 700;
+	font-style: normal;
+}
+
+.arriva-merch-single__body {
+	font-size: 0.9375rem;
+	line-height: 1.6;
+}
+
+.arriva-merch-single__actions {
+	padding-top: var(--wp--preset--spacing--20, 0.75rem);
+	border-top: 1px solid var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.1));
+}
+
+.arriva-merch-single__back {
+	font-size: 0.9375rem;
+	font-weight: 600;
+	font-style: normal;
+	text-decoration: none;
+	color: var(--wp--preset--color--accent, #1a93a4);
+}
+
+.arriva-merch-lightbox {
+	max-width: min(96vw, 56rem);
+	width: 100%;
+	padding: 0;
+	border: 0;
+	background: transparent;
+}
+
+.arriva-merch-lightbox::backdrop {
+	background: color-mix(in srgb, var(--wp--preset--color--contrast, #18222a) 55%, transparent);
+}
+
+.arriva-merch-lightbox__img {
+	display: block;
+	width: 100%;
+	height: auto;
+	max-height: 90vh;
+	object-fit: contain;
+	background: var(--wp--preset--color--base, #fff);
+	border-radius: 0.35rem;
+}
+
+.arriva-merch-lightbox__close {
+	position: fixed;
+	top: 1rem;
+	right: 1rem;
+	z-index: 2;
+	width: 2.5rem;
+	height: 2.5rem;
+	border: 0;
+	border-radius: 50%;
+	font-size: 1.5rem;
+	line-height: 1;
+	color: var(--wp--preset--color--base, #fff);
+	background: color-mix(in srgb, var(--wp--preset--color--contrast, #18222a) 80%, transparent);
+	cursor: pointer;
+}
+
+.arriva-merch-lightbox__close:focus-visible {
+	outline: 2px solid var(--wp--preset--color--accent, #1a93a4);
+	outline-offset: 2px;
+}
+
+@media (max-width: 781px) {
+	.arriva-merch-single__layout {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.arriva-merch-single__buy {
+		position: static;
+	}
+
+	.arriva-merch-single__spec-list {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.arriva-merch-single__order,
+	.arriva-merch-single__thumb {
+		transition: none;
+	}
+}

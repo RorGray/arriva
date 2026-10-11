@@ -5,10 +5,14 @@
 
 defined( 'ABSPATH' ) || exit;
 
-const ARRIVA_MERCH_POST_TYPE   = 'arriva_merch';
-const ARRIVA_MERCH_PRICE_META  = 'arriva_merch_price';
+const ARRIVA_MERCH_POST_TYPE    = 'arriva_merch';
+const ARRIVA_MERCH_PRICE_META   = 'arriva_merch_price';
 const ARRIVA_MERCH_OPTIONS_META = 'arriva_merch_options';
-const ARRIVA_MERCH_GROUP_META  = 'arriva_merch_group';
+const ARRIVA_MERCH_GROUP_META   = 'arriva_merch_group';
+const ARRIVA_MERCH_BADGE_META   = 'arriva_merch_badge';
+const ARRIVA_MERCH_GALLERY_META = 'arriva_merch_gallery';
+const ARRIVA_MERCH_COLORS_META  = 'arriva_merch_colors';
+const ARRIVA_MERCH_DETAILS_META = 'arriva_merch_details';
 
 /**
  * Register CPT (call on init and plugin activation).
@@ -36,7 +40,7 @@ function arriva_register_merch_content_type() {
 			'show_in_rest'        => true,
 			'rest_base'           => 'arriva-merch',
 			'menu_icon'           => 'dashicons-tag',
-			'supports'            => array( 'title', 'editor', 'excerpt', 'thumbnail', 'page-attributes' ),
+			'supports'            => array( 'title', 'editor', 'excerpt', 'thumbnail', 'page-attributes', 'custom-fields' ),
 			'capability_type'     => 'post',
 			'exclude_from_search' => true,
 		)
@@ -55,6 +59,7 @@ function arriva_register_merch_content_type() {
 			'show_in_rest'      => true,
 			'auth_callback'     => $meta_auth,
 			'sanitize_callback' => 'sanitize_text_field',
+			'label'             => __( 'Preis', 'arriva' ),
 		)
 	);
 
@@ -84,7 +89,124 @@ function arriva_register_merch_content_type() {
 			},
 		)
 	);
+
+	register_post_meta(
+		ARRIVA_MERCH_POST_TYPE,
+		ARRIVA_MERCH_BADGE_META,
+		array(
+			'type'              => 'string',
+			'single'            => true,
+			'show_in_rest'      => true,
+			'auth_callback'     => $meta_auth,
+			'sanitize_callback' => 'sanitize_text_field',
+			'label'             => __( 'Badge (Shop-Karte)', 'arriva' ),
+		)
+	);
+
+	register_post_meta(
+		ARRIVA_MERCH_POST_TYPE,
+		ARRIVA_MERCH_GALLERY_META,
+		array(
+			'type'              => 'array',
+			'single'            => true,
+			'show_in_rest'      => array(
+				'schema' => array(
+					'type'  => 'array',
+					'items' => array(
+						'type' => 'integer',
+					),
+				),
+			),
+			'default'           => array(),
+			'auth_callback'     => $meta_auth,
+			'sanitize_callback' => static function ( $value ) {
+				if ( ! is_array( $value ) ) {
+					return array();
+				}
+
+				return array_values(
+					array_unique(
+						array_filter(
+							array_map( 'absint', $value )
+						)
+					)
+				);
+			},
+		)
+	);
+
+	register_post_meta(
+		ARRIVA_MERCH_POST_TYPE,
+		ARRIVA_MERCH_COLORS_META,
+		array(
+			'type'              => 'string',
+			'single'            => true,
+			'show_in_rest'      => true,
+			'auth_callback'     => $meta_auth,
+			'sanitize_callback' => 'sanitize_textarea_field',
+		)
+	);
+
+	register_post_meta(
+		ARRIVA_MERCH_POST_TYPE,
+		ARRIVA_MERCH_DETAILS_META,
+		array(
+			'type'              => 'string',
+			'single'            => true,
+			'show_in_rest'      => true,
+			'auth_callback'     => $meta_auth,
+			'sanitize_callback' => 'sanitize_textarea_field',
+		)
+	);
 }
+
+add_action(
+	'wp_enqueue_scripts',
+	static function () {
+		if ( ! is_singular( ARRIVA_MERCH_POST_TYPE ) ) {
+			return;
+		}
+
+		$asset = require __DIR__ . '/../shared/merch-single.asset.php';
+
+		wp_enqueue_style(
+			'arriva-merch-single',
+			plugins_url( 'shared/merch-single.css', __DIR__ . '/../arriva.php' ),
+			array( 'arriva-merch-catalog' ),
+			ARRIVA_VERSION
+		);
+
+		wp_enqueue_script(
+			'arriva-merch-single',
+			plugins_url( 'shared/merch-single.js', __DIR__ . '/../arriva.php' ),
+			$asset['dependencies'],
+			$asset['version'],
+			true
+		);
+	}
+);
+
+add_action(
+	'enqueue_block_editor_assets',
+	static function () {
+		$asset = require __DIR__ . '/../merch-editor/index.asset.php';
+
+		wp_enqueue_style(
+			'arriva-merch-editor',
+			plugins_url( 'merch-editor/style.css', __DIR__ . '/../arriva.php' ),
+			array(),
+			ARRIVA_VERSION
+		);
+
+		wp_enqueue_script(
+			'arriva-merch-editor',
+			plugins_url( 'merch-editor/index.js', __DIR__ . '/../arriva.php' ),
+			$asset['dependencies'],
+			$asset['version'],
+			true
+		);
+	}
+);
 
 add_action( 'init', 'arriva_register_merch_content_type' );
 
@@ -113,6 +235,21 @@ function arriva_merch_product_group( WP_Post $post ) {
 	}
 
 	return in_array( $post->post_name, arriva_merch_featured_slugs_fallback(), true ) ? 'featured' : 'catalog';
+}
+
+/**
+ * Optional overlay label on shop cards / product page (e.g. „NEU“). Empty = hidden.
+ *
+ * @param WP_Post $post Product.
+ * @return string
+ */
+function arriva_merch_badge_label( WP_Post $post ) {
+	$label = get_post_meta( $post->ID, ARRIVA_MERCH_BADGE_META, true );
+	if ( ! is_string( $label ) ) {
+		return '';
+	}
+
+	return trim( $label );
 }
 
 /**
@@ -191,6 +328,200 @@ function arriva_merch_option_lines( WP_Post $post ) {
 }
 
 /**
+ * @param string $name Color label.
+ * @return string Hex or empty.
+ */
+function arriva_merch_color_name_to_hex( $name ) {
+	$key = strtolower( trim( $name ) );
+	$map = array(
+		'navy'            => '#1e2a4a',
+		'schwarz'         => '#1a1a1a',
+		'weiß'            => '#f5f5f2',
+		'weiss'           => '#f5f5f2',
+		'royalblau'       => '#1e4d8c',
+		'royal'           => '#1e4d8c',
+		'bright royal'    => '#2563eb',
+		'convoy grey'     => '#6b7280',
+		'carolina blue'   => '#6cb4d8',
+		'forest green'    => '#2d5a3d',
+		'military green'  => '#4a5d3f',
+		'heather saphir'  => '#3d5a80',
+		'orange'          => '#e87722',
+		'charcoal'        => '#36454f',
+		'pink'            => '#e8a0bf',
+		'mint'            => '#98d4bb',
+	);
+
+	return isset( $map[ $key ] ) ? $map[ $key ] : '';
+}
+
+/**
+ * @param string $line One color entry ("Navy", "Navy #1e2a4a", "#1e2a4a").
+ * @return array{label:string,hex:string}|null
+ */
+function arriva_merch_parse_color_line( $line ) {
+	$line = trim( $line );
+	if ( '' === $line ) {
+		return null;
+	}
+
+	if ( preg_match( '/^(?<label>[^#]+?)\s+(?<hex>#[0-9a-fA-F]{3,8})$/u', $line, $m ) ) {
+		return array(
+			'label' => trim( $m['label'] ),
+			'hex'   => $m['hex'],
+		);
+	}
+
+	if ( preg_match( '/^#[0-9a-fA-F]{3,8}$/', $line ) ) {
+		return array(
+			'label' => $line,
+			'hex'   => $line,
+		);
+	}
+
+	return array(
+		'label' => $line,
+		'hex'   => arriva_merch_color_name_to_hex( $line ),
+	);
+}
+
+/**
+ * @param WP_Post $post Product.
+ * @return array<int, array{label:string,hex:string}>
+ */
+function arriva_merch_color_swatches( WP_Post $post ) {
+	$swatches = array();
+	$raw      = get_post_meta( $post->ID, ARRIVA_MERCH_COLORS_META, true );
+
+	if ( is_string( $raw ) && '' !== trim( $raw ) ) {
+		$lines = preg_split( '/\r\n|\r|\n/', $raw );
+		foreach ( $lines as $line ) {
+			$parsed = arriva_merch_parse_color_line( $line );
+			if ( $parsed ) {
+				$swatches[] = $parsed;
+			}
+		}
+	}
+
+	if ( empty( $swatches ) ) {
+		foreach ( arriva_merch_option_lines( $post ) as $line ) {
+			if ( preg_match( '/^Farben?:\s*(.+)$/iu', $line, $m ) ) {
+				$parts = preg_split( '/\s*[·,—–-]\s*|\s*,\s*/u', $m[1] );
+				foreach ( $parts as $part ) {
+					$part = preg_replace( '/\s*(Druck|druck).*$/u', '', trim( $part ) );
+					$parsed = arriva_merch_parse_color_line( $part );
+					if ( $parsed && '' !== $parsed['label'] ) {
+						$swatches[] = $parsed;
+					}
+				}
+				break;
+			}
+		}
+	}
+
+	return $swatches;
+}
+
+/**
+ * @param WP_Post $post Product.
+ * @return string[]
+ */
+function arriva_merch_spec_lines( WP_Post $post ) {
+	$lines = arriva_merch_option_lines( $post );
+	$specs = array();
+
+	foreach ( $lines as $line ) {
+		if ( preg_match( '/^Farben?:\s*/iu', $line ) ) {
+			continue;
+		}
+		$specs[] = $line;
+	}
+
+	$details = get_post_meta( $post->ID, ARRIVA_MERCH_DETAILS_META, true );
+	if ( is_string( $details ) && '' !== trim( $details ) ) {
+		foreach ( preg_split( '/\r\n|\r|\n/', $details ) as $line ) {
+			$line = trim( $line );
+			if ( '' !== $line ) {
+				$specs[] = $line;
+			}
+		}
+	}
+
+	return $specs;
+}
+
+/**
+ * @param WP_Post $post Product.
+ * @return int[] Attachment IDs (featured image + gallery meta).
+ */
+function arriva_merch_gallery_ids( WP_Post $post ) {
+	$stored = get_post_meta( $post->ID, ARRIVA_MERCH_GALLERY_META, true );
+	$ids    = is_array( $stored ) ? array_map( 'absint', $stored ) : array();
+
+	if ( has_post_thumbnail( $post ) ) {
+		$thumb = (int) get_post_thumbnail_id( $post );
+		if ( $thumb && ! in_array( $thumb, $ids, true ) ) {
+			array_unshift( $ids, $thumb );
+		} elseif ( empty( $ids ) ) {
+			$ids[] = $thumb;
+		}
+	}
+
+	return array_values(
+		array_filter(
+			array_unique( $ids ),
+			static function ( $id ) {
+				return $id > 0 && wp_attachment_is_image( $id );
+			}
+		)
+	);
+}
+
+/**
+ * @param WP_Post $post Product.
+ */
+function arriva_merch_render_gallery( WP_Post $post ) {
+	$ids = arriva_merch_gallery_ids( $post );
+
+	echo '<div class="arriva-merch-single__gallery" data-arriva-merch-gallery>';
+
+	if ( empty( $ids ) ) {
+		echo '<div class="arriva-merch-single__stage arriva-merch-single__stage--empty" aria-hidden="true"></div>';
+		echo '</div>';
+		return;
+	}
+
+	$first = (int) $ids[0];
+	$full  = wp_get_attachment_image_url( $first, 'full' );
+	$large = wp_get_attachment_image_url( $first, 'large' );
+	$alt   = get_post_meta( $first, '_wp_attachment_image_alt', true );
+
+	echo '<div class="arriva-merch-single__stage">';
+	echo '<button type="button" class="arriva-merch-single__zoom" data-full="' . esc_url( $full ? $full : $large ) . '" aria-label="' . esc_attr__( 'Bild vergrößern', 'arriva' ) . '">';
+	echo wp_get_attachment_image( $first, 'large', false, array( 'class' => 'arriva-merch-single__image' ) );
+	echo '<span class="arriva-merch-single__zoom-hint">' . esc_html__( 'Vergrößern', 'arriva' ) . '</span>';
+	echo '</button>';
+	echo '</div>';
+
+	if ( count( $ids ) > 1 ) {
+		echo '<ul class="arriva-merch-single__thumbs" role="list">';
+		foreach ( $ids as $index => $id ) {
+			$id     = (int) $id;
+			$large  = wp_get_attachment_image_url( $id, 'large' );
+			$full   = wp_get_attachment_image_url( $id, 'full' );
+			$alt    = get_post_meta( $id, '_wp_attachment_image_alt', true );
+			$active = 0 === $index ? ' is-active' : '';
+			echo '<li><button type="button" class="arriva-merch-single__thumb' . esc_attr( $active ) . '" data-src="' . esc_url( $large ? $large : $full ) . '" data-full="' . esc_url( $full ) . '" data-alt="' . esc_attr( $alt ) . '" aria-current="' . ( 0 === $index ? 'true' : 'false' ) . '">';
+			echo wp_get_attachment_image( $id, 'thumbnail', false, array( 'class' => 'arriva-merch-single__thumb-img' ) );
+			echo '</button></li>';
+		}
+		echo '</ul>';
+	}
+
+	echo '</div>';
+}
+
+/**
  * Single product layout (meta + back link).
  *
  * @param string $content Post content.
@@ -215,41 +546,63 @@ function arriva_merch_single_content( $content ) {
 	$price = get_post_meta( $post->ID, ARRIVA_MERCH_PRICE_META, true );
 	$price = $price ? $price : __( 'Preis auf Anfrage', 'arriva' );
 
-	$options = arriva_merch_option_lines( $post );
-	$group   = arriva_merch_product_group( $post );
+	$colors   = arriva_merch_color_swatches( $post );
+	$specs    = arriva_merch_spec_lines( $post );
+	$excerpt  = has_excerpt( $post ) ? get_the_excerpt( $post ) : '';
 
 	ob_start();
 	echo '<article class="arriva-merch-single">';
 
 	echo '<div class="arriva-merch-single__layout">';
 
-	echo '<div class="arriva-merch-single__gallery">';
-	if ( has_post_thumbnail( $post ) ) {
-		echo '<figure class="arriva-merch-single__figure">';
-		echo get_the_post_thumbnail( $post, 'large', array( 'class' => 'arriva-merch-single__image' ) );
-		echo '</figure>';
-	} else {
-		echo '<div class="arriva-merch-single__figure arriva-merch-single__figure--empty" aria-hidden="true"></div>';
-	}
-	echo '</div>';
+	arriva_merch_render_gallery( $post );
 
-	echo '<aside class="arriva-merch-single__buy" aria-label="' . esc_attr__( 'Bestellinformationen', 'arriva' ) . '">';
-	if ( 'featured' === $group ) {
-		echo '<p class="arriva-merch-single__badge">' . esc_html__( 'Korrekturabzug', 'arriva' ) . '</p>';
+	echo '<aside class="arriva-merch-single__buy" aria-label="' . esc_attr__( 'Produktdetails', 'arriva' ) . '">';
+	echo '<h1 class="arriva-merch-single__title">' . esc_html( get_the_title( $post ) ) . '</h1>';
+
+	$badge = arriva_merch_badge_label( $post );
+	if ( $badge ) {
+		echo '<p class="arriva-merch-single__badge">' . esc_html( $badge ) . '</p>';
 	}
+
+	if ( $excerpt ) {
+		echo '<p class="arriva-merch-single__lead">' . esc_html( wp_strip_all_tags( $excerpt ) ) . '</p>';
+	}
+
 	echo '<p class="arriva-merch-single__price-row">';
 	echo '<span class="arriva-merch-single__price-label">' . esc_html__( 'Preis', 'arriva' ) . '</span>';
 	echo '<span class="arriva-merch-single__price">' . esc_html( $price ) . '</span>';
 	echo '</p>';
 
-	if ( $options ) {
-		echo '<div class="arriva-merch-single__options">';
-		echo '<h2 class="arriva-merch-single__options-title">' . esc_html__( 'Optionen', 'arriva' ) . '</h2>';
-		echo '<ul class="arriva-merch-single__options-list">';
-		foreach ( $options as $line ) {
-			echo '<li>' . esc_html( $line ) . '</li>';
+	if ( $colors ) {
+		echo '<div class="arriva-merch-single__colors">';
+		echo '<h2 class="arriva-merch-single__colors-title">' . esc_html__( 'Farben', 'arriva' ) . '</h2>';
+		echo '<ul class="arriva-merch-single__swatches" role="list">';
+		foreach ( $colors as $swatch ) {
+			$style = $swatch['hex'] ? '--arriva-swatch: ' . $swatch['hex'] : '';
+			echo '<li class="arriva-merch-single__swatch" style="' . esc_attr( $style ) . '" title="' . esc_attr( $swatch['label'] ) . '">';
+			echo '<span class="arriva-merch-single__swatch-dot" aria-hidden="true"></span>';
+			echo '<span class="arriva-merch-single__swatch-label">' . esc_html( $swatch['label'] ) . '</span>';
+			echo '</li>';
 		}
 		echo '</ul>';
+		echo '<p class="arriva-merch-single__colors-note">' . esc_html__( 'Farbauswahl bei Bestellung — keine Live-Vorschau.', 'arriva' ) . '</p>';
+		echo '</div>';
+	}
+
+	if ( $specs ) {
+		echo '<div class="arriva-merch-single__specs">';
+		echo '<h2 class="arriva-merch-single__specs-title">' . esc_html__( 'Details & Optionen', 'arriva' ) . '</h2>';
+		echo '<dl class="arriva-merch-single__spec-list">';
+		foreach ( $specs as $line ) {
+			if ( preg_match( '/^([^:]+):\s*(.+)$/', $line, $m ) ) {
+				echo '<dt>' . esc_html( trim( $m[1] ) ) . '</dt>';
+				echo '<dd>' . esc_html( trim( $m[2] ) ) . '</dd>';
+			} else {
+				echo '<dt class="arriva-merch-single__spec-solo">' . esc_html( $line ) . '</dt>';
+			}
+		}
+		echo '</dl>';
 		echo '</div>';
 	}
 
@@ -261,7 +614,7 @@ function arriva_merch_single_content( $content ) {
 
 	if ( trim( $content ) ) {
 		echo '<div class="arriva-merch-single__details">';
-		echo '<h2 class="arriva-merch-single__details-title">' . esc_html__( 'Beschreibung', 'arriva' ) . '</h2>';
+		echo '<h2 class="arriva-merch-single__details-title">' . esc_html__( 'Weitere Informationen', 'arriva' ) . '</h2>';
 		echo '<div class="arriva-merch-single__body">';
 		echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- filtered content.
 		echo '</div>';
@@ -271,6 +624,11 @@ function arriva_merch_single_content( $content ) {
 	echo '<nav class="arriva-merch-single__actions" aria-label="' . esc_attr__( 'Navigation', 'arriva' ) . '">';
 	echo '<a class="arriva-merch-single__back" href="' . esc_url( home_url( '/mitglieder/merch/' ) ) . '">' . esc_html__( '← Zurück zur Übersicht', 'arriva' ) . '</a>';
 	echo '</nav>';
+
+	echo '<dialog class="arriva-merch-lightbox" id="arriva-merch-lightbox" aria-label="' . esc_attr__( 'Produktbild', 'arriva' ) . '">';
+	echo '<button type="button" class="arriva-merch-lightbox__close" aria-label="' . esc_attr__( 'Schließen', 'arriva' ) . '">×</button>';
+	echo '<img class="arriva-merch-lightbox__img" alt="" decoding="async" />';
+	echo '</dialog>';
 
 	echo '</article>';
 

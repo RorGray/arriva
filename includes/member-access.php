@@ -284,6 +284,34 @@ function arriva_inject_member_nav_before_termine_title( $block_content, $block, 
 add_filter( 'render_block', 'arriva_inject_member_nav_before_termine_title', 10, 3 );
 
 /**
+ * Product singles: title and date are rendered in the PDP (plugin), not the theme template.
+ *
+ * @param string   $block_content Block HTML.
+ * @param array    $block         Block data.
+ * @param WP_Block $instance      Block instance.
+ * @return string
+ */
+function arriva_hide_merch_template_blocks( $block_content, $block, $instance ) {
+	if ( ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || is_admin() ) {
+		return $block_content;
+	}
+
+	if ( ! is_singular( ARRIVA_MERCH_POST_TYPE ) ) {
+		return $block_content;
+	}
+
+	$block_name = isset( $block['blockName'] ) ? $block['blockName'] : '';
+	$hide       = array( 'core/post-date', 'core/post-title', 'core/post-excerpt' );
+
+	if ( in_array( $block_name, $hide, true ) ) {
+		return '';
+	}
+
+	return $block_content;
+}
+add_filter( 'render_block', 'arriva_hide_merch_template_blocks', 10, 3 );
+
+/**
  * Body class for member-area layout CSS.
  *
  * @param string[] $classes Body classes.

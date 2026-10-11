@@ -27,7 +27,7 @@ $render_grid = static function ( array $posts ) {
 		$url     = get_permalink( $post );
 		$thumb   = get_the_post_thumbnail( $post, 'medium_large', array( 'class' => 'arriva-merch-shop__image' ) );
 		$excerpt = has_excerpt( $post ) ? get_the_excerpt( $post ) : '';
-		$group   = function_exists( 'arriva_merch_product_group' ) ? arriva_merch_product_group( $post ) : 'catalog';
+		$badge   = function_exists( 'arriva_merch_badge_label' ) ? arriva_merch_badge_label( $post ) : '';
 		$options = function_exists( 'arriva_merch_option_lines' ) ? arriva_merch_option_lines( $post ) : array();
 		$teaser  = $options ? $options[0] : '';
 
@@ -35,8 +35,8 @@ $render_grid = static function ( array $posts ) {
 		echo '<a class="arriva-merch-shop__card" href="' . esc_url( $url ) . '">';
 
 		echo '<div class="arriva-merch-shop__media">';
-		if ( 'featured' === $group ) {
-			echo '<span class="arriva-merch-shop__badge">' . esc_html__( 'Korrekturabzug', 'arriva' ) . '</span>';
+		if ( $badge ) {
+			echo '<span class="arriva-merch-shop__badge">' . esc_html( $badge ) . '</span>';
 		}
 		if ( $thumb ) {
 			echo $thumb; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
