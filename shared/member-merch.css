@@ -1,0 +1,127 @@
+/**
+ * Mitglieder → Vereinskleidung / Merch
+ */
+
+.arriva-merch__intro {
+	max-width: 46rem;
+	margin: 0 0 var(--wp--preset--spacing--40, 1.5rem);
+	line-height: 1.6;
+}
+
+.arriva-merch__notice {
+	margin: 0 0 var(--wp--preset--spacing--50, 2rem);
+	padding: var(--wp--preset--spacing--30, 1rem) var(--wp--preset--spacing--40, 1.25rem);
+	border-left: 4px solid var(--wp--preset--color--accent, #1a93a4);
+	border-radius: 0.5rem;
+	background: color-mix(in srgb, var(--wp--preset--color--accent, #1a93a4) 7%, var(--wp--preset--color--base, #fff));
+	font-size: 0.9375rem;
+	line-height: 1.55;
+}
+
+.arriva-merch__grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: var(--wp--preset--spacing--40, 1.5rem);
+	margin-bottom: var(--wp--preset--spacing--60, 2.5rem);
+}
+
+@media (max-width: 781px) {
+	.arriva-merch__grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+.arriva-merch__product {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	padding: var(--wp--preset--spacing--30, 1rem);
+	border: 1px solid var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.1));
+	border-radius: 0.75rem;
+	background: var(--wp--preset--color--base-2, #f6f5f1);
+	box-shadow: 0 8px 28px color-mix(in srgb, var(--wp--preset--color--contrast, #18222a) 4%, transparent);
+}
+
+.arriva-merch__product .wp-block-image {
+	margin: 0 0 var(--wp--preset--spacing--20, 0.75rem);
+}
+
+.arriva-merch__product .wp-block-image img {
+	border-radius: 0.5rem;
+	background: var(--wp--preset--color--base, #fff);
+}
+
+.arriva-merch__product-title {
+	margin: 0 0 0.35rem;
+	font-size: 1.125rem;
+	font-weight: 700;
+	line-height: 1.3;
+}
+
+.arriva-merch__price {
+	margin: 0 0 0.65rem;
+	font-size: 1rem;
+	font-weight: 600;
+	color: var(--wp--preset--color--contrast, inherit);
+}
+
+.arriva-merch__options {
+	margin: 0;
+	padding-left: 1.1rem;
+	font-size: 0.875rem;
+	line-height: 1.55;
+}
+
+.arriva-merch__options li {
+	margin-bottom: 0.25rem;
+}
+
+.arriva-merch__section-title {
+	margin: var(--wp--preset--spacing--50, 2rem) 0 var(--wp--preset--spacing--30, 1rem);
+	font-size: 1.25rem;
+}
+
+.arriva-merch__catalog {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: var(--wp--preset--spacing--40, 1.5rem);
+}
+
+@media (max-width: 781px) {
+	.arriva-merch__catalog {
+		grid-template-columns: 1fr;
+	}
+}
+
+.arriva-merch__catalog-item {
+	padding: var(--wp--preset--spacing--30, 1rem);
+	border: 1px solid var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.08));
+	border-radius: 0.75rem;
+	background: var(--wp--preset--color--base, #fff);
+}
+
+.arriva-merch__catalog-item .wp-block-image img {
+	border-radius: 0.35rem;
+}
+
+.arriva-merch__catalog-item h4 {
+	margin: 0.75rem 0 0.35rem;
+	font-size: 0.9375rem;
+	font-weight: 700;
+}
+
+.arriva-merch__swatches {
+	margin: 0;
+	font-size: 0.8125rem;
+	line-height: 1.5;
+	opacity: 0.88;
+}
+
+.arriva-merch__cta {
+	max-width: 36rem;
+	margin: var(--wp--preset--spacing--60, 2.5rem) auto 0;
+	padding: var(--wp--preset--spacing--40, 1.5rem);
+	text-align: center;
+	border-radius: 0.75rem;
+	background: var(--wp--preset--color--base-2, #f6f5f1);
+}

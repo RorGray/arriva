@@ -40,6 +40,11 @@ $links = array(
 		'url'   => home_url( '/mitglieder/dokumente/' ),
 		'key'   => 'dokumente',
 	),
+	array(
+		'label' => __( 'Merch', 'arriva' ),
+		'url'   => home_url( '/mitglieder/merch/' ),
+		'key'   => 'merch',
+	),
 );
 
 $current_path = trim( (string) parse_url( arriva_current_request_url(), PHP_URL_PATH ), '/' );
