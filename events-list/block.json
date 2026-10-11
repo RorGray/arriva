@@ -1,0 +1,31 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "arriva/events-list",
+	"title": "Events List",
+	"category": "widgets",
+	"icon": "list-view",
+	"description": "Full Termine list for a calendar year, grouped by type.",
+	"keywords": [ "termine", "events", "calendar" ],
+	"textdomain": "arriva",
+	"attributes": {
+		"year": {
+			"type": "number",
+			"default": 0
+		},
+		"heading": {
+			"type": "string",
+			"default": "Termine"
+		},
+		"showDisclaimer": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ]
+	},
+	"style": "file:./style.css",
+	"render": "file:./render.php"
+}

@@ -1,0 +1,29 @@
+.arriva-upcoming-events__heading {
+	margin: 0 0 1rem;
+	font-size: inherit;
+}
+
+.arriva-upcoming-events__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.arriva-upcoming-events__item {
+	margin: 0 0 0.65rem;
+	line-height: 1.5;
+}
+
+.arriva-upcoming-events__date {
+	font-weight: 600;
+}
+
+.arriva-upcoming-events__type {
+	font-size: 0.875em;
+	opacity: 0.75;
+}
+
+.arriva-upcoming-events__empty {
+	margin: 0;
+	opacity: 0.85;
+}
