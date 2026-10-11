@@ -22,5 +22,7 @@
 
 /* Pull the wave up by its height so a transparent top reveals the section above */
 .wp-block-arriva-wave-divider.is-overlap-previous {
+	position: relative;
+	z-index: 1;
 	margin-block-start: calc(-1 * var(--arriva-wave-height, 56px));
 }
