@@ -40,6 +40,7 @@ body:not(.block-editor-page) .wp-block-arriva-hero.is-fixed-scroll.is-layer-hidd
 
 .wp-block-arriva-hero .arriva-hero__inner {
 	position: relative;
+	box-sizing: border-box;
 	overflow: visible;
 	min-height: var(--arriva-hero-min-height);
 	padding-block: clamp(5rem, 12vw, 9rem) clamp(4rem, 9vw, 7rem);
