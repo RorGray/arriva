@@ -1,0 +1,40 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "arriva/protected-email",
+	"title": "Protected Email",
+	"category": "widgets",
+	"icon": "email",
+	"description": "Email button that assembles the address on click to reduce crawler harvesting.",
+	"keywords": [ "email", "contact", "mailto" ],
+	"textdomain": "arriva",
+	"attributes": {
+		"buttonLabel": {
+			"type": "string",
+			"default": "Nachricht schreiben"
+		},
+		"emailUser": {
+			"type": "string",
+			"default": ""
+		},
+		"emailDomain": {
+			"type": "string",
+			"default": ""
+		},
+		"helperText": {
+			"type": "string",
+			"default": "Die Adresse wird erst beim Klick zusammengesetzt, um automatisches Auslesen zu erschweren."
+		},
+		"noscriptText": {
+			"type": "string",
+			"default": "JavaScript ist deaktiviert. Bitte schreiben Sie an vorstand (at) arriva-speyer.de."
+		}
+	},
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ]
+	},
+	"editorScript": "file:./index.js",
+	"style": "file:./style.css",
+	"viewScript": "file:./view.js"
+}

@@ -1,0 +1,151 @@
+.wp-block-arriva-page-header {
+	--arriva-hero-bg: #18222a;
+	--arriva-hero-accent: #1a93a4;
+	--arriva-hero-accent-d: #117585;
+	--arriva-hero-glow: rgba(26, 147, 164, 0.28);
+	--arriva-hero-min-height: 340px;
+	position: relative;
+	overflow-x: clip;
+}
+
+.wp-block-arriva-page-header.alignfull {
+	width: 100dvw;
+	max-width: 100dvw;
+	margin-left: calc(50% - 50dvw);
+	margin-right: calc(50% - 50dvw);
+}
+
+.wp-block-arriva-page-header .arriva-page-header__layer {
+	position: relative;
+}
+
+.wp-block-arriva-page-header .arriva-hero__inner {
+	position: relative;
+	overflow: visible;
+	min-height: var(--arriva-hero-min-height);
+	padding-block: clamp(3rem, 8vw, 5rem);
+	background: var(--arriva-hero-bg);
+	background-size: cover;
+	background-position: center;
+	color: #fff;
+}
+
+.wp-block-arriva-page-header .arriva-hero__glow {
+	position: absolute;
+	inset: 0;
+	background: radial-gradient(
+		ellipse 55% 65% at 85% 20%,
+		var(--arriva-hero-glow) 0%,
+		transparent 65%
+	);
+	pointer-events: none;
+}
+
+.wp-block-arriva-page-header .arriva-hero__icon {
+	position: absolute;
+	right: clamp(2rem, 8vw, 8rem);
+	top: 50%;
+	transform: translateY(-50%);
+	opacity: 0.12;
+	pointer-events: none;
+}
+
+.wp-block-arriva-page-header .arriva-hero__icon-motion {
+	will-change: transform;
+	animation: arriva-page-header-float 4.5s ease-in-out infinite;
+}
+
+.wp-block-arriva-page-header .arriva-hero__icon svg {
+	width: clamp(140px, 20vw, 260px);
+	height: auto;
+	stroke: #fff;
+	fill: none;
+	stroke-width: 1;
+}
+
+.wp-block-arriva-page-header .arriva-hero__icon-img {
+	width: clamp(140px, 20vw, 260px);
+	height: auto;
+	object-fit: contain;
+}
+
+.wp-block-arriva-page-header .arriva-hero__wrap {
+	position: relative;
+	max-width: 1100px;
+	margin-inline: auto;
+	padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+.wp-block-arriva-page-header .arriva-hero__content.is-centered {
+	max-width: 720px;
+	margin-inline: auto;
+	text-align: center;
+}
+
+.wp-block-arriva-page-header .arriva-hero__eye {
+	font-size: 0.64rem;
+	font-weight: 700;
+	font-style: normal;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: rgba(255, 255, 255, 0.45);
+	margin-bottom: 1rem;
+	display: block;
+}
+
+.wp-block-arriva-page-header .arriva-hero__title {
+	font-size: clamp(2.25rem, 1.5rem + 3vw, 3.75rem);
+	font-weight: 500;
+	font-style: normal;
+	letter-spacing: -0.025em;
+	line-height: 1.08;
+	color: #fff;
+	margin: 0 0 1rem;
+}
+
+.wp-block-arriva-page-header .arriva-hero__sub {
+	font-size: clamp(1rem, 0.95rem + 0.35vw, 1.2rem);
+	font-style: normal;
+	color: rgba(255, 255, 255, 0.65);
+	max-width: 42ch;
+	line-height: 1.6;
+	margin: 0 auto;
+}
+
+@keyframes arriva-page-header-float {
+	0%,
+	100% {
+		transform: translate3d(0, 0, 0);
+	}
+	50% {
+		transform: translate3d(0, -6px, 0);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wp-block-arriva-page-header .arriva-hero__icon-motion {
+		animation: none;
+	}
+}
+
+@media (max-width: 720px) {
+	.wp-block-arriva-page-header .arriva-hero__icon {
+		top: auto;
+		right: auto;
+		left: 50%;
+		bottom: 0.75rem;
+		transform: translateX(-50%);
+		opacity: 0.14;
+	}
+
+	.wp-block-arriva-page-header .arriva-hero__sub {
+		max-width: none;
+	}
+}
+
+.block-editor-block-list__layout .wp-block-arriva-page-header.alignfull {
+	width: 100dvw;
+	max-width: 100dvw;
+	margin-left: calc(50% - 50dvw);
+	margin-right: calc(50% - 50dvw);
+}

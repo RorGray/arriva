@@ -1,0 +1,63 @@
+.wp-block-arriva-protected-email {
+	--arriva-email-accent: #1a93a4;
+	--arriva-email-accent-d: #117585;
+}
+
+.wp-block-arriva-protected-email .arriva-protected-email__btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 2.75rem;
+	padding: 0.65rem 1.35rem;
+	border: none;
+	border-radius: 999px;
+	background: var(--arriva-email-accent);
+	color: #fff;
+	font: inherit;
+	font-weight: 600;
+	font-style: normal;
+	line-height: 1.2;
+	cursor: pointer;
+	text-decoration: none;
+	transition: background 160ms ease-out, transform 160ms ease-out, box-shadow 160ms ease-out;
+}
+
+.wp-block-arriva-protected-email .arriva-protected-email__btn:hover {
+	background: var(--arriva-email-accent-d);
+	box-shadow: 0 8px 22px rgba(26, 147, 164, 0.28);
+}
+
+.wp-block-arriva-protected-email .arriva-protected-email__btn:focus-visible {
+	outline: 2px solid var(--arriva-email-accent-d);
+	outline-offset: 3px;
+}
+
+.wp-block-arriva-protected-email .arriva-protected-email__btn:active {
+	transform: translateY(1px);
+}
+
+.wp-block-arriva-protected-email .arriva-protected-email__btn:disabled {
+	opacity: 0.55;
+	cursor: not-allowed;
+	box-shadow: none;
+}
+
+.wp-block-arriva-protected-email .arriva-protected-email__note {
+	margin: 0.85rem 0 0;
+	font-size: 0.875rem;
+	line-height: 1.5;
+	color: inherit;
+	opacity: 0.85;
+}
+
+.wp-block-arriva-protected-email .arriva-protected-email__warning {
+	margin: 0.75rem 0 0;
+	font-size: 0.8125rem;
+	color: #9a3412;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wp-block-arriva-protected-email .arriva-protected-email__btn {
+		transition: none;
+	}
+}

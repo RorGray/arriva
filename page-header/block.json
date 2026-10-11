@@ -1,0 +1,71 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "arriva/page-header",
+	"title": "Page Header",
+	"category": "design",
+	"icon": "heading",
+	"description": "Compact Arriva page header for subpages (not the home hero). Hides the theme page title when present.",
+	"keywords": [ "header", "title", "banner", "page" ],
+	"textdomain": "arriva",
+	"attributes": {
+		"eyebrow": {
+			"type": "string",
+			"default": ""
+		},
+		"title": {
+			"type": "string",
+			"default": ""
+		},
+		"subtitle": {
+			"type": "string",
+			"default": ""
+		},
+		"backgroundColor": {
+			"type": "string",
+			"default": "#18222a"
+		},
+		"accentColor": {
+			"type": "string",
+			"default": "#1a93a4"
+		},
+		"accentDarkColor": {
+			"type": "string",
+			"default": "#117585"
+		},
+		"glowColor": {
+			"type": "string",
+			"default": "#1a93a4"
+		},
+		"iconUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"iconAlt": {
+			"type": "string",
+			"default": ""
+		},
+		"backgroundImageUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"minHeight": {
+			"type": "number",
+			"default": 340
+		},
+		"showIcon": {
+			"type": "boolean",
+			"default": true
+		},
+		"showGlow": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"supports": {
+		"html": false,
+		"align": [ "full", "wide" ]
+	},
+	"editorScript": "file:./index.js",
+	"style": "file:./style.css"
+}
