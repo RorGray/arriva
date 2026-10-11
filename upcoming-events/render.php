@@ -27,7 +27,11 @@ $posts = arriva_query_events(
 	)
 );
 
-$wrapper = get_block_wrapper_attributes( array( 'class' => 'arriva-upcoming-events' ) );
+$wrapper = get_block_wrapper_attributes(
+	array(
+		'class' => 'arriva-upcoming-events alignfull',
+	)
+);
 
 echo '<section ' . $wrapper . '>';
 echo '<div class="arriva-upcoming-events__inner">';

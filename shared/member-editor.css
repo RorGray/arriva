@@ -3,10 +3,19 @@
  */
 
 .editor-styles-wrapper {
+	--arriva-member-content-max: 1100px;
 	--arriva-member-gutter: var(--wp--preset--spacing--50, 2rem);
-	--arriva-member-column: min(1100px, calc(100% - 2 * var(--arriva-member-gutter)));
-	--wp--style--global--content-size: var(--arriva-member-column);
-	--wp--style--global--wide-size: var(--arriva-member-column);
+	--arriva-member-column: min(
+		var(--arriva-member-content-max),
+		calc(100vw - 2 * var(--arriva-member-gutter))
+	);
+	--wp--style--global--content-size: var(--arriva-member-column) !important;
+	--wp--style--global--wide-size: var(--arriva-member-column) !important;
+	box-sizing: border-box;
+	width: min(var(--arriva-member-content-max), calc(100% - 2 * var(--arriva-member-gutter)));
+	max-width: var(--arriva-member-content-max);
+	margin-inline: auto;
+	padding-inline: 0;
 }
 
 .editor-styles-wrapper .is-layout-constrained,
@@ -17,7 +26,15 @@
 }
 
 .editor-styles-wrapper .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
-	max-width: var(--arriva-member-column);
+	max-width: var(--arriva-member-column) !important;
+	margin-inline: auto !important;
+}
+
+.editor-styles-wrapper :is(.alignfull, .alignwide):not(.wp-block-arriva-page-header):not(.wp-block-arriva-wave-divider) {
+	width: 100% !important;
+	max-width: 100% !important;
+	margin-left: 0 !important;
+	margin-right: 0 !important;
 }
 
 .editor-styles-wrapper .wp-block-arriva-page-header .arriva-page-header__inner {
@@ -30,21 +47,8 @@
 .editor-styles-wrapper > .wp-block-group.alignfull.has-global-padding.is-layout-constrained {
 	padding-top: var(--wp--preset--spacing--30, 1rem) !important;
 	padding-bottom: var(--wp--preset--spacing--70, 2.5rem) !important;
-	padding-left: var(--arriva-member-gutter) !important;
-	padding-right: var(--arriva-member-gutter) !important;
-}
-
-@media (max-width: 781px) {
-	.editor-styles-wrapper {
-		padding-inline: var(--arriva-member-gutter) !important;
-		box-sizing: border-box;
-	}
-
-	.editor-styles-wrapper > .wp-block-group.alignfull.has-global-padding.is-layout-constrained,
-	.editor-styles-wrapper .wp-block-group.arriva-member-layout.alignfull {
-		padding-left: 0 !important;
-		padding-right: 0 !important;
-	}
+	padding-left: 0 !important;
+	padding-right: 0 !important;
 }
 
 .editor-styles-wrapper .arriva-member-layout .arriva-member-nav-bar--content,

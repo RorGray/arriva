@@ -15,7 +15,7 @@
 			var attributes = props.attributes;
 			var setAttributes = props.setAttributes;
 			var blockProps = useBlockProps( {
-				className: 'arriva-upcoming-events-editor',
+				className: 'arriva-upcoming-events-editor alignfull',
 			} );
 
 			return el(

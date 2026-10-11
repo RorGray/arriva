@@ -35,6 +35,16 @@
 		} );
 	} );
 
+	var scrollLockClass = 'arriva-merch-lightbox-open';
+
+	function lockPageScroll() {
+		document.documentElement.classList.add( scrollLockClass );
+	}
+
+	function unlockPageScroll() {
+		document.documentElement.classList.remove( scrollLockClass );
+	}
+
 	function openLightbox() {
 		if ( ! dialog || ! dialogImg || ! mainImg ) {
 			return;
@@ -47,6 +57,7 @@
 		dialogImg.alt = mainImg.alt;
 		if ( typeof dialog.showModal === 'function' ) {
 			dialog.showModal();
+			lockPageScroll();
 		}
 	}
 
@@ -73,8 +84,11 @@
 				closeLightbox();
 			}
 		} );
-		dialog.addEventListener( 'cancel', function () {
-			dialogImg.removeAttribute( 'src' );
+		dialog.addEventListener( 'close', function () {
+			unlockPageScroll();
+			if ( dialogImg ) {
+				dialogImg.removeAttribute( 'src' );
+			}
 		} );
 	}
 } )();

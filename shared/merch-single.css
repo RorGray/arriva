@@ -322,6 +322,12 @@
 	color: var(--wp--preset--color--accent, #1a93a4);
 }
 
+html.arriva-merch-lightbox-open,
+html.arriva-merch-lightbox-open body {
+	overflow: hidden;
+	overscroll-behavior: none;
+}
+
 .arriva-merch-lightbox {
 	max-width: min(96vw, 56rem);
 	width: 100%;

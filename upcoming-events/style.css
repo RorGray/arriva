@@ -3,7 +3,6 @@
 	padding: 0.75rem 1rem;
 	border: 1px dashed var(--wp--preset--color--accent);
 	border-radius: 0.5rem;
-	background: color-mix(in srgb, var(--wp--preset--color--accent) 6%, transparent);
 }
 
 .arriva-upcoming-events-editor__label {
@@ -12,18 +11,22 @@
 	line-height: 1.45;
 }
 
-/* Dark band from the theme palette (contrast = deep slate, base = default light). */
+/* Background comes from the block colour control. Band is always viewport-wide. */
 .wp-block-arriva-upcoming-events {
-	background: var(--wp--preset--color--contrast);
-	color: var(--wp--preset--color--base);
-	padding-block: clamp(3.5rem, 8vw, 6rem);
-}
-
-.wp-block-arriva-upcoming-events.alignfull {
 	width: 100dvw;
 	max-width: 100dvw;
 	margin-left: calc(50% - 50dvw);
 	margin-right: calc(50% - 50dvw);
+	padding-block: clamp(3.5rem, 8vw, 6rem);
+	box-sizing: border-box;
+}
+
+.wp-block-arriva-upcoming-events:not(.has-background) {
+	background-color: var(--wp--preset--color--contrast);
+}
+
+.wp-block-arriva-upcoming-events:not(.has-text-color) {
+	color: var(--wp--preset--color--base);
 }
 
 .arriva-upcoming-events__inner {
@@ -39,7 +42,7 @@
 	letter-spacing: 0.18em;
 	line-height: 1.2;
 	text-transform: uppercase;
-	color: color-mix(in srgb, var(--wp--preset--color--base) 40%, transparent);
+	color: color-mix(in srgb, currentColor 40%, transparent);
 }
 
 .arriva-upcoming-events__heading {
@@ -50,7 +53,7 @@
 	font-style: normal;
 	letter-spacing: -0.015em;
 	line-height: 1.1;
-	color: var(--wp--preset--color--base);
+	color: inherit;
 }
 
 .arriva-upcoming-events__intro {
@@ -58,7 +61,7 @@
 	max-width: 52ch;
 	font-size: 1rem;
 	line-height: 1.7;
-	color: color-mix(in srgb, var(--wp--preset--color--base) 50%, transparent);
+	color: color-mix(in srgb, currentColor 50%, transparent);
 }
 
 .arriva-upcoming-events__list {
@@ -80,17 +83,17 @@
 	align-items: center;
 	gap: 1rem;
 	padding: 1rem 1.5rem;
-	border: 1px solid color-mix(in srgb, var(--wp--preset--color--base) 8%, transparent);
+	border: 1px solid color-mix(in srgb, currentColor 8%, transparent);
 	border-radius: 16px;
-	background: color-mix(in srgb, var(--wp--preset--color--base) 5%, transparent);
-	color: var(--wp--preset--color--base);
+	background: color-mix(in srgb, currentColor 5%, transparent);
+	color: inherit;
 	text-decoration: none;
 	transition: background 0.15s ease;
 }
 
 .arriva-upcoming-events__card:hover {
-	background: color-mix(in srgb, var(--wp--preset--color--base) 9%, transparent);
-	color: var(--wp--preset--color--base);
+	background: color-mix(in srgb, currentColor 9%, transparent);
+	color: inherit;
 }
 
 .arriva-upcoming-events__card:focus-visible {
@@ -123,7 +126,7 @@
 	font-weight: 700;
 	letter-spacing: 0.1em;
 	text-transform: uppercase;
-	color: color-mix(in srgb, var(--wp--preset--color--base) 75%, transparent);
+	color: color-mix(in srgb, currentColor 75%, transparent);
 }
 
 .arriva-upcoming-events__title {
@@ -132,27 +135,27 @@
 	font-size: 0.875rem;
 	font-weight: 600;
 	line-height: 1.3;
-	color: var(--wp--preset--color--base);
+	color: inherit;
 }
 
 .arriva-upcoming-events__detail {
 	display: block;
 	font-size: 0.75rem;
 	line-height: 1.4;
-	color: color-mix(in srgb, var(--wp--preset--color--base) 45%, transparent);
+	color: color-mix(in srgb, currentColor 45%, transparent);
 }
 
 .arriva-upcoming-events__type {
 	padding: 0.28rem 0.7rem;
-	border: 1px solid color-mix(in srgb, var(--wp--preset--color--base) 12%, transparent);
+	border: 1px solid color-mix(in srgb, currentColor 12%, transparent);
 	border-radius: 999px;
-	background: color-mix(in srgb, var(--wp--preset--color--base) 8%, transparent);
+	background: color-mix(in srgb, currentColor 8%, transparent);
 	font-size: 0.6rem;
 	font-weight: 700;
 	letter-spacing: 0.08em;
 	line-height: 1.2;
 	text-transform: uppercase;
-	color: color-mix(in srgb, var(--wp--preset--color--base) 60%, transparent);
+	color: color-mix(in srgb, currentColor 60%, transparent);
 	white-space: nowrap;
 }
 
@@ -169,21 +172,21 @@
 	gap: 0.4rem;
 	margin-top: 2rem;
 	padding: 0.72rem 1.55rem;
-	border: 1.5px solid color-mix(in srgb, var(--wp--preset--color--base) 25%, transparent);
+	border: 1.5px solid color-mix(in srgb, currentColor 25%, transparent);
 	border-radius: 999px;
 	background: transparent;
 	font-size: 0.875rem;
 	font-weight: 600;
 	line-height: 1;
 	text-decoration: none;
-	color: color-mix(in srgb, var(--wp--preset--color--base) 80%, transparent);
+	color: color-mix(in srgb, currentColor 80%, transparent);
 	transition: border-color 0.15s ease, color 0.15s ease;
 }
 
 .arriva-upcoming-events__more:hover,
 .arriva-upcoming-events__more:focus-visible {
-	border-color: color-mix(in srgb, var(--wp--preset--color--base) 60%, transparent);
-	color: var(--wp--preset--color--base);
+	border-color: color-mix(in srgb, currentColor 60%, transparent);
+	color: inherit;
 }
 
 .arriva-upcoming-events__more:focus-visible {
@@ -193,7 +196,7 @@
 
 .arriva-upcoming-events__empty {
 	margin: clamp(2rem, 4vw, 3.5rem) 0 0;
-	color: color-mix(in srgb, var(--wp--preset--color--base) 70%, transparent);
+	color: color-mix(in srgb, currentColor 70%, transparent);
 }
 
 @media (max-width: 560px) {
@@ -210,7 +213,7 @@
 	}
 }
 
-.block-editor-block-list__layout .wp-block-arriva-upcoming-events.alignfull {
+.block-editor-block-list__layout .wp-block-arriva-upcoming-events {
 	width: 100dvw;
 	max-width: 100dvw;
 	margin-left: calc(50% - 50dvw);

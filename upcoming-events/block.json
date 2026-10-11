@@ -32,11 +32,23 @@
 		"moreUrl": {
 			"type": "string",
 			"default": ""
+		},
+		"backgroundColor": {
+			"type": "string",
+			"default": "contrast"
+		},
+		"textColor": {
+			"type": "string",
+			"default": "base"
 		}
 	},
 	"supports": {
 		"html": false,
-		"align": [ "wide", "full" ]
+		"align": [ "full", "wide" ],
+		"color": {
+			"background": true,
+			"text": true
+		}
 	},
 	"editorScript": "file:./index.js",
 	"style": "file:./style.css",
