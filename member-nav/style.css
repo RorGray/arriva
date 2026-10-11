@@ -12,6 +12,20 @@
 	line-height: 1.45;
 }
 
+/* Injected above Termin title (outside post content). */
+.arriva-member-nav-bar {
+	margin: 0;
+	padding: var(--wp--preset--spacing--30, 1rem) var(--wp--preset--spacing--50, 2rem)
+		var(--wp--preset--spacing--20, 0.75rem);
+}
+
+.arriva-member-nav-bar .arriva-member-nav {
+	margin: 0;
+	padding-bottom: var(--wp--preset--spacing--20, 0.75rem);
+	border-bottom: 1px solid var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.12));
+}
+
+/* Inside Mitglieder page content (below page header / wave). */
 .arriva-member-nav {
 	margin: 0 0 var(--wp--preset--spacing--40, 1.5rem);
 	padding-bottom: var(--wp--preset--spacing--20, 0.75rem);

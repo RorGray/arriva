@@ -173,30 +173,56 @@ function arriva_restrict_events_rest_dispatch( $result, $server, $request ) {
 add_filter( 'rest_pre_dispatch', 'arriva_restrict_events_rest_dispatch', 10, 3 );
 
 /**
- * Show member sub-nav on single Termin views (theme has no CPT template).
+ * Markup: full-width member sub-nav (Termin templates — outside post content).
  *
- * @param string $content Post content.
  * @return string
  */
-function arriva_prepend_member_nav_on_event_singular( $content ) {
+function arriva_member_nav_bar_markup() {
+	return do_blocks(
+		'<!-- wp:group {"align":"full","className":"arriva-member-nav-bar","layout":{"type":"constrained","contentSize":"720px"}} -->
+<!-- wp:arriva/member-nav /-->
+<!-- /wp:group -->'
+	);
+}
+
+/**
+ * Inject member nav above the title on Termin singles/archives (not inside post content).
+ *
+ * @param string   $block_content Block HTML.
+ * @param array    $block         Block data.
+ * @param WP_Block $instance      Block instance.
+ * @return string
+ */
+function arriva_inject_member_nav_before_termine_title( $block_content, $block, $instance ) {
 	if ( ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || is_admin() ) {
-		return $content;
+		return $block_content;
 	}
 
-	if ( ! is_singular( ARRIVA_EVENT_POST_TYPE ) || ! is_user_logged_in() ) {
-		return $content;
+	if ( ! is_user_logged_in() ) {
+		return $block_content;
 	}
 
-	if ( ! in_the_loop() || ! is_main_query() ) {
-		return $content;
+	$block_name = isset( $block['blockName'] ) ? $block['blockName'] : '';
+	$inject     = false;
+
+	if ( 'core/post-title' === $block_name && is_singular( ARRIVA_EVENT_POST_TYPE ) ) {
+		$inject = true;
+	}
+
+	if ( 'core/query-title' === $block_name && is_post_type_archive( ARRIVA_EVENT_POST_TYPE ) ) {
+		$inject = true;
+	}
+
+	if ( ! $inject ) {
+		return $block_content;
 	}
 
 	static $done = false;
 	if ( $done ) {
-		return $content;
+		return $block_content;
 	}
 	$done = true;
 
-	return do_blocks( '<!-- wp:arriva/member-nav /-->' ) . $content;
+	return arriva_member_nav_bar_markup() . $block_content;
 }
-add_filter( 'the_content', 'arriva_prepend_member_nav_on_event_singular', 8 );
+add_filter( 'render_block', 'arriva_inject_member_nav_before_termine_title', 10, 3 );
