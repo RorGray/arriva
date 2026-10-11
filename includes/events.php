@@ -8,7 +8,10 @@ defined( 'ABSPATH' ) || exit;
 const ARRIVA_EVENT_DATE_META = 'arriva_event_date';
 const ARRIVA_EVENT_TYPE_TAX  = 'arriva_event_type';
 
-add_action( 'init', function () {
+/**
+ * Register CPT + taxonomy (also called on plugin activation before flush_rewrite_rules).
+ */
+function arriva_register_events_content_types() {
 	register_post_type(
 		'arriva_event',
 		array(
@@ -74,7 +77,9 @@ add_action( 'init', function () {
 			},
 		)
 	);
-} );
+}
+
+add_action( 'init', 'arriva_register_events_content_types' );
 
 /**
  * @param mixed $value Meta value.
