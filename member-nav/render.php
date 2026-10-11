@@ -44,6 +44,8 @@ $links = array(
 
 $current_path = trim( (string) parse_url( arriva_current_request_url(), PHP_URL_PATH ), '/' );
 
+echo '<div class="arriva-member-nav-bar arriva-member-nav-bar--content">';
+
 $wrapper = get_block_wrapper_attributes(
 	array(
 		'class' => 'arriva-member-nav',
@@ -75,4 +77,4 @@ foreach ( $links as $link ) {
 	);
 }
 
-echo '</ul></nav>';
+echo '</ul></nav></div>';

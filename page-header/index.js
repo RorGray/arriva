@@ -93,13 +93,8 @@
 				renderInner( attributes, true, setAttributes )
 			);
 		},
-		save: function ( props ) {
-			var blockProps = useBlockProps.save();
-			return el(
-				'div',
-				blockProps,
-				renderInner( props.attributes, false, null )
-			);
+		save: function () {
+			return null;
 		},
 	} );
 } )();

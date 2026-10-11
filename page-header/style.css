@@ -21,6 +21,11 @@
 	border-bottom: 3px solid var(--wp--preset--color--accent);
 }
 
+body.arriva-mitglied-area .wp-block-arriva-page-header .arriva-page-header__inner {
+	max-width: min(1100px, calc(100% - 2.5rem));
+	padding-inline: var(--wp--preset--spacing--50, 2rem);
+}
+
 .wp-block-arriva-page-header .arriva-page-header__eyebrow {
 	margin: 0 0 0.35rem;
 	font-size: 0.6875rem;

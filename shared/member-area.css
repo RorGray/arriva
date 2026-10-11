@@ -1,18 +1,51 @@
 /**
- * Mitgliederbereich — align main column with site wide size (1100px).
+ * Mitgliederbereich — one column width and consistent spacing.
  */
+
+body.arriva-mitglied-area {
+	--arriva-member-column: min(1100px, calc(100% - 2.5rem));
+}
 
 body.arriva-mitglied-area main .wp-block-group.arriva-member-layout.is-layout-constrained,
 body.arriva-mitglied-area .arriva-member-nav-bar.is-layout-constrained {
-	--wp--style--global--content-size: min(1100px, 100% - 2.5rem);
+	--wp--style--global--content-size: var(--arriva-member-column);
+}
+
+/* Page header title band: same horizontal alignment as member content. */
+body.arriva-mitglied-area .wp-block-arriva-page-header .arriva-page-header__inner {
+	max-width: var(--arriva-member-column);
+	margin-inline: auto;
+	padding-inline: var(--wp--preset--spacing--50, 2rem);
+}
+
+/* Member content shell — one gutter on mobile/desktop (match Termine/Dokumente). */
+body.arriva-mitglied-area main .wp-block-group.arriva-member-layout.alignfull,
+body.arriva-mitglied-area main .wp-block-post-content > .wp-block-group.alignfull.has-global-padding.is-layout-constrained {
+	padding-top: var(--wp--preset--spacing--30, 1rem) !important;
+	padding-bottom: var(--wp--preset--spacing--70, 2.5rem) !important;
+	padding-left: var(--wp--preset--spacing--50, 2rem) !important;
+	padding-right: var(--wp--preset--spacing--50, 2rem) !important;
+}
+
+body.arriva-mitglied-area.page-mitglieder main .wp-block-post-content > .wp-block-group.alignfull.has-global-padding.is-layout-constrained {
+	padding-bottom: var(--wp--preset--spacing--30, 1rem) !important;
+}
+
+/* Breadcrumbs / template intro above page content (theme blocks). */
+body.arriva-mitglied-area main > .wp-block-group.has-global-padding.is-layout-constrained:first-child,
+body.arriva-mitglied-area main > .wp-block-group.is-layout-constrained:first-child:not(.arriva-member-layout) {
+	max-width: var(--arriva-member-column);
+	margin-inline: auto;
+	padding-inline: var(--wp--preset--spacing--50, 2rem);
 }
 
 /* Termin & Produkt detail templates (theme default is often ~620px). */
 body.arriva-mitglied-area.single-arriva_event main,
 body.arriva-mitglied-area.single-arriva_merch main {
-	width: min(1100px, calc(100% - 2.5rem));
+	width: var(--arriva-member-column);
 	max-width: none;
 	margin-inline: auto;
+	padding-inline: var(--wp--preset--spacing--50, 2rem);
 }
 
 body.arriva-mitglied-area.single-arriva_event main .wp-block-post-content,

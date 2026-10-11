@@ -287,23 +287,8 @@
 				)
 			);
 		},
-		save: function ( props ) {
-			var attributes = props.attributes;
-			var shape = attributes.shape;
-			var offset = attributes.offset;
-			var bottomColor = attributes.bottomColor;
-			var blockProps = useBlockProps.save( blockPropsFor( attributes, shape ) );
-
-			return el(
-				'div',
-				blockProps,
-				waveSvg(
-					shape,
-					bottomColor,
-					offset,
-					patternId( shape, bottomColor, offset, '' )
-				)
-			);
+		save: function () {
+			return null;
 		},
 	} );
 } )();
