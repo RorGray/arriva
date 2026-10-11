@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Arriva
  * Description: Custom Gutenberg blocks for Arriva Speyer e.V.
- * Version: 1.8.2
+ * Version: 1.8.4
  * Author: Arriva Speyer e.V.
  * License: GPL-2.0-or-later
  * Text Domain: arriva
@@ -122,4 +122,48 @@ add_action( 'wp_enqueue_scripts', function () {
 
 add_action( 'enqueue_block_editor_assets', function () {
 	wp_enqueue_script( 'arriva-formats' );
+
+	$post_id = get_the_ID();
+	if ( ! $post_id || 'page' !== get_post_type( $post_id ) ) {
+		return;
+	}
+
+	if ( ! function_exists( 'arriva_is_mitglied_hub_or_subpage' ) || ! arriva_is_mitglied_hub_or_subpage( $post_id ) ) {
+		return;
+	}
+
+	wp_enqueue_style(
+		'arriva-member-editor',
+		plugins_url( 'shared/member-editor.css', __FILE__ ),
+		array(),
+		ARRIVA_VERSION
+	);
+
+	wp_enqueue_style(
+		'arriva-member-nav',
+		plugins_url( 'member-nav/style.css', __FILE__ ),
+		array( 'arriva-member-editor' ),
+		ARRIVA_VERSION
+	);
+
+	$page = get_post( $post_id );
+	$slug = $page ? $page->post_name : '';
+
+	if ( 'vorstand' === $slug ) {
+		wp_enqueue_style(
+			'arriva-member-vorstand',
+			plugins_url( 'shared/member-vorstand.css', __FILE__ ),
+			array( 'arriva-member-editor' ),
+			ARRIVA_VERSION
+		);
+	}
+
+	if ( 'merch' === $slug ) {
+		wp_enqueue_style(
+			'arriva-merch-catalog',
+			plugins_url( 'merch-catalog/style.css', __FILE__ ),
+			array( 'arriva-member-editor' ),
+			ARRIVA_VERSION
+		);
+	}
 } );

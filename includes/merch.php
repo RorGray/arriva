@@ -36,11 +36,15 @@ function arriva_register_merch_content_type() {
 			'show_in_rest'        => true,
 			'rest_base'           => 'arriva-merch',
 			'menu_icon'           => 'dashicons-tag',
-			'supports'            => array( 'title', 'editor', 'excerpt', 'thumbnail' ),
+			'supports'            => array( 'title', 'editor', 'excerpt', 'thumbnail', 'page-attributes' ),
 			'capability_type'     => 'post',
 			'exclude_from_search' => true,
 		)
 	);
+
+	$meta_auth = static function () {
+		return current_user_can( 'edit_posts' );
+	};
 
 	register_post_meta(
 		ARRIVA_MERCH_POST_TYPE,
@@ -49,6 +53,7 @@ function arriva_register_merch_content_type() {
 			'type'              => 'string',
 			'single'            => true,
 			'show_in_rest'      => true,
+			'auth_callback'     => $meta_auth,
 			'sanitize_callback' => 'sanitize_text_field',
 		)
 	);
@@ -60,6 +65,7 @@ function arriva_register_merch_content_type() {
 			'type'              => 'string',
 			'single'            => true,
 			'show_in_rest'      => true,
+			'auth_callback'     => $meta_auth,
 			'sanitize_callback' => 'sanitize_textarea_field',
 		)
 	);
@@ -72,6 +78,7 @@ function arriva_register_merch_content_type() {
 			'single'            => true,
 			'show_in_rest'      => true,
 			'default'           => 'featured',
+			'auth_callback'     => $meta_auth,
 			'sanitize_callback' => function ( $value ) {
 				return in_array( $value, array( 'featured', 'catalog' ), true ) ? $value : 'featured';
 			},
@@ -82,28 +89,83 @@ function arriva_register_merch_content_type() {
 add_action( 'init', 'arriva_register_merch_content_type' );
 
 /**
+ * Featured products when Gruppe meta was never saved (e.g. REST import before auth_callback).
+ *
+ * @return string[]
+ */
+function arriva_merch_featured_slugs_fallback() {
+	return array(
+		'hybrid-jacke-navy',
+		'hybrid-jacke-schwarz',
+		'jogginghose-version-1',
+		'jogginghose-version-2',
+	);
+}
+
+/**
+ * @param WP_Post $post Product.
+ * @return string featured|catalog
+ */
+function arriva_merch_product_group( WP_Post $post ) {
+	$stored = get_post_meta( $post->ID, ARRIVA_MERCH_GROUP_META, true );
+	if ( is_string( $stored ) && in_array( $stored, array( 'featured', 'catalog' ), true ) ) {
+		return $stored;
+	}
+
+	return in_array( $post->post_name, arriva_merch_featured_slugs_fallback(), true ) ? 'featured' : 'catalog';
+}
+
+/**
+ * @param WP_Post[] $posts Products.
+ * @return WP_Post[]
+ */
+function arriva_merch_sort_products( array $posts ) {
+	$order = array_flip( arriva_merch_featured_slugs_fallback() );
+
+	usort(
+		$posts,
+		static function ( WP_Post $a, WP_Post $b ) use ( $order ) {
+			$oa = isset( $order[ $a->post_name ] ) ? (int) $order[ $a->post_name ] : 1000;
+			$ob = isset( $order[ $b->post_name ] ) ? (int) $order[ $b->post_name ] : 1000;
+
+			if ( $oa === $ob ) {
+				return strcasecmp( $a->post_title, $b->post_title );
+			}
+
+			return $oa <=> $ob;
+		}
+	);
+
+	return $posts;
+}
+
+/**
  * @param string $group featured|catalog|'' for all.
  * @return WP_Post[]
  */
 function arriva_query_merch( $group = '' ) {
-	$args = array(
-		'post_type'      => ARRIVA_MERCH_POST_TYPE,
-		'post_status'    => 'publish',
-		'posts_per_page' => -1,
-		'orderby'        => 'menu_order title',
-		'order'          => 'ASC',
+	$posts = get_posts(
+		array(
+			'post_type'      => ARRIVA_MERCH_POST_TYPE,
+			'post_status'    => 'publish',
+			'posts_per_page' => -1,
+			'orderby'        => array( 'menu_order' => 'ASC', 'title' => 'ASC' ),
+			'order'          => 'ASC',
+		)
 	);
 
-	if ( $group ) {
-		$args['meta_query'] = array(
-			array(
-				'key'   => ARRIVA_MERCH_GROUP_META,
-				'value' => $group,
-			),
-		);
+	if ( ! $group ) {
+		return arriva_merch_sort_products( $posts );
 	}
 
-	return get_posts( $args );
+	$filtered = array();
+	foreach ( $posts as $post ) {
+		if ( arriva_merch_product_group( $post ) === $group ) {
+			$filtered[] = $post;
+		}
+	}
+
+	return arriva_merch_sort_products( $filtered );
 }
 
 /**

@@ -45,6 +45,25 @@ function arriva_mitglieder_page_id() {
 
 /**
  * @param int|null $post_id Page ID.
+ * @return bool Mitglieder hub or any child/descendant page.
+ */
+function arriva_is_mitglied_hub_or_subpage( $post_id = null ) {
+	$post_id = $post_id ?? get_queried_object_id();
+	$hub     = arriva_mitglieder_page_id();
+
+	if ( ! $hub || ! $post_id ) {
+		return false;
+	}
+
+	if ( (int) $post_id === $hub ) {
+		return true;
+	}
+
+	return arriva_is_mitglied_subpage( $post_id );
+}
+
+/**
+ * @param int|null $post_id Page ID.
  * @return bool True when page is a child/descendant of Mitglieder (not the hub itself).
  */
 function arriva_is_mitglied_subpage( $post_id = null ) {
@@ -275,6 +294,55 @@ function arriva_mitglied_area_body_class( $classes ) {
 		$classes[] = 'arriva-mitglied-area';
 	}
 
+	if ( is_singular( 'page' ) && arriva_page_has_block( 'arriva/page-header' ) ) {
+		$classes[] = 'arriva-has-page-header';
+	}
+
 	return $classes;
 }
 add_filter( 'body_class', 'arriva_mitglied_area_body_class' );
+
+/**
+ * @param int|null $post_id Post ID.
+ * @param string   $block   Block name (e.g. arriva/page-header).
+ * @return bool
+ */
+function arriva_page_has_block( $block, $post_id = null ) {
+	$post_id = $post_id ?? get_queried_object_id();
+	if ( ! $post_id ) {
+		return false;
+	}
+
+	$content = get_post_field( 'post_content', $post_id );
+	if ( ! is_string( $content ) || '' === $content ) {
+		return false;
+	}
+
+	return false !== strpos( $content, 'wp:' . $block );
+}
+
+/**
+ * Editor body classes for Mitglieder page editing.
+ *
+ * @param string $classes Space-separated admin body classes.
+ * @return string
+ */
+function arriva_member_editor_admin_body_class( $classes ) {
+	$post_id = get_the_ID();
+	if ( ! $post_id || 'page' !== get_post_type( $post_id ) ) {
+		return $classes;
+	}
+
+	if ( ! arriva_is_mitglied_hub_or_subpage( $post_id ) ) {
+		return $classes;
+	}
+
+	$classes .= ' arriva-member-editor';
+
+	if ( arriva_page_has_block( 'arriva/page-header', $post_id ) ) {
+		$classes .= ' arriva-member-editor-has-page-header';
+	}
+
+	return $classes;
+}
+add_filter( 'admin_body_class', 'arriva_member_editor_admin_body_class' );

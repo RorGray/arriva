@@ -6,6 +6,12 @@ body.arriva-mitglied-area {
 	--arriva-member-column: min(1100px, calc(100% - 2.5rem));
 }
 
+/* Page-header block already provides the H1. */
+body.arriva-mitglied-area.arriva-has-page-header main .wp-block-post-title,
+body.arriva-mitglied-area.arriva-has-page-header main .entry-header .wp-block-post-title {
+	display: none;
+}
+
 body.arriva-mitglied-area main .wp-block-group.arriva-member-layout.is-layout-constrained,
 body.arriva-mitglied-area .arriva-member-nav-bar.is-layout-constrained {
 	--wp--style--global--content-size: var(--arriva-member-column);
