@@ -205,12 +205,65 @@ function arriva_format_event_date( WP_Post $post ) {
 }
 
 /**
+ * Day and short month for the event date tile.
+ *
+ * @param WP_Post $post Event post.
+ * @return array{iso: string, day: string, month: string}|null
+ */
+function arriva_event_date_badge( WP_Post $post ) {
+	$iso = get_post_meta( $post->ID, ARRIVA_EVENT_DATE_META, true );
+	if ( ! is_string( $iso ) || '' === $iso ) {
+		return null;
+	}
+	$ts = strtotime( $iso . ' 12:00:00' );
+	if ( ! $ts ) {
+		return null;
+	}
+	return array(
+		'iso'   => $iso,
+		'day'   => wp_date( 'd', $ts ),
+		'month' => wp_date( 'M', $ts ),
+	);
+}
+
+/**
  * @param WP_Post $post Event post.
  * @return string
  */
 function arriva_event_type_label( WP_Post $post ) {
 	$term = arriva_get_event_type_term( $post );
 	return $term ? $term->name : '';
+}
+
+/**
+ * Colour variant for a Termin-Typ pill. Unknown types use the accent outline.
+ *
+ * @param WP_Post $post Event post.
+ * @return string public|sport|internal|youth|default|empty
+ */
+function arriva_event_type_variant( WP_Post $post ) {
+	$term = arriva_get_event_type_term( $post );
+	if ( ! $term ) {
+		return '';
+	}
+
+	$known = array(
+		'oeffentlich' => 'public',
+		'offentlich'  => 'public',
+		'public'      => 'public',
+		'sport'       => 'sport',
+		'intern'      => 'internal',
+		'interne'     => 'internal',
+		'jugend'      => 'youth',
+	);
+
+	$slug = sanitize_title( $term->slug );
+	if ( isset( $known[ $slug ] ) ) {
+		return $known[ $slug ];
+	}
+
+	$name = sanitize_title( $term->name );
+	return isset( $known[ $name ] ) ? $known[ $name ] : 'default';
 }
 
 /**

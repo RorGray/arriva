@@ -532,7 +532,12 @@ function arriva_merch_single_content( $content ) {
 		return $content;
 	}
 
-	if ( ! is_singular( ARRIVA_MERCH_POST_TYPE ) || ! in_the_loop() || ! is_main_query() ) {
+	if ( ! is_singular( ARRIVA_MERCH_POST_TYPE ) ) {
+		return $content;
+	}
+
+	$post = get_post();
+	if ( ! $post instanceof WP_Post || ARRIVA_MERCH_POST_TYPE !== $post->post_type ) {
 		return $content;
 	}
 
@@ -541,8 +546,6 @@ function arriva_merch_single_content( $content ) {
 		return $content;
 	}
 	$done = true;
-
-	$post  = get_post();
 	$price = get_post_meta( $post->ID, ARRIVA_MERCH_PRICE_META, true );
 	$price = $price ? $price : __( 'Preis auf Anfrage', 'arriva' );
 

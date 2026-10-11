@@ -3,26 +3,48 @@
  */
 
 .editor-styles-wrapper {
-	--arriva-member-column: min(1100px, calc(100% - 2.5rem));
+	--arriva-member-gutter: var(--wp--preset--spacing--50, 2rem);
+	--arriva-member-column: min(1100px, calc(100% - 2 * var(--arriva-member-gutter)));
+	--wp--style--global--content-size: var(--arriva-member-column);
+	--wp--style--global--wide-size: var(--arriva-member-column);
 }
 
+.editor-styles-wrapper .is-layout-constrained,
 .editor-styles-wrapper .wp-block-group.arriva-member-layout.is-layout-constrained,
 .editor-styles-wrapper .arriva-member-nav-bar.is-layout-constrained {
 	--wp--style--global--content-size: var(--arriva-member-column);
+	--wp--style--global--wide-size: var(--arriva-member-column);
+}
+
+.editor-styles-wrapper .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+	max-width: var(--arriva-member-column);
 }
 
 .editor-styles-wrapper .wp-block-arriva-page-header .arriva-page-header__inner {
 	max-width: var(--arriva-member-column);
 	margin-inline: auto;
-	padding-inline: var(--wp--preset--spacing--50, 2rem);
+	padding-inline: var(--arriva-member-gutter);
 }
 
 .editor-styles-wrapper .wp-block-group.arriva-member-layout.alignfull,
 .editor-styles-wrapper > .wp-block-group.alignfull.has-global-padding.is-layout-constrained {
 	padding-top: var(--wp--preset--spacing--30, 1rem) !important;
 	padding-bottom: var(--wp--preset--spacing--70, 2.5rem) !important;
-	padding-left: var(--wp--preset--spacing--50, 2rem) !important;
-	padding-right: var(--wp--preset--spacing--50, 2rem) !important;
+	padding-left: var(--arriva-member-gutter) !important;
+	padding-right: var(--arriva-member-gutter) !important;
+}
+
+@media (max-width: 781px) {
+	.editor-styles-wrapper {
+		padding-inline: var(--arriva-member-gutter) !important;
+		box-sizing: border-box;
+	}
+
+	.editor-styles-wrapper > .wp-block-group.alignfull.has-global-padding.is-layout-constrained,
+	.editor-styles-wrapper .wp-block-group.arriva-member-layout.alignfull {
+		padding-left: 0 !important;
+		padding-right: 0 !important;
+	}
 }
 
 .editor-styles-wrapper .arriva-member-layout .arriva-member-nav-bar--content,

@@ -13,9 +13,25 @@
 			"type": "number",
 			"default": 8
 		},
+		"eyebrow": {
+			"type": "string",
+			"default": "Termine"
+		},
 		"heading": {
 			"type": "string",
-			"default": "Nächste Termine"
+			"default": "Kommende Veranstaltungen"
+		},
+		"subtitle": {
+			"type": "string",
+			"default": "Alle öffentlichen Vereinstermine. Interne Infos findest du im Mitgliederbereich."
+		},
+		"moreLabel": {
+			"type": "string",
+			"default": "Alle Termine im Mitgliederbereich"
+		},
+		"moreUrl": {
+			"type": "string",
+			"default": ""
 		}
 	},
 	"supports": {
