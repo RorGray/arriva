@@ -1,5 +1,7 @@
 /**
- * Mitgliederbereich — one column width (1100px) and consistent spacing.
+ * Mitgliederbereich
+ * - Readable column: 1100px (text, nav, catalogs, singles)
+ * - Viewport bands stay full window width: page header, wave, upcoming events
  */
 
 body.arriva-mitglied-area {
@@ -13,15 +15,14 @@ body.arriva-mitglied-area {
 	--wp--style--global--wide-size: var(--arriva-member-column) !important;
 }
 
-/* Centered content shell — Termine/Vorstand/Dokumente/Merch + CPT singles. */
+/* main stays as wide as the theme allows so 100dvw bands can break out. */
 body.arriva-mitglied-area main {
 	--wp--style--global--content-size: var(--arriva-member-column) !important;
 	--wp--style--global--wide-size: var(--arriva-member-column) !important;
-	box-sizing: border-box;
-	width: min(var(--arriva-member-content-max), calc(100% - 2 * var(--arriva-member-gutter))) !important;
-	max-width: var(--arriva-member-content-max) !important;
-	margin-inline: auto !important;
-	padding-inline: 0;
+	width: auto !important;
+	max-width: none !important;
+	margin-inline: 0 !important;
+	overflow-x: visible;
 }
 
 body.arriva-mitglied-area main .wp-block-post-content,
@@ -31,22 +32,22 @@ body.arriva-mitglied-area main .is-layout-constrained {
 	--wp--style--global--wide-size: var(--arriva-member-column) !important;
 }
 
-body.arriva-mitglied-area main .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+/* Non-full-bleed blocks → 1100px column. */
+body.arriva-mitglied-area main .is-layout-constrained > :where(
+		:not(.alignleft):not(.alignright):not(.alignfull):not(.alignwide)
+	) {
 	max-width: var(--arriva-member-column) !important;
 	margin-inline: auto !important;
 }
 
-/*
- * alignfull/wide break out to 100vw in TT4 — keep member pages in the 1100px column.
- * Page header + wave stay full-bleed bands.
- */
-body.arriva-mitglied-area main :is(.alignfull, .alignwide):not(.wp-block-arriva-page-header):not(
-		.wp-block-arriva-wave-divider
-	) {
-	width: 100% !important;
-	max-width: 100% !important;
-	margin-left: 0 !important;
-	margin-right: 0 !important;
+/* Viewport-wide bands (do not inherit the column). */
+body.arriva-mitglied-area .wp-block-arriva-page-header.alignfull,
+body.arriva-mitglied-area .wp-block-arriva-wave-divider,
+body.arriva-mitglied-area .wp-block-arriva-upcoming-events {
+	width: 100dvw !important;
+	max-width: 100dvw !important;
+	margin-left: calc(50% - 50dvw) !important;
+	margin-right: calc(50% - 50dvw) !important;
 }
 
 /* Page-header block already provides the H1. */
@@ -55,41 +56,31 @@ body.arriva-mitglied-area.arriva-has-page-header main .entry-header .wp-block-po
 	display: none;
 }
 
-body.arriva-mitglied-area main .wp-block-group.arriva-member-layout.is-layout-constrained,
-body.arriva-mitglied-area .arriva-member-nav-bar.is-layout-constrained {
-	--wp--style--global--content-size: var(--arriva-member-column) !important;
-}
-
-/* Page header title band: same horizontal alignment as member content. */
+/* Title text inside the full-bleed header stays on the 1100px column. */
 body.arriva-mitglied-area .wp-block-arriva-page-header .arriva-page-header__inner {
 	max-width: var(--arriva-member-column);
 	margin-inline: auto;
 	padding-inline: var(--arriva-member-gutter);
 }
 
-/* Member content shell — vertical spacing only (main owns horizontal gutter). */
+body.arriva-mitglied-area .arriva-upcoming-events__inner {
+	max-width: var(--arriva-member-column);
+	padding-inline: var(--arriva-member-gutter);
+}
+
+/* Member content shell: vertical rhythm only. Horizontal inset comes from the column. */
 body.arriva-mitglied-area main .wp-block-group.arriva-member-layout.alignfull,
 body.arriva-mitglied-area main .wp-block-post-content > .wp-block-group.alignfull.has-global-padding.is-layout-constrained {
 	padding-top: var(--wp--preset--spacing--30, 1rem) !important;
 	padding-bottom: var(--wp--preset--spacing--70, 2.5rem) !important;
-	padding-left: 0 !important;
-	padding-right: 0 !important;
 }
 
 body.arriva-mitglied-area.page-mitglieder main .wp-block-post-content > .wp-block-group.alignfull.has-global-padding.is-layout-constrained {
 	padding-bottom: var(--wp--preset--spacing--30, 1rem) !important;
 }
 
-body.arriva-mitglied-area main > .wp-block-group.has-global-padding.is-layout-constrained:first-child,
-body.arriva-mitglied-area main > .wp-block-group.is-layout-constrained:first-child:not(.arriva-member-layout) {
-	max-width: 100%;
-	margin-inline: auto;
+body.arriva-mitglied-area main .wp-block-post-content.has-global-padding {
 	padding-inline: 0;
-}
-
-body.arriva-mitglied-area main .wp-block-post-content.has-global-padding,
-body.arriva-mitglied-area main .wp-block-post-content.is-layout-constrained {
-	padding-inline: 0 !important;
 }
 
 /* Produkt singles: theme title/date/excerpt are rendered in the PDP (plugin). */
@@ -99,43 +90,14 @@ body.arriva-mitglied-area.single-arriva_merch main .wp-block-post-excerpt {
 	display: none;
 }
 
+/* CPT singles have no full-bleed bands in post content — column the content block. */
 body.arriva-mitglied-area.single-arriva_merch main .wp-block-post-content,
-body.arriva-mitglied-area.single-arriva_merch main .entry-content {
-	display: block;
-	width: 100%;
-	max-width: 100%;
-}
-
+body.arriva-mitglied-area.single-arriva_merch main .entry-content,
 body.arriva-mitglied-area.single-arriva_event main .wp-block-post-content,
-body.arriva-mitglied-area.single-arriva_event main .entry-content {
-	display: block;
-	width: 100%;
-	max-width: 100%;
-}
-
-body.arriva-mitglied-area.single-arriva_merch .arriva-merch-single,
-body.arriva-mitglied-area .arriva-merch-shop,
-body.arriva-mitglied-area .arriva-events-list,
-body.arriva-mitglied-area .arriva-vorstand {
-	width: 100%;
-	max-width: 100%;
-}
-
-body.arriva-mitglied-area.post-type-archive-arriva_event main .wp-block-query,
-body.arriva-mitglied-area.post-type-archive-arriva_event main .wp-block-query-title {
-	width: 100%;
-	max-width: 100%;
-	margin-inline: auto;
-}
-
-/* Injected member nav on Termin/Merch templates — align with column, no extra inset. */
-body.arriva-mitglied-area main .arriva-member-nav-bar.alignfull,
-body.arriva-mitglied-area main .wp-block-group.arriva-member-nav-bar.alignfull {
-	padding-left: 0 !important;
-	padding-right: 0 !important;
-}
-
-body.arriva-mitglied-area main .arriva-member-nav-bar--content {
-	padding-left: 0;
-	padding-right: 0;
+body.arriva-mitglied-area.single-arriva_event main .entry-content,
+body.arriva-mitglied-area.post-type-archive-arriva_event main .wp-block-query {
+	box-sizing: border-box;
+	width: min(var(--arriva-member-content-max), calc(100% - 2 * var(--arriva-member-gutter))) !important;
+	max-width: var(--arriva-member-content-max) !important;
+	margin-inline: auto !important;
 }

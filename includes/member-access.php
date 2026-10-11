@@ -301,7 +301,13 @@ function arriva_hide_merch_template_blocks( $block_content, $block, $instance ) 
 	}
 
 	$block_name = isset( $block['blockName'] ) ? $block['blockName'] : '';
-	$hide       = array( 'core/post-date', 'core/post-title', 'core/post-excerpt' );
+	$hide       = array(
+		'core/post-date',
+		'core/post-title',
+		'core/post-excerpt',
+		'core/separator',
+		'core/post-navigation',
+	);
 
 	if ( in_array( $block_name, $hide, true ) ) {
 		return '';

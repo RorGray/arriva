@@ -11,7 +11,7 @@
 	grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
 	gap: var(--wp--preset--spacing--50, 2rem);
 	align-items: start;
-	margin-bottom: var(--wp--preset--spacing--50, 2rem);
+	margin-bottom: var(--wp--preset--spacing--30, 1rem);
 }
 
 .arriva-merch-single__gallery {
@@ -310,7 +310,11 @@
 }
 
 .arriva-merch-single__actions {
-	padding-top: var(--wp--preset--spacing--20, 0.75rem);
+	display: flex;
+	flex-direction: column;
+	gap: var(--wp--preset--spacing--30, 1rem);
+	margin-top: var(--wp--preset--spacing--30, 1rem);
+	padding-top: var(--wp--preset--spacing--30, 1rem);
 	border-top: 1px solid var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.1));
 }
 
@@ -322,10 +326,55 @@
 	color: var(--wp--preset--color--accent, #1a93a4);
 }
 
+.arriva-merch-single__adjacent {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem 1.25rem;
+	justify-content: space-between;
+}
+
+.arriva-merch-single__adjacent-link {
+	flex: 1 1 12rem;
+	max-width: 100%;
+	font-size: 0.875rem;
+	line-height: 1.4;
+	text-decoration: none;
+	color: inherit;
+}
+
+.arriva-merch-single__adjacent-link--next {
+	text-align: right;
+	margin-left: auto;
+}
+
+.arriva-merch-single__adjacent-link--next .arriva-merch-single__adjacent-title::after {
+	content: " →";
+}
+
+.arriva-merch-single__adjacent-label {
+	font-weight: 600;
+	color: var(--wp--preset--color--accent, #1a93a4);
+}
+
+.arriva-merch-single__adjacent-title {
+	display: inline;
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+}
+
+.arriva-merch-single__adjacent-link:hover .arriva-merch-single__adjacent-title,
+.arriva-merch-single__adjacent-link:focus-visible .arriva-merch-single__adjacent-title {
+	color: var(--wp--preset--color--accent, #1a93a4);
+}
+
 html.arriva-merch-lightbox-open,
 html.arriva-merch-lightbox-open body {
 	overflow: hidden;
 	overscroll-behavior: none;
+}
+
+.arriva-merch-lightbox:not([open]) {
+	display: none !important;
 }
 
 .arriva-merch-lightbox {

@@ -183,3 +183,13 @@
 body.single-arriva_merch .wp-block-post-featured-image {
 	display: none;
 }
+
+/* Single template block gap (TT4) — keep footer area tight after PDP. */
+body.arriva-mitglied-area.single-arriva_merch main,
+body.arriva-mitglied-area.single-arriva_merch main .is-layout-constrained {
+	--wp--style--block-gap: var(--wp--preset--spacing--30, 1rem);
+}
+
+body.arriva-mitglied-area.single-arriva_merch main .wp-block-post-content {
+	margin-block-end: 0 !important;
+}

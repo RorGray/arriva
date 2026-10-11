@@ -624,17 +624,46 @@ function arriva_merch_single_content( $content ) {
 		echo '</div>';
 	}
 
+	$prev = get_previous_post( true, '', ARRIVA_MERCH_POST_TYPE );
+	$next = get_next_post( true, '', ARRIVA_MERCH_POST_TYPE );
+
 	echo '<nav class="arriva-merch-single__actions" aria-label="' . esc_attr__( 'Navigation', 'arriva' ) . '">';
 	echo '<a class="arriva-merch-single__back" href="' . esc_url( home_url( '/mitglieder/merch/' ) ) . '">' . esc_html__( '← Zurück zur Übersicht', 'arriva' ) . '</a>';
+	if ( $prev || $next ) {
+		echo '<div class="arriva-merch-single__adjacent">';
+		if ( $prev ) {
+			echo '<a class="arriva-merch-single__adjacent-link arriva-merch-single__adjacent-link--prev" href="' . esc_url( get_permalink( $prev ) ) . '">';
+			echo '<span class="arriva-merch-single__adjacent-label">← ' . esc_html__( 'Vorheriger', 'arriva' ) . ':</span> ';
+			echo '<span class="arriva-merch-single__adjacent-title">' . esc_html( get_the_title( $prev ) ) . '</span>';
+			echo '</a>';
+		}
+		if ( $next ) {
+			echo '<a class="arriva-merch-single__adjacent-link arriva-merch-single__adjacent-link--next" href="' . esc_url( get_permalink( $next ) ) . '">';
+			echo '<span class="arriva-merch-single__adjacent-label">' . esc_html__( 'Nächster', 'arriva' ) . ':</span> ';
+			echo '<span class="arriva-merch-single__adjacent-title">' . esc_html( get_the_title( $next ) ) . '</span>';
+			echo '</a>';
+		}
+		echo '</div>';
+	}
 	echo '</nav>';
-
-	echo '<dialog class="arriva-merch-lightbox" id="arriva-merch-lightbox" aria-label="' . esc_attr__( 'Produktbild', 'arriva' ) . '">';
-	echo '<button type="button" class="arriva-merch-lightbox__close" aria-label="' . esc_attr__( 'Schließen', 'arriva' ) . '">×</button>';
-	echo '<img class="arriva-merch-lightbox__img" alt="" decoding="async" />';
-	echo '</dialog>';
 
 	echo '</article>';
 
 	return ob_get_clean();
 }
 add_filter( 'the_content', 'arriva_merch_single_content', 9 );
+
+/**
+ * Lightbox markup at end of document (not in post content — avoids layout gaps).
+ */
+function arriva_merch_render_lightbox() {
+	if ( ! is_singular( ARRIVA_MERCH_POST_TYPE ) ) {
+		return;
+	}
+
+	echo '<dialog class="arriva-merch-lightbox" id="arriva-merch-lightbox" aria-label="' . esc_attr__( 'Produktbild', 'arriva' ) . '">';
+	echo '<button type="button" class="arriva-merch-lightbox__close" aria-label="' . esc_attr__( 'Schließen', 'arriva' ) . '">×</button>';
+	echo '<img class="arriva-merch-lightbox__img" alt="" decoding="async" />';
+	echo '</dialog>';
+}
+add_action( 'wp_footer', 'arriva_merch_render_lightbox' );
