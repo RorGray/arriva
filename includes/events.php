@@ -152,7 +152,7 @@ function arriva_query_events( array $args = array() ) {
 		$tax_query[] = array(
 			'taxonomy' => ARRIVA_EVENT_TYPE_TAX,
 			'field'    => 'slug',
-			'terms'    => sanitize_key( $args['type'] ),
+			'terms'    => array_map( 'sanitize_key', (array) $args['type'] ),
 		);
 	}
 
@@ -172,6 +172,15 @@ function arriva_query_events( array $args = array() ) {
 	$query = new WP_Query( $query_args );
 
 	return $query->posts;
+}
+
+/**
+ * Termin-Typ slugs whose events may be listed to visitors who are not logged in.
+ *
+ * @return string[]
+ */
+function arriva_public_event_type_slugs() {
+	return (array) apply_filters( 'arriva_public_event_type_slugs', array( 'oeffentlich', 'offentlich', 'public' ) );
 }
 
 /**
@@ -231,7 +240,7 @@ function arriva_event_date_badge( WP_Post $post ) {
  * Echo one event card (<li>) for the shared events list styles.
  *
  * @param WP_Post $post  Event post.
- * @param array   $args  tile: 'month'|'weekday', today: Y-m-d, is_next: bool.
+ * @param array   $args  tile: 'month'|'weekday', today: Y-m-d, is_next: bool, link: bool.
  */
 function arriva_render_event_card( WP_Post $post, array $args = array() ) {
 	$args = wp_parse_args(
@@ -240,6 +249,7 @@ function arriva_render_event_card( WP_Post $post, array $args = array() ) {
 			'tile'    => 'month',
 			'today'   => wp_date( 'Y-m-d' ),
 			'is_next' => false,
+			'link'    => true,
 		)
 	);
 
@@ -256,8 +266,14 @@ function arriva_render_event_card( WP_Post $post, array $args = array() ) {
 		$classes[] = 'is-next';
 	}
 
+	$tag = $args['link'] ? 'a' : 'div';
+
 	echo '<li class="arriva-events__item">';
-	echo '<a class="' . esc_attr( implode( ' ', $classes ) ) . '" href="' . esc_url( get_permalink( $post ) ) . '">';
+	if ( $args['link'] ) {
+		echo '<a class="' . esc_attr( implode( ' ', $classes ) ) . '" href="' . esc_url( get_permalink( $post ) ) . '">';
+	} else {
+		echo '<div class="' . esc_attr( implode( ' ', $classes ) ) . '">';
+	}
 
 	if ( $badge ) {
 		$sub = 'weekday' === $args['tile'] ? $badge['weekday'] : $badge['month'];
@@ -279,7 +295,7 @@ function arriva_render_event_card( WP_Post $post, array $args = array() ) {
 		echo '<span class="arriva-events__type' . esc_attr( $variant_class ) . '">' . esc_html( $type ) . '</span>';
 	}
 
-	echo '</a>';
+	echo '</' . $tag . '>';
 	echo '</li>';
 }
 

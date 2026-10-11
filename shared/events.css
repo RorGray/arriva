@@ -87,7 +87,7 @@
 	transition: background 0.15s ease, border-color 0.15s ease;
 }
 
-.arriva-events__card:hover {
+a.arriva-events__card:hover {
 	background: color-mix(in srgb, currentColor 9%, transparent);
 	color: inherit;
 }

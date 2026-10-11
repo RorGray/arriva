@@ -7,6 +7,7 @@
 	var RichText = wp.blockEditor.RichText;
 	var PanelBody = wp.components.PanelBody;
 	var TextControl = wp.components.TextControl;
+	var TextareaControl = wp.components.TextareaControl;
 	var RangeControl = wp.components.RangeControl;
 	var ServerSideRender = wp.serverSideRender;
 	var __ = wp.i18n.__;
@@ -60,9 +61,32 @@
 						} ),
 						el( TextControl, {
 							label: __( 'Link-URL', 'arriva' ),
-							help: __( 'Der Link wird nur mit Text und URL angezeigt.', 'arriva' ),
+							help: __( 'Der Link wird nur mit Text und URL angezeigt (nur für Mitglieder).', 'arriva' ),
 							value: attributes.moreUrl,
 							onChange: bind( 'moreUrl' ),
+						} )
+					),
+					el(
+						PanelBody,
+						{ title: __( 'Nicht angemeldete Besucher', 'arriva' ), initialOpen: false },
+						el(
+							'p',
+							{},
+							__(
+								'Gäste sehen nur Termine vom Typ „Öffentlich“ (ohne Link). Gibt es keine, wird stattdessen dieser Hinweis gezeigt.',
+								'arriva'
+							)
+						),
+						el( TextareaControl, {
+							label: __( 'Hinweistext', 'arriva' ),
+							value: attributes.loginText,
+							onChange: bind( 'loginText' ),
+						} ),
+						el( TextControl, {
+							label: __( 'Button-Text (Login)', 'arriva' ),
+							help: __( 'Verlinkt auf den Mitgliederbereich. Leer = kein Button.', 'arriva' ),
+							value: attributes.loginLabel,
+							onChange: bind( 'loginLabel' ),
 						} )
 					)
 				),

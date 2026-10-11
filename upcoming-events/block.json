@@ -36,6 +36,14 @@
 		"moreUrl": {
 			"type": "string",
 			"default": ""
+		},
+		"loginText": {
+			"type": "string",
+			"default": ""
+		},
+		"loginLabel": {
+			"type": "string",
+			"default": ""
 		}
 	},
 	"supports": {
