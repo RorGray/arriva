@@ -130,7 +130,7 @@
 			'--arriva-hero-accent': attrs.accentColor || '#1a93a4',
 			'--arriva-hero-accent-d': attrs.accentDarkColor || '#117585',
 			'--arriva-hero-glow': glowVarValue( attrs.glowColor ),
-			'--arriva-hero-min-height': ( attrs.minHeight || 600 ) + 'px',
+			'--arriva-hero-min-height': ( attrs.minHeight || 400 ) + 'px',
 		};
 	}
 
@@ -358,7 +358,7 @@
 							onChange: function ( value ) {
 								setAttributes( { minHeight: value } );
 							},
-							min: 400,
+							min: 320,
 							max: 1200,
 							step: 10,
 						} ),

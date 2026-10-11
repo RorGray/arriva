@@ -67,7 +67,7 @@
 		},
 		"minHeight": {
 			"type": "number",
-			"default": 600
+			"default": 400
 		},
 		"fixedScroll": {
 			"type": "boolean",

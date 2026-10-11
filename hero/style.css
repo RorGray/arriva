@@ -3,7 +3,7 @@
 	--arriva-hero-accent: #1a93a4;
 	--arriva-hero-accent-d: #117585;
 	--arriva-hero-glow: rgba(26, 147, 164, 0.28);
-	--arriva-hero-min-height: 600px;
+	--arriva-hero-min-height: 400px;
 	position: relative;
 	overflow-x: clip;
 }
@@ -213,10 +213,6 @@ body:not(.block-editor-page) .wp-block-arriva-hero.is-fixed-scroll.is-layer-hidd
 }
 
 @media (max-width: 720px) {
-	.wp-block-arriva-hero {
-		--arriva-hero-min-height: 480px;
-	}
-
 	.wp-block-arriva-hero .arriva-hero__inner {
 		padding-block: clamp(3rem, 12vw, 4.5rem) clamp(5rem, 16vw, 6.5rem);
 	}
