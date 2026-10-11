@@ -126,10 +126,18 @@
 
 /* Cards */
 .arriva-dash-card {
-	height: 100%;
 	padding: 1.25rem;
 	background: var(--wp--preset--color--base-2, #f6f5f1);
 	border-radius: 12px;
+}
+
+/* A card alone in its column matches the height of the neighbouring column. */
+.wp-block-column > .arriva-dash-card:only-child {
+	height: 100%;
+}
+
+.wp-block-column > .arriva-dash-card + .arriva-dash-card {
+	margin-top: 1rem;
 }
 
 .arriva-dash-card__title {
