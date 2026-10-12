@@ -1,7 +1,7 @@
 ( function () {
 	var COPIED_MS = 1800;
-	var MIN_FONT = 11;
-	var MAX_FONT = 14;
+	var MIN_FONT = 12;
+	var MAX_FONT = 15;
 
 	function addressFromButton( button ) {
 		var user = button.getAttribute( 'data-u' );
