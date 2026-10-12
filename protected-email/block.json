@@ -5,8 +5,8 @@
 	"title": "Protected Email",
 	"category": "widgets",
 	"icon": "email",
-	"description": "Email button that assembles the address on click to reduce crawler harvesting.",
-	"keywords": [ "email", "contact", "mailto" ],
+	"description": "Mailto button plus canvas address display and copy action; address is assembled in JS (not plain HTML) to reduce crawler harvesting.",
+	"keywords": [ "email", "contact", "mailto", "copy" ],
 	"textdomain": "arriva",
 	"attributes": {
 		"buttonLabel": {
@@ -23,7 +23,7 @@
 		},
 		"helperText": {
 			"type": "string",
-			"default": "Die Adresse wird erst beim Klick zusammengesetzt, um automatisches Auslesen zu erschweren."
+			"default": "Adresse als Grafik zum Kopieren — nicht als lesbarer Text im HTML."
 		},
 		"noscriptText": {
 			"type": "string",

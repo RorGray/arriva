@@ -76,6 +76,37 @@
 						},
 						attributes.buttonLabel || __( 'Nachricht schreiben', 'arriva' )
 					),
+					ready
+						? el(
+							'div',
+							{ className: 'arriva-protected-email__address' },
+							el(
+								'div',
+								{ className: 'arriva-protected-email__visual' },
+								el(
+									'span',
+									{
+										style: {
+											fontFamily:
+												'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace',
+											fontWeight: 600,
+											fontSize: '15px',
+										},
+									},
+									attributes.emailUser + '@' + attributes.emailDomain
+								)
+							),
+							el(
+								'button',
+								{
+									type: 'button',
+									className: 'arriva-protected-email__copy',
+									disabled: true,
+								},
+								__( 'Kopieren', 'arriva' )
+							)
+						)
+						: null,
 					attributes.helperText
 						? el( 'p', { className: 'arriva-protected-email__note' }, attributes.helperText )
 						: null,
