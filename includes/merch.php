@@ -579,6 +579,10 @@ function arriva_merch_render_single( WP_Post $post, $content ) {
 
 	ob_start();
 
+	if ( function_exists( 'arriva_member_section_header_markup' ) ) {
+		echo arriva_member_section_header_markup( 'merch' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- block markup.
+	}
+
 	if ( empty( $GLOBALS['arriva_member_nav_rendered'] ) ) {
 		echo do_blocks( '<!-- wp:arriva/member-nav /-->' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
@@ -590,7 +594,8 @@ function arriva_merch_render_single( WP_Post $post, $content ) {
 	arriva_merch_render_gallery( $post );
 
 	echo '<aside class="arriva-merch-single__buy" aria-label="' . esc_attr__( 'Produktdetails', 'arriva' ) . '">';
-	echo '<h1 class="arriva-merch-single__title">' . esc_html( get_the_title( $post ) ) . '</h1>';
+	// Section page-header is the H1; product name is the secondary heading.
+	echo '<h2 class="arriva-merch-single__title">' . esc_html( get_the_title( $post ) ) . '</h2>';
 
 	$badge = arriva_merch_badge_label( $post );
 	if ( $badge ) {

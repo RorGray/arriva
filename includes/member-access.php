@@ -256,7 +256,69 @@ function arriva_member_nav_bar_markup() {
 }
 
 /**
- * Inject member nav above the title on Termin singles/archives (not inside post content).
+ * Page-header (+ following wave) from a Mitglieder subpage — keeps detail views in sync with Termine/Merch.
+ *
+ * @param string $slug Subpage slug under mitglieder (e.g. termine, merch).
+ * @return string
+ */
+function arriva_member_section_header_markup( $slug ) {
+	static $cache = array();
+
+	$slug = sanitize_title( (string) $slug );
+	if ( '' === $slug ) {
+		return '';
+	}
+
+	if ( array_key_exists( $slug, $cache ) ) {
+		return $cache[ $slug ];
+	}
+
+	$page = get_page_by_path( 'mitglieder/' . $slug );
+	if ( ! $page ) {
+		$cache[ $slug ] = '';
+		return '';
+	}
+
+	$blocks = parse_blocks( (string) $page->post_content );
+	$out    = '';
+
+	foreach ( $blocks as $i => $block ) {
+		$name = isset( $block['blockName'] ) ? $block['blockName'] : '';
+		if ( 'arriva/page-header' !== $name ) {
+			continue;
+		}
+
+		$out .= render_block( $block );
+
+		$next = isset( $blocks[ $i + 1 ] ) ? $blocks[ $i + 1 ] : null;
+		if ( $next && 'arriva/wave-divider' === ( $next['blockName'] ?? '' ) ) {
+			$out .= render_block( $next );
+		}
+		break;
+	}
+
+	if ( '' === $out ) {
+		$title = get_the_title( $page );
+		$out   = do_blocks(
+			sprintf(
+				'<!-- wp:arriva/page-header %s /-->',
+				wp_json_encode(
+					array(
+						'title' => $title,
+					),
+					JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+				)
+			)
+		);
+	}
+
+	$cache[ $slug ] = $out;
+
+	return $out;
+}
+
+/**
+ * Inject section header + member nav above the title on Termin singles/archives.
  *
  * @param string   $block_content Block HTML.
  * @param array    $block         Block data.
@@ -274,9 +336,11 @@ function arriva_inject_member_nav_before_termine_title( $block_content, $block, 
 
 	$block_name = isset( $block['blockName'] ) ? $block['blockName'] : '';
 	$inject     = false;
+	$is_single  = false;
 
 	if ( 'core/post-title' === $block_name && is_singular( ARRIVA_EVENT_POST_TYPE ) ) {
-		$inject = true;
+		$inject    = true;
+		$is_single = true;
 	}
 
 	if ( 'core/query-title' === $block_name && is_post_type_archive( ARRIVA_EVENT_POST_TYPE ) ) {
@@ -288,14 +352,47 @@ function arriva_inject_member_nav_before_termine_title( $block_content, $block, 
 	}
 
 	static $done = false;
-	if ( $done || ! empty( $GLOBALS['arriva_member_nav_rendered'] ) ) {
+	if ( $done ) {
 		return $block_content;
 	}
 	$done = true;
 
-	return arriva_member_nav_bar_markup() . $block_content;
+	$prefix = '';
+	if ( $is_single ) {
+		$prefix .= arriva_member_section_header_markup( 'termine' );
+	}
+	if ( empty( $GLOBALS['arriva_member_nav_rendered'] ) ) {
+		$prefix .= arriva_member_nav_bar_markup();
+	}
+
+	return $prefix . $block_content;
 }
 add_filter( 'render_block', 'arriva_inject_member_nav_before_termine_title', 10, 3 );
+
+/**
+ * Section header is the H1 on Termin detail — demote the event title.
+ *
+ * @param array $parsed_block Block data.
+ * @return array
+ */
+function arriva_demote_event_single_title( $parsed_block ) {
+	if ( ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || is_admin() ) {
+		return $parsed_block;
+	}
+
+	if ( 'core/post-title' !== ( $parsed_block['blockName'] ?? '' ) ) {
+		return $parsed_block;
+	}
+
+	if ( ! is_singular( ARRIVA_EVENT_POST_TYPE ) ) {
+		return $parsed_block;
+	}
+
+	$parsed_block['attrs']['level'] = 2;
+
+	return $parsed_block;
+}
+add_filter( 'render_block_data', 'arriva_demote_event_single_title' );
 
 /**
  * Product singles: title and date are rendered in the PDP (plugin), not the theme template.
@@ -359,6 +456,11 @@ function arriva_mitglied_area_body_class( $classes ) {
 
 	if ( is_singular( 'page' ) && arriva_page_has_block( 'arriva/page-header' ) ) {
 		$classes[] = 'arriva-has-page-header';
+	}
+
+	// CPT detail views reuse the Termine/Merch page-header band (not a duplicate of the item title).
+	if ( is_singular( ARRIVA_EVENT_POST_TYPE ) || is_singular( ARRIVA_MERCH_POST_TYPE ) ) {
+		$classes[] = 'arriva-has-section-header';
 	}
 
 	return $classes;

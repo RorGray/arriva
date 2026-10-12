@@ -33,10 +33,16 @@ body.arriva-mitglied-area .arriva-events {
 	padding-block: 1.5rem 2.5rem;
 }
 
-/* Site header is position: fixed (theme custom CSS) — the singles templates have no breadcrumb row to clear it. */
-body.arriva-mitglied-area.single-arriva_merch main,
-body.arriva-mitglied-area.single-arriva_event main {
+/* Site header is position: fixed (theme custom CSS) — the singles templates have no breadcrumb row to clear it.
+ * With the injected Termine/Merch page-header band, match listing pages (band sits under the fixed nav). */
+body.arriva-mitglied-area.single-arriva_merch:not(.arriva-has-section-header) main,
+body.arriva-mitglied-area.single-arriva_event:not(.arriva-has-section-header) main {
 	padding-top: calc(var(--arriva-header-height, 5.5rem) + 1rem) !important;
+}
+
+body.arriva-mitglied-area.single-arriva_merch.arriva-has-section-header main,
+body.arriva-mitglied-area.single-arriva_event.arriva-has-section-header main {
+	padding-top: 0 !important;
 }
 
 /* Fallback if a single is rendered with the theme's generic template (~620px column). */
