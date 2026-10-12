@@ -33,13 +33,6 @@ body.arriva-mitglied-area .arriva-events {
 	padding-block: 1.5rem 2.5rem;
 }
 
-/* Site header is position: fixed (theme custom CSS) — CPT singles have no theme spacer.
- * Keep clearance so page-header + member-nav never sit behind the bar (same visual as listing pages). */
-body.arriva-mitglied-area.single-arriva_merch main,
-body.arriva-mitglied-area.single-arriva_event main {
-	padding-top: calc(var(--arriva-header-height, 5.5rem) + 1rem) !important;
-}
-
 /* Fallback if a single is rendered with the theme's generic template (~620px column). */
 body.arriva-mitglied-area.single-arriva_merch,
 body.arriva-mitglied-area.single-arriva_event {
