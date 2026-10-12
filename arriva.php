@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Arriva
  * Description: Custom Gutenberg blocks for Arriva Speyer e.V.
- * Version: 1.11.5
+ * Version: 1.11.7
  * Author: Arriva Speyer e.V.
  * License: GPL-2.0-or-later
  * Text Domain: arriva
@@ -15,6 +15,7 @@ require_once __DIR__ . '/includes/ical.php';
 require_once __DIR__ . '/includes/merch.php';
 require_once __DIR__ . '/includes/member-access.php';
 require_once __DIR__ . '/includes/member-dashboard.php';
+require_once __DIR__ . '/includes/protected-email.php';
 
 register_activation_hook(
 	__FILE__,

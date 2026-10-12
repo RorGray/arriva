@@ -1,6 +1,10 @@
 /* Colors: theme palette — accent / accent-2 / base / vivid-red / contrast. */
 
 .wp-block-arriva-protected-email {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 0.65rem;
 	color: inherit;
 }
 
@@ -8,10 +12,11 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
+	width: 100%;
 	min-height: 2.75rem;
-	padding: 0.65rem 1.35rem;
+	padding: 0.65rem 1.25rem;
 	border: none;
-	border-radius: 999px;
+	border-radius: 0.5rem;
 	background: var(--wp--preset--color--accent);
 	color: var(--wp--preset--color--base);
 	font: inherit;
@@ -47,70 +52,71 @@
 
 .wp-block-arriva-protected-email .arriva-protected-email__address {
 	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 0.55rem 0.75rem;
-	margin-top: 0.95rem;
+	align-items: stretch;
+	width: 100%;
+	min-width: 0;
+	margin: 0;
+	border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+	border-radius: 0.5rem;
+	background: color-mix(in srgb, currentColor 3%, transparent);
+	overflow: hidden;
 }
 
 .wp-block-arriva-protected-email .arriva-protected-email__visual {
-	display: inline-flex;
+	display: flex;
+	flex: 1 1 auto;
 	align-items: center;
-	max-width: 100%;
-	padding: 0.4rem 0.65rem;
-	border: 1px dashed color-mix(in srgb, currentColor 22%, transparent);
-	border-radius: 0.4rem;
-	background: color-mix(in srgb, currentColor 4%, transparent);
-	overflow-x: auto;
+	min-width: 0;
+	padding: 0.55rem 0.75rem;
 	-webkit-user-select: none;
 	user-select: none;
 }
 
-.wp-block-arriva-protected-email .arriva-protected-email__svg {
+.wp-block-arriva-protected-email .arriva-protected-email__graphic {
 	display: block;
 	max-width: 100%;
 	height: auto;
 }
 
 .wp-block-arriva-protected-email .arriva-protected-email__copy {
+	flex: 0 0 auto;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	min-height: 2.25rem;
-	padding: 0.4rem 0.9rem;
-	border: 1px solid color-mix(in srgb, currentColor 28%, transparent);
-	border-radius: 999px;
+	min-height: 2.5rem;
+	padding: 0.45rem 0.85rem;
+	border: none;
+	border-left: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+	border-radius: 0;
 	background: transparent;
 	color: inherit;
 	font: inherit;
-	font-size: 0.875rem;
+	font-size: 0.8125rem;
 	font-weight: 600;
 	line-height: 1.2;
 	cursor: pointer;
+	white-space: nowrap;
 	transition: background 160ms cubic-bezier(0.22, 1, 0.36, 1),
-		border-color 160ms cubic-bezier(0.22, 1, 0.36, 1),
 		color 160ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .wp-block-arriva-protected-email .arriva-protected-email__copy:hover,
 .wp-block-arriva-protected-email .arriva-protected-email__copy:focus-visible {
-	border-color: var(--wp--preset--color--accent);
-	background: color-mix(in srgb, var(--wp--preset--color--accent) 10%, transparent);
+	background: color-mix(in srgb, var(--wp--preset--color--accent) 12%, transparent);
 	color: var(--wp--preset--color--contrast, inherit);
 }
 
 .wp-block-arriva-protected-email .arriva-protected-email__copy:focus-visible {
 	outline: 2px solid var(--wp--preset--color--accent-2);
-	outline-offset: 2px;
+	outline-offset: -2px;
 }
 
 .wp-block-arriva-protected-email .arriva-protected-email__copy.is-copied {
-	border-color: var(--wp--preset--color--accent);
-	background: color-mix(in srgb, var(--wp--preset--color--accent) 14%, transparent);
+	background: color-mix(in srgb, var(--wp--preset--color--accent) 16%, transparent);
 }
 
 .wp-block-arriva-protected-email .arriva-protected-email__note {
-	margin: 0.85rem 0 0;
+	margin: 0;
 	font-size: 0.875rem;
 	line-height: 1.5;
 	color: inherit;
@@ -118,7 +124,7 @@
 }
 
 .wp-block-arriva-protected-email .arriva-protected-email__warning {
-	margin: 0.75rem 0 0;
+	margin: 0;
 	font-size: 0.8125rem;
 	color: var(--wp--preset--color--vivid-red);
 }

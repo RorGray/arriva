@@ -1,5 +1,7 @@
 ( function () {
 	var COPIED_MS = 1800;
+	var MIN_FONT = 11;
+	var MAX_FONT = 14;
 
 	function addressFromButton( button ) {
 		var user = button.getAttribute( 'data-u' );
@@ -10,35 +12,45 @@
 		return user + '@' + domain;
 	}
 
+	function measureTextWidth( email, fontSize ) {
+		var ctx = document.createElement( 'canvas' ).getContext( '2d' );
+		ctx.font =
+			'600 ' +
+			fontSize +
+			'px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+		return ctx.measureText( email ).width;
+	}
+
+	function fontSizeForWidth( email, maxWidth ) {
+		var size = MAX_FONT;
+		while ( size > MIN_FONT && measureTextWidth( email, size ) > maxWidth ) {
+			size -= 0.5;
+		}
+		return size;
+	}
+
 	/**
-	 * Draw the address as pixels (canvas) so it never appears as selectable HTML/SVG text.
-	 * Built only in JS from data-u / data-h (same split as the mailto button).
+	 * Draw the address as pixels (canvas) so it never appears as selectable HTML text.
 	 */
-	function buildAddressCanvas( email, color ) {
-		var fontSize = 15;
+	function paintAddressCanvas( canvas, email, color, maxWidth ) {
+		var fontSize = fontSizeForWidth( email, Math.max( maxWidth - 2, 40 ) );
 		var font =
 			'600 ' +
 			fontSize +
 			'px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
 		var dpr = window.devicePixelRatio || 1;
+		var textWidth = measureTextWidth( email, fontSize );
+		var width = Math.max( Math.ceil( textWidth + 2 ), 1 );
+		var height = Math.ceil( fontSize * 1.45 );
 
-		var measure = document.createElement( 'canvas' ).getContext( '2d' );
-		measure.font = font;
-		var textWidth = Math.ceil( measure.measureText( email ).width );
-		var width = Math.max( textWidth + 2, 1 );
-		var height = Math.ceil( fontSize * 1.55 );
-
-		var canvas = document.createElement( 'canvas' );
 		canvas.width = Math.ceil( width * dpr );
 		canvas.height = Math.ceil( height * dpr );
 		canvas.style.width = width + 'px';
 		canvas.style.height = height + 'px';
-		canvas.className = 'arriva-protected-email__graphic';
-		canvas.setAttribute( 'aria-hidden', 'true' );
-		canvas.setAttribute( 'focusable', 'false' );
 
 		var ctx = canvas.getContext( '2d' );
 		ctx.setTransform( dpr, 0, 0, dpr, 0, 0 );
+		ctx.clearRect( 0, 0, width, height );
 		ctx.font = font;
 		ctx.fillStyle = color || '#1a1a1a';
 		ctx.textBaseline = 'alphabetic';
@@ -88,24 +100,38 @@
 		document.body.removeChild( input );
 	}
 
+	function redraw( visual, canvas, email, color ) {
+		var maxWidth = visual.clientWidth || 200;
+		paintAddressCanvas( canvas, email, color, maxWidth );
+	}
+
 	function ensureAddressRow( root, mailBtn, email ) {
 		if ( root.querySelector( '.arriva-protected-email__address' ) ) {
 			return;
 		}
 
+		// Disclaimer was for the old “assemble on click” UX — drop it once JS is active.
+		root.querySelectorAll( '.arriva-protected-email__note' ).forEach( function ( note ) {
+			note.remove();
+		} );
+
 		var labels = {
 			copy: mailBtn.getAttribute( 'data-copy-label' ) || 'Kopieren',
 			copied: mailBtn.getAttribute( 'data-copied-label' ) || 'Kopiert',
 		};
+		var color = getComputedStyle( root ).color;
 
 		var row = document.createElement( 'div' );
 		row.className = 'arriva-protected-email__address';
 
 		var visual = document.createElement( 'div' );
 		visual.className = 'arriva-protected-email__visual';
-		visual.appendChild(
-			buildAddressCanvas( email, getComputedStyle( root ).color )
-		);
+
+		var canvas = document.createElement( 'canvas' );
+		canvas.className = 'arriva-protected-email__graphic';
+		canvas.setAttribute( 'aria-hidden', 'true' );
+		canvas.setAttribute( 'focusable', 'false' );
+		visual.appendChild( canvas );
 
 		var copyBtn = document.createElement( 'button' );
 		copyBtn.type = 'button';
@@ -118,8 +144,20 @@
 
 		row.appendChild( visual );
 		row.appendChild( copyBtn );
-
 		mailBtn.insertAdjacentElement( 'afterend', row );
+
+		var paint = function () {
+			redraw( visual, canvas, email, color );
+		};
+
+		// Layout must settle before measuring available width.
+		requestAnimationFrame( function () {
+			paint();
+			if ( typeof ResizeObserver !== 'undefined' ) {
+				var ro = new ResizeObserver( paint );
+				ro.observe( visual );
+			}
+		} );
 	}
 
 	function initButton( button ) {

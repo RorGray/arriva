@@ -90,7 +90,12 @@
 											fontFamily:
 												'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace',
 											fontWeight: 600,
-											fontSize: '15px',
+											fontSize: '13px',
+											overflow: 'hidden',
+											textOverflow: 'ellipsis',
+											whiteSpace: 'nowrap',
+											display: 'block',
+											maxWidth: '100%',
 										},
 									},
 									attributes.emailUser + '@' + attributes.emailDomain

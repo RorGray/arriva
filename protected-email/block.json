@@ -23,7 +23,7 @@
 		},
 		"helperText": {
 			"type": "string",
-			"default": "Adresse als Grafik zum Kopieren — nicht als lesbarer Text im HTML."
+			"default": ""
 		},
 		"noscriptText": {
 			"type": "string",

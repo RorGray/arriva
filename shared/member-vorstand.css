@@ -127,7 +127,8 @@
 .arriva-vorstand__email .wp-block-arriva-protected-email {
 	display: flex;
 	flex-direction: column;
-	align-items: center;
+	align-items: stretch;
+	width: 100%;
 }
 
 .arriva-vorstand__email-note {
