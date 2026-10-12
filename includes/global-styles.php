@@ -6,6 +6,22 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
+ * Typography reset for Navigation links (undo global `elements.link`).
+ *
+ * @return array<string, string>
+ */
+function arriva_navigation_link_typography_reset() {
+	return array(
+		'fontFamily'     => 'inherit',
+		'fontSize'       => 'inherit',
+		'fontStyle'      => 'inherit',
+		'fontWeight'     => 'inherit',
+		'lineHeight'     => 'inherit',
+		'textDecoration' => 'none',
+	);
+}
+
+/**
  * Scope Navigation block links away from the global `a:where(:not(.wp-element-button))` rules.
  *
  * @param WP_Theme_JSON_Data $theme_json Theme JSON data object.
@@ -16,6 +32,25 @@ function arriva_navigation_link_element_styles( $theme_json ) {
 		return $theme_json;
 	}
 
+	$link = array(
+		'typography' => arriva_navigation_link_typography_reset(),
+		'color'      => array(
+			'text' => 'inherit',
+		),
+		':hover'     => array(
+			'typography' => arriva_navigation_link_typography_reset(),
+			'color'      => array(
+				'text' => 'inherit',
+			),
+		),
+		':focus'     => array(
+			'typography' => arriva_navigation_link_typography_reset(),
+			'color'      => array(
+				'text' => 'inherit',
+			),
+		),
+	);
+
 	return $theme_json->update_with(
 		array(
 			'version' => 3,
@@ -23,27 +58,7 @@ function arriva_navigation_link_element_styles( $theme_json ) {
 				'blocks' => array(
 					'core/navigation' => array(
 						'elements' => array(
-							'link' => array(
-								'typography' => array(
-									'textDecoration' => 'none',
-								),
-								'color'      => array(
-									'text' => 'inherit',
-								),
-								':hover'     => array(
-									'typography' => array(
-										'textDecoration' => 'none',
-									),
-									'color'      => array(
-										'text' => 'inherit',
-									),
-								),
-								':focus'     => array(
-									'typography' => array(
-										'textDecoration' => 'none',
-									),
-								),
-							),
+							'link' => $link,
 						),
 					),
 				),
