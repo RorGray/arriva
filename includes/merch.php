@@ -583,6 +583,10 @@ function arriva_merch_render_single( WP_Post $post, $content ) {
 		echo arriva_member_section_header_markup( 'merch' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- block markup.
 	}
 
+	if ( function_exists( 'arriva_mark_section_chrome_ready' ) ) {
+		arriva_mark_section_chrome_ready();
+	}
+
 	if ( empty( $GLOBALS['arriva_member_nav_rendered'] ) ) {
 		echo do_blocks( '<!-- wp:arriva/member-nav /-->' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}

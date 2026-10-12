@@ -325,6 +325,46 @@ function arriva_member_section_header_markup( $slug ) {
 }
 
 /**
+ * Detail templates often place member-nav above the post title. Hold it until
+ * the Termine/Merch page-header chrome has been printed (title → wave → nav).
+ *
+ * @param string|null $pre_render   Short-circuit HTML.
+ * @param array       $parsed_block Block data.
+ * @return string|null
+ */
+function arriva_defer_member_nav_until_section_header( $pre_render, $parsed_block ) {
+	if ( null !== $pre_render ) {
+		return $pre_render;
+	}
+
+	if ( ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || is_admin() ) {
+		return $pre_render;
+	}
+
+	if ( 'arriva/member-nav' !== ( $parsed_block['blockName'] ?? '' ) ) {
+		return $pre_render;
+	}
+
+	if ( ! is_singular( ARRIVA_EVENT_POST_TYPE ) && ! is_singular( ARRIVA_MERCH_POST_TYPE ) ) {
+		return $pre_render;
+	}
+
+	if ( ! empty( $GLOBALS['arriva_section_chrome_ready'] ) ) {
+		return $pre_render;
+	}
+
+	return '';
+}
+add_filter( 'pre_render_block', 'arriva_defer_member_nav_until_section_header', 10, 2 );
+
+/**
+ * Mark section chrome ready so deferred member-nav may render.
+ */
+function arriva_mark_section_chrome_ready() {
+	$GLOBALS['arriva_section_chrome_ready'] = true;
+}
+
+/**
  * Inject section header + member nav above the title on Termin singles/archives.
  *
  * @param string   $block_content Block HTML.
@@ -367,6 +407,7 @@ function arriva_inject_member_nav_before_termine_title( $block_content, $block, 
 	$prefix = '';
 	if ( $is_single ) {
 		$prefix .= arriva_member_section_header_markup( 'termine' );
+		arriva_mark_section_chrome_ready();
 	}
 	if ( empty( $GLOBALS['arriva_member_nav_rendered'] ) ) {
 		$prefix .= arriva_member_nav_bar_markup();

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Arriva
  * Description: Custom Gutenberg blocks for Arriva Speyer e.V.
- * Version: 1.11.10
+ * Version: 1.11.11
  * Author: Arriva Speyer e.V.
  * License: GPL-2.0-or-later
  * Text Domain: arriva

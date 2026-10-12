@@ -11,6 +11,11 @@ if ( ! is_user_logged_in() ) {
 	return;
 }
 
+// Only one member nav per request (template + plugin injection).
+if ( ! empty( $GLOBALS['arriva_member_nav_rendered'] ) ) {
+	return;
+}
+
 $GLOBALS['arriva_member_nav_rendered'] = true;
 
 $hub = arriva_mitglieder_page_id();
