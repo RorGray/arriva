@@ -290,9 +290,16 @@ function arriva_member_section_header_markup( $slug ) {
 
 		$out .= render_block( $block );
 
-		$next = isset( $blocks[ $i + 1 ] ) ? $blocks[ $i + 1 ] : null;
-		if ( $next && 'arriva/wave-divider' === ( $next['blockName'] ?? '' ) ) {
-			$out .= render_block( $next );
+		// Skip freeform whitespace blocks WordPress inserts between siblings.
+		for ( $j = $i + 1, $n = count( $blocks ); $j < $n; $j++ ) {
+			$next_name = isset( $blocks[ $j ]['blockName'] ) ? $blocks[ $j ]['blockName'] : null;
+			if ( null === $next_name || '' === $next_name ) {
+				continue;
+			}
+			if ( 'arriva/wave-divider' === $next_name ) {
+				$out .= render_block( $blocks[ $j ] );
+			}
+			break;
 		}
 		break;
 	}
