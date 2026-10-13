@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Arriva
  * Description: Custom Gutenberg blocks for Arriva Speyer e.V.
- * Version: 1.11.16
+ * Version: 1.11.17
  * Author: Arriva Speyer e.V.
  * License: GPL-2.0-or-later
  * Text Domain: arriva
@@ -138,6 +138,15 @@ add_action( 'wp_enqueue_scripts', function () {
 		);
 	}
 
+	if ( is_page( 'dokumente' ) ) {
+		wp_enqueue_style(
+			'arriva-member-dokumente',
+			plugins_url( 'shared/member-dokumente.css', __FILE__ ),
+			array( 'arriva-member-area' ),
+			ARRIVA_VERSION
+		);
+	}
+
 	if ( is_page( 'merch' ) || is_singular( ARRIVA_MERCH_POST_TYPE ) ) {
 		wp_enqueue_style(
 			'arriva-merch-catalog',
@@ -190,6 +199,15 @@ add_action( 'enqueue_block_editor_assets', function () {
 		wp_enqueue_style(
 			'arriva-member-vorstand',
 			plugins_url( 'shared/member-vorstand.css', __FILE__ ),
+			array( 'arriva-member-editor' ),
+			ARRIVA_VERSION
+		);
+	}
+
+	if ( 'dokumente' === $slug ) {
+		wp_enqueue_style(
+			'arriva-member-dokumente',
+			plugins_url( 'shared/member-dokumente.css', __FILE__ ),
 			array( 'arriva-member-editor' ),
 			ARRIVA_VERSION
 		);
