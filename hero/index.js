@@ -18,8 +18,6 @@
 	var __ = wp.i18n.__;
 	var usePaletteGroups = wp.arriva.usePaletteGroups;
 
-	var DEFAULT_GLOW = 'rgba(26,147,164,0.28)';
-
 	var DEFAULT_ICON = el(
 		'svg',
 		{
@@ -98,7 +96,7 @@
 
 	function glowVarValue( color ) {
 		if ( ! color ) {
-			return DEFAULT_GLOW;
+			return '';
 		}
 		if ( color.indexOf( 'rgba' ) === 0 || color.indexOf( 'hsla' ) === 0 ) {
 			return color;
@@ -125,13 +123,24 @@
 	}
 
 	function heroStyleVars( attrs ) {
-		return {
-			'--arriva-hero-bg': attrs.backgroundColor || '#18222a',
-			'--arriva-hero-accent': attrs.accentColor || '#1a93a4',
-			'--arriva-hero-accent-d': attrs.accentDarkColor || '#117585',
-			'--arriva-hero-glow': glowVarValue( attrs.glowColor ),
+		// Only override CSS custom properties when the block sets a colour;
+		// otherwise hero/style.css defaults to theme presets (contrast / accent / …).
+		var style = {
 			'--arriva-hero-min-height': ( attrs.minHeight || 400 ) + 'px',
 		};
+		if ( attrs.backgroundColor ) {
+			style['--arriva-hero-bg'] = attrs.backgroundColor;
+		}
+		if ( attrs.accentColor ) {
+			style['--arriva-hero-accent'] = attrs.accentColor;
+		}
+		if ( attrs.accentDarkColor ) {
+			style['--arriva-hero-accent-d'] = attrs.accentDarkColor;
+		}
+		if ( attrs.glowColor ) {
+			style['--arriva-hero-glow'] = glowVarValue( attrs.glowColor );
+		}
+		return style;
 	}
 
 	function renderIcon( iconUrl, iconAlt ) {

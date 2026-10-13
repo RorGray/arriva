@@ -6,7 +6,7 @@
 	margin: 0.5rem 0 0;
 	font-size: 12px;
 	line-height: 1.45;
-	color: #646970;
+	color: var(--wp--preset--color--contrast-3, #646970);
 }
 
 .arriva-merch-product-editor__swatch-popover {

@@ -39,19 +39,19 @@
 		},
 		"backgroundColor": {
 			"type": "string",
-			"default": "#18222a"
+			"default": ""
 		},
 		"accentColor": {
 			"type": "string",
-			"default": "#1a93a4"
+			"default": ""
 		},
 		"accentDarkColor": {
 			"type": "string",
-			"default": "#117585"
+			"default": ""
 		},
 		"glowColor": {
 			"type": "string",
-			"default": "#1a93a4"
+			"default": ""
 		},
 		"iconUrl": {
 			"type": "string",

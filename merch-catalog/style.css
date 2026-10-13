@@ -14,8 +14,8 @@
 	font-style: normal;
 	letter-spacing: 0.1em;
 	text-transform: uppercase;
-	color: color-mix(in srgb, var(--wp--preset--color--contrast, #18222a) 55%, transparent);
-	border-bottom: 1px solid var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.1));
+	color: color-mix(in srgb, var(--wp--preset--color--contrast) 55%, transparent);
+	border-bottom: 1px solid var(--wp--preset--color--custom-subtle);
 }
 
 .arriva-merch-shop__heading:not(:first-child) {
@@ -42,11 +42,11 @@
 	min-width: 0;
 	text-decoration: none;
 	color: inherit;
-	background: var(--wp--preset--color--base, #fff);
-	border: 1px solid var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.1));
+	background: var(--wp--preset--color--base);
+	border: 1px solid var(--wp--preset--color--custom-subtle);
 	border-radius: 0.65rem;
 	overflow: hidden;
-	box-shadow: 0 1px 0 color-mix(in srgb, var(--wp--preset--color--contrast, #18222a) 6%, transparent);
+	box-shadow: 0 1px 0 color-mix(in srgb, var(--wp--preset--color--contrast) 6%, transparent);
 	transition:
 		transform 0.2s cubic-bezier(0.33, 1, 0.68, 1),
 		box-shadow 0.2s cubic-bezier(0.33, 1, 0.68, 1),
@@ -55,12 +55,12 @@
 
 .arriva-merch-shop__card:hover {
 	transform: translateY(-2px);
-	border-color: color-mix(in srgb, var(--wp--preset--color--accent, #1a93a4) 35%, transparent);
-	box-shadow: 0 12px 28px color-mix(in srgb, var(--wp--preset--color--contrast, #18222a) 8%, transparent);
+	border-color: color-mix(in srgb, var(--wp--preset--color--accent) 35%, transparent);
+	box-shadow: 0 12px 28px color-mix(in srgb, var(--wp--preset--color--contrast) 8%, transparent);
 }
 
 .arriva-merch-shop__card:focus-visible {
-	outline: 2px solid var(--wp--preset--color--accent, #1a93a4);
+	outline: 2px solid var(--wp--preset--color--accent);
 	outline-offset: 3px;
 	transform: translateY(-2px);
 }
@@ -69,8 +69,8 @@
 	position: relative;
 	aspect-ratio: 1 / 1;
 	padding: 1rem;
-	background: var(--wp--preset--color--base-2, #f6f5f1);
-	border-bottom: 1px solid var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.08));
+	background: var(--wp--preset--color--base-2);
+	border-bottom: 1px solid var(--wp--preset--color--custom-subtle);
 }
 
 .arriva-merch-shop__badge {
@@ -84,8 +84,8 @@
 	font-style: normal;
 	letter-spacing: 0.06em;
 	text-transform: uppercase;
-	color: var(--wp--preset--color--base, #fff);
-	background: var(--wp--preset--color--contrast, #18222a);
+	color: var(--wp--preset--color--base);
+	background: var(--wp--preset--color--contrast);
 	border-radius: 0.25rem;
 }
 
@@ -102,8 +102,8 @@
 	border-radius: 0.35rem;
 	background: linear-gradient(
 		145deg,
-		var(--wp--preset--color--base, #fff),
-		var(--wp--preset--color--base-2, #f6f5f1)
+		var(--wp--preset--color--base),
+		var(--wp--preset--color--base-2)
 	);
 }
 
@@ -129,7 +129,7 @@
 	margin: 0;
 	font-size: 0.8125rem;
 	line-height: 1.45;
-	color: color-mix(in srgb, var(--wp--preset--color--contrast, #18222a) 62%, transparent);
+	color: color-mix(in srgb, var(--wp--preset--color--contrast) 62%, transparent);
 	display: -webkit-box;
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 2;
@@ -143,7 +143,7 @@
 	gap: 0.75rem;
 	margin-top: auto;
 	padding-top: 0.65rem;
-	border-top: 1px solid var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.08));
+	border-top: 1px solid var(--wp--preset--color--custom-subtle);
 }
 
 .arriva-merch-shop__price {
@@ -160,15 +160,15 @@
 	font-size: 0.75rem;
 	font-weight: 700;
 	font-style: normal;
-	color: var(--wp--preset--color--base, #fff);
-	background: var(--wp--preset--color--contrast, #18222a);
+	color: var(--wp--preset--color--base);
+	background: var(--wp--preset--color--contrast);
 	border-radius: 999px;
 	transition: background 0.15s cubic-bezier(0.33, 1, 0.68, 1);
 }
 
 .arriva-merch-shop__card:hover .arriva-merch-shop__cta,
 .arriva-merch-shop__card:focus-visible .arriva-merch-shop__cta {
-	background: var(--wp--preset--color--accent, #1a93a4);
+	background: var(--wp--preset--color--accent);
 }
 
 .arriva-merch-shop__empty {
@@ -176,7 +176,7 @@
 	padding: 1.5rem;
 	text-align: center;
 	font-size: 0.9375rem;
-	border: 1px dashed var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.15));
+	border: 1px dashed var(--wp--preset--color--custom-subtle);
 	border-radius: 0.5rem;
 }
 

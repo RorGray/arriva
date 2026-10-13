@@ -1,9 +1,9 @@
 .arriva-member-nav-editor {
 	margin: 0;
 	padding: 0.75rem 1rem;
-	border: 1px dashed var(--wp--preset--color--accent, #1a93a4);
+	border: 1px dashed var(--wp--preset--color--accent);
 	border-radius: 0.5rem;
-	background: color-mix(in srgb, var(--wp--preset--color--accent, #1a93a4) 6%, transparent);
+	background: color-mix(in srgb, var(--wp--preset--color--accent) 6%, transparent);
 }
 
 .arriva-member-nav-editor__label {
@@ -35,7 +35,7 @@ body.arriva-mitglied-area main .wp-block-post-content > .wp-block-group.alignful
 .arriva-member-nav-bar--content .arriva-member-nav {
 	margin: 0;
 	padding-bottom: var(--wp--preset--spacing--20, 0.75rem);
-	border-bottom: 1px solid var(--wp--preset--color--custom-subtle, rgba(0, 0, 0, 0.12));
+	border-bottom: 1px solid var(--wp--preset--color--custom-subtle);
 }
 
 .arriva-member-nav__list {

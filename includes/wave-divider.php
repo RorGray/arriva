@@ -89,7 +89,7 @@ function arriva_render_wave_divider( $attributes ) {
 	$shape             = isset( $attributes['shape'] ) ? (string) $attributes['shape'] : 'ripple-flip';
 	$offset            = isset( $attributes['offset'] ) ? (int) $attributes['offset'] : 0;
 	$top_color         = isset( $attributes['topColor'] ) ? (string) $attributes['topColor'] : 'transparent';
-	$bottom_color      = isset( $attributes['bottomColor'] ) ? (string) $attributes['bottomColor'] : '#ffffff';
+	$bottom_color      = isset( $attributes['bottomColor'] ) ? (string) $attributes['bottomColor'] : 'var(--wp--preset--color--base)';
 	$overlap_previous  = ! empty( $attributes['overlapPrevious'] );
 	$waves             = arriva_wave_divider_shapes();
 	$wave              = isset( $waves[ $shape ] ) ? $waves[ $shape ] : $waves['wave'];

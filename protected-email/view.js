@@ -52,7 +52,15 @@
 		ctx.setTransform( dpr, 0, 0, dpr, 0, 0 );
 		ctx.clearRect( 0, 0, width, height );
 		ctx.font = font;
-		ctx.fillStyle = color || '#1a1a1a';
+		// Canvas cannot use CSS variables — resolve the theme contrast preset when needed.
+		if ( ! color ) {
+			var probe = document.createElement( 'span' );
+			probe.style.color = 'var(--wp--preset--color--contrast)';
+			document.body.appendChild( probe );
+			color = getComputedStyle( probe ).color;
+			document.body.removeChild( probe );
+		}
+		ctx.fillStyle = color;
 		ctx.textBaseline = 'alphabetic';
 		ctx.fillText( email, 0, fontSize );
 
