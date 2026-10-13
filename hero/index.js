@@ -122,23 +122,44 @@
 		return 'rgba(' + r + ',' + g + ',' + b + ',0.28)';
 	}
 
+	// Old block.json defaults — treat as “use theme” so saved pages pick up presets.
+	var LEGACY_COLOR_DEFAULTS = {
+		backgroundColor: '#18222a',
+		accentColor: '#1a93a4',
+		accentDarkColor: '#117585',
+		glowColor: '#1a93a4',
+	};
+
+	function customColor( attrs, key ) {
+		var value = attrs[ key ];
+		if ( ! value || value === LEGACY_COLOR_DEFAULTS[ key ] ) {
+			return '';
+		}
+		return value;
+	}
+
 	function heroStyleVars( attrs ) {
-		// Only override CSS custom properties when the block sets a colour;
-		// otherwise hero/style.css defaults to theme presets (contrast / accent / …).
+		// Styles use --wp--preset--color-* directly. Custom picks re-scope those
+		// presets on this block only (legacy hex defaults are ignored).
 		var style = {
 			'--arriva-hero-min-height': ( attrs.minHeight || 400 ) + 'px',
 		};
-		if ( attrs.backgroundColor ) {
-			style['--arriva-hero-bg'] = attrs.backgroundColor;
+		var bg = customColor( attrs, 'backgroundColor' );
+		var accent = customColor( attrs, 'accentColor' );
+		var accentDark = customColor( attrs, 'accentDarkColor' );
+		var glow = customColor( attrs, 'glowColor' );
+
+		if ( bg ) {
+			style['--wp--preset--color--contrast'] = bg;
 		}
-		if ( attrs.accentColor ) {
-			style['--arriva-hero-accent'] = attrs.accentColor;
+		if ( accent ) {
+			style['--wp--preset--color--accent'] = accent;
 		}
-		if ( attrs.accentDarkColor ) {
-			style['--arriva-hero-accent-d'] = attrs.accentDarkColor;
+		if ( accentDark ) {
+			style['--wp--preset--color--accent-2'] = accentDark;
 		}
-		if ( attrs.glowColor ) {
-			style['--arriva-hero-glow'] = glowVarValue( attrs.glowColor );
+		if ( glow ) {
+			style['--arriva-hero-glow'] = glowVarValue( glow );
 		}
 		return style;
 	}

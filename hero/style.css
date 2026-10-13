@@ -1,9 +1,4 @@
 .wp-block-arriva-hero {
-	--arriva-hero-bg: var(--wp--preset--color--contrast);
-	--arriva-hero-accent: var(--wp--preset--color--accent);
-	--arriva-hero-accent-d: var(--wp--preset--color--accent-2);
-	--arriva-hero-glow: color-mix(in srgb, var(--wp--preset--color--accent) 28%, transparent);
-	--arriva-hero-fg: var(--wp--preset--color--base);
 	--arriva-hero-min-height: 400px;
 	position: relative;
 	overflow-x: clip;
@@ -45,10 +40,10 @@ body:not(.block-editor-page) .wp-block-arriva-hero.is-fixed-scroll.is-layer-hidd
 	overflow: visible;
 	min-height: var(--arriva-hero-min-height);
 	padding-block: clamp(5rem, 12vw, 9rem) clamp(4rem, 9vw, 7rem);
-	background: var(--arriva-hero-bg);
+	background: var(--wp--preset--color--contrast);
 	background-size: cover;
 	background-position: center;
-	color: var(--arriva-hero-fg);
+	color: var(--wp--preset--color--base);
 }
 
 .wp-block-arriva-hero .arriva-hero__inner::before {
@@ -67,7 +62,7 @@ body:not(.block-editor-page) .wp-block-arriva-hero.is-fixed-scroll.is-layer-hidd
 	inset: 0;
 	background: radial-gradient(
 		ellipse 55% 65% at 85% 20%,
-		var(--arriva-hero-glow) 0%,
+		var(--arriva-hero-glow, color-mix(in srgb, var(--wp--preset--color--accent) 28%, transparent)) 0%,
 		transparent 65%
 	);
 	pointer-events: none;
@@ -90,7 +85,7 @@ body:not(.block-editor-page) .wp-block-arriva-hero.is-fixed-scroll.is-layer-hidd
 .wp-block-arriva-hero .arriva-hero__icon svg {
 	width: clamp(180px, 25vw, 340px);
 	height: auto;
-	stroke: var(--arriva-hero-fg);
+	stroke: var(--wp--preset--color--base);
 	fill: none;
 	stroke-width: 1;
 	stroke-linecap: round;
@@ -121,7 +116,7 @@ body:not(.block-editor-page) .wp-block-arriva-hero.is-fixed-scroll.is-layer-hidd
 	font-weight: 700;
 	letter-spacing: 0.18em;
 	text-transform: uppercase;
-	color: color-mix(in srgb, var(--arriva-hero-fg) 45%, transparent);
+	color: color-mix(in srgb, var(--wp--preset--color--base) 45%, transparent);
 	margin-bottom: 1.5rem;
 	display: block;
 }
@@ -131,7 +126,7 @@ body:not(.block-editor-page) .wp-block-arriva-hero.is-fixed-scroll.is-layer-hidd
 	font-weight: 500;
 	letter-spacing: -0.025em;
 	line-height: 1.04;
-	color: var(--arriva-hero-fg);
+	color: var(--wp--preset--color--base);
 	margin: 0 0 1.5rem;
 	overflow: visible;
 	padding-bottom: 0.25em;
@@ -139,12 +134,12 @@ body:not(.block-editor-page) .wp-block-arriva-hero.is-fixed-scroll.is-layer-hidd
 
 .wp-block-arriva-hero .arriva-hero__title em {
 	font-style: italic;
-	color: color-mix(in srgb, var(--arriva-hero-fg) 50%, transparent);
+	color: color-mix(in srgb, var(--wp--preset--color--base) 50%, transparent);
 }
 
 .wp-block-arriva-hero .arriva-hero__sub {
 	font-size: clamp(1.15rem, 1.06rem + 0.44vw, 1.35rem);
-	color: color-mix(in srgb, var(--arriva-hero-fg) 60%, transparent);
+	color: color-mix(in srgb, var(--wp--preset--color--base) 60%, transparent);
 	max-width: 46ch;
 	line-height: 1.65;
 	margin: 0 0 2rem;
@@ -174,28 +169,28 @@ body:not(.block-editor-page) .wp-block-arriva-hero.is-fixed-scroll.is-layer-hidd
 }
 
 .wp-block-arriva-hero .arriva-hero__btn--main {
-	background: var(--arriva-hero-accent);
-	color: var(--arriva-hero-fg);
-	border-color: var(--arriva-hero-accent);
+	background: var(--wp--preset--color--accent);
+	color: var(--wp--preset--color--base);
+	border-color: var(--wp--preset--color--accent);
 }
 
 .wp-block-arriva-hero .arriva-hero__btn--main:hover {
-	background: var(--arriva-hero-accent-d);
-	border-color: var(--arriva-hero-accent-d);
+	background: var(--wp--preset--color--accent-2);
+	border-color: var(--wp--preset--color--accent-2);
 	transform: translateY(-2px);
-	box-shadow: 0 8px 22px color-mix(in srgb, var(--arriva-hero-accent) 32%, transparent);
-	color: var(--arriva-hero-fg);
+	box-shadow: 0 8px 22px color-mix(in srgb, var(--wp--preset--color--accent) 32%, transparent);
+	color: var(--wp--preset--color--base);
 }
 
 .wp-block-arriva-hero .arriva-hero__btn--ghost {
 	background: transparent;
-	color: color-mix(in srgb, var(--arriva-hero-fg) 80%, transparent);
-	border-color: color-mix(in srgb, var(--arriva-hero-fg) 25%, transparent);
+	color: color-mix(in srgb, var(--wp--preset--color--base) 80%, transparent);
+	border-color: color-mix(in srgb, var(--wp--preset--color--base) 25%, transparent);
 }
 
 .wp-block-arriva-hero .arriva-hero__btn--ghost:hover {
-	border-color: color-mix(in srgb, var(--arriva-hero-fg) 60%, transparent);
-	color: var(--arriva-hero-fg);
+	border-color: color-mix(in srgb, var(--wp--preset--color--base) 60%, transparent);
+	color: var(--wp--preset--color--base);
 }
 
 @keyframes arriva-hero-float {
